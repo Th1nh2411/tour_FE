@@ -1,13 +1,12 @@
 .wrapper {
-    background: #717171;
     width: 100%;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.08);
 }
 .inner {
-    padding: 40px var(--default-layout-horizontal-spacer);
     margin: auto;
     width: var(--default-layout-width);
+    padding: 40px var(--default-layout-horizontal-spacer);
     max-width: 100%;
-    color: #fff;
 }
 .info-wrapper {
 }
@@ -39,14 +38,16 @@
     margin-top: 15px;
 }
 .info-title {
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: #ffb800;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--primary-color);
     margin-bottom: 5px;
 }
 .info-subtitle {
     display: flex;
     align-items: center;
+    padding: 10px 0;
+    font-size: 1.8rem;
     &:hover {
         cursor: pointer;
         opacity: 0.9;
@@ -58,12 +59,12 @@
 .info-icon {
     font-size: 2.2rem;
     margin: 5px 8px 5px 0;
-    color: #ffb800;
+    color: var(--primary-color);
+    flex-shrink: 0;
 }
 .license-wrapper {
-    border-top: 1px solid #dddddd50;
+    border-top: 1px solid var(--primary-color);
     padding: 10px 0;
     text-align: center;
     font-size: 1.2rem;
-    color: #fff;
 }

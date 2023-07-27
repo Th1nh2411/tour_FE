@@ -15,7 +15,7 @@ const cx = classNames.bind(styles);
 function Header() {
     const localStorageManager = LocalStorageManager.getInstance();
     const [showMenuMb, setShowMenuMb] = useState(false);
-    const [searchValue, setSearchVale] = useState('');
+    const userLogin = true;
     const overlayRef = useRef();
     const handleDocumentClick = (event) => {
         if (overlayRef.current && overlayRef.current.contains(event.target)) {
@@ -55,52 +55,37 @@ function Header() {
                                 className={(nav) => cx('header-nav_item', { active: nav.isActive })}
                                 to={config.routes.home}
                             >
-                                Trang chủ
+                                Home
                             </NavLink>
                             <NavLink
                                 className={(nav) => cx('header-nav_item', { active: nav.isActive })}
                                 to={config.routes.aboutUs}
                             >
-                                Về chúng tôi
+                                About
                             </NavLink>
+
                             <NavLink
                                 className={(nav) => cx('header-nav_item', { active: nav.isActive })}
-                                to={config.routes.STEMCourse}
+                                to={config.routes.tour}
                             >
-                                Khoá học STEM
-                            </NavLink>
-                            <NavLink
-                                className={(nav) => cx('header-nav_item', { active: nav.isActive })}
-                                to={config.routes.course}
-                            >
-                                Khoá học
-                            </NavLink>
-                            <NavLink
-                                className={(nav) => cx('header-nav_item', { active: nav.isActive })}
-                                to={config.routes.mentor}
-                            >
-                                Mentor
-                            </NavLink>
-                            <NavLink
-                                className={(nav) => cx('header-nav_item', { active: nav.isActive })}
-                                to={config.routes.blog}
-                            >
-                                Blog
+                                Tours
                             </NavLink>
                         </nav>
                     </div>
-                    <div className={cx('cart-wrapper')}>
-                        <h2 className={cx('cart-title')}>Giỏ hàng</h2>
-                        <Image src={images.shoppingCart} alt="cart" className={cx('cart-img')} />
-                        <span className={cx('cart-quantity')}>3</span>
-                    </div>
-                    <Input
-                        className={cx('search')}
-                        suffix={<MdSearch />}
-                        value={searchValue}
-                        onChange={(e) => setSearchVale(e.target.value)}
-                        placeholder="Tìm kiếm khoá học"
-                    />
+                    {!userLogin ? (
+                        <div className={cx('cart-wrapper')}>
+                            <h2 className={cx('cart-title')}>Giỏ hàng</h2>
+                            <Image src={images.shoppingCart} alt="cart" className={cx('cart-img')} />
+                            <span className={cx('cart-quantity')}>3</span>
+                        </div>
+                    ) : (
+                        <div className={cx('header-actions')}>
+                            <Link className={cx('custom-btn')}>Login</Link>
+                            <Button size="large" type="ghost" className={cx('custom-btn', 'active')}>
+                                Register
+                            </Button>
+                        </div>
+                    )}
                 </div>
             </header>
             <div ref={overlayRef} className={cx('menu-modal-overlay', { active: showMenuMb })}></div>

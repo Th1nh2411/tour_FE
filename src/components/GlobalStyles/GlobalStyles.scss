@@ -51,7 +51,7 @@
     src: url(../../assets/fonts/Nunito-Italic-VariableFont_wght.ttf);
 }
 :root {
-    --primary-color: #fa8c16;
+    --primary-color: #faa935;
     --radial-gradient-bg: linear-gradient(45deg, #27be70 0%, #0c713d 100%);
     --radial-gradient-bg-2: linear-gradient(45deg, #0c713d 0%, #27be70 100%);
     --secondary-color: rgb(95, 95, 95);
@@ -59,7 +59,7 @@
     --card-bg-color: #fff;
     --default-layout-header-height: 80px;
     --hover-color: #1f915633;
-    --default-layout-width: 1200px;
+    --default-layout-width: 1300px;
     --default-layout-horizontal-spacer: 20px;
     --black: #000;
     --white: #fff;
@@ -68,6 +68,7 @@
     --search-border-radius: 92px;
     --search-height: 40px;
     --search-space-height: 9px;
+    --subtitle-font-name: 'Island Moments', cursive;
 }
 
 * {
@@ -108,8 +109,35 @@ input,
 a[href] {
     text-decoration: none;
 }
-.mt-16 {
-    margin-top: 16px;
+.w-100 {
+    width: 100% !important;
+}
+section {
+    padding: 50px 0;
+}
+.mt-1 {
+    margin-top: 1rem;
+}
+.mt-2 {
+    margin-top: 2rem;
+}
+.mt-3 {
+    margin-top: 3rem;
+}
+.mt-4 {
+    margin-top: 4rem;
+}
+.ml-1 {
+    margin-left: 1rem;
+}
+.ml-2 {
+    margin-left: 2rem;
+}
+.ml-3 {
+    margin-left: 3rem;
+}
+.ml-4 {
+    margin-left: 4rem;
 }
 .d-flex {
     display: flex;
@@ -130,19 +158,7 @@ a[href] {
         background-color: #cccccc69;
     }
 }
-// Grid Boostrap gutter
-.g-2 {
-    --bs-gutter-x: 2.5rem;
-    --bs-gutter-y: 2.5rem;
-}
-.g-3 {
-    --bs-gutter-x: 3.5rem;
-    --bs-gutter-y: 3.5rem;
-}
-.g-4 {
-    --bs-gutter-x: 4.5rem;
-    --bs-gutter-y: 4.5rem;
-}
+
 // Custom tippy tool tip
 body {
     .tippy-box {
