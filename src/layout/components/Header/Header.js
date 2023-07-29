@@ -14,6 +14,7 @@ const cx = classNames.bind(styles);
 
 function Header() {
     const localStorageManager = LocalStorageManager.getInstance();
+    const navigate = useNavigate();
     const [showMenuMb, setShowMenuMb] = useState(false);
     const userLogin = true;
     const overlayRef = useRef();
@@ -80,8 +81,15 @@ function Header() {
                         </div>
                     ) : (
                         <div className={cx('header-actions')}>
-                            <Link className={cx('custom-btn')}>Login</Link>
-                            <Button size="large" type="ghost" className={cx('custom-btn', 'active')}>
+                            <Link to={config.routes.login} className={cx('custom-btn')}>
+                                Login
+                            </Link>
+                            <Button
+                                onClick={() => navigate(config.routes.register)}
+                                size="large"
+                                type="ghost"
+                                className={cx('custom-btn', 'active')}
+                            >
                                 Register
                             </Button>
                         </div>
