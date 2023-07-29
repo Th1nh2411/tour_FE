@@ -3,26 +3,49 @@ import classNames from 'classnames/bind';
 import Image from '../../components/Image';
 import images from '../../assets/images';
 import { useContext, useEffect, useState } from 'react';
-import { Button, Col, Input, Row, Space } from 'antd';
+import { Button, Col, Input, Row, Space, notification } from 'antd';
 import { FaUser } from 'react-icons/fa';
+import * as authService from '../../services/authService';
+import { useNavigate } from 'react-router';
+import config from '../../config';
+import LocalStorageManager from '../../utils/LocalStorageManager';
+import { StoreContext, actions } from '../../store';
 const cx = classNames.bind(styles);
 
 function LoginPage() {
+    const [state, dispatch] = useContext(StoreContext);
+    const localStorageManage = LocalStorageManager.getInstance();
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const login = async () => {
+        const results = await authService.login(email, password);
+        if (results.token) {
+            localStorageManage.setItem('userInfo', results);
+            dispatch(actions.setUserInfo(results));
+            const toast = state.showToast('Success', 'Đăng nhập thành công', 'success');
+            navigate(config.routes.home);
+        } else {
+            const toast = state.showToast('Fail', results.message, 'error');
+            setEmail('');
+            setPassword('');
+        }
+    };
+
     return (
         <div className={cx('wrapper')}>
             <Row style={{ boxShadow: '0 48px 100px 0 rgba(17, 12, 46, 0.15)' }}>
-                <Col lg={12}>
+                <Col xs={0} md={12}>
                     <Image
                         className={cx('bg-img')}
                         src="https://doan-eta.vercel.app/static/media/login.0ef8aace597cf40e2588.png"
                     />
                 </Col>
-                <Col lg={12}>
+                <Col xs={24} md={12}>
                     <Space size={'middle'} direction="vertical" className={cx('form')}>
                         <h1 className={cx('form-title')}>Login</h1>
                         <Input
+                            value={email}
                             size="large"
                             placeholder="Email"
                             onChange={(e) => {
@@ -30,6 +53,7 @@ function LoginPage() {
                             }}
                         />
                         <Input.Password
+                            value={password}
                             size="large"
                             placeholder="Password"
                             type=""
@@ -37,7 +61,7 @@ function LoginPage() {
                                 setPassword(e.target.value);
                             }}
                         />
-                        <Button type="ghost" size="large" className={cx('login-btn')}>
+                        <Button onClick={() => login()} type="ghost" size="large" className={cx('login-btn')}>
                             Login
                         </Button>
                         <h3 className={cx('option-title')}>

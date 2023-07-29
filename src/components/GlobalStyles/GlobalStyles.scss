@@ -143,8 +143,17 @@ section {
 .d-flex {
     display: flex;
 }
-.jusContentCenter {
+.align-center {
+    display: flex;
+    align-items: center;
+}
+.content-center {
+    display: flex;
     justify-content: center;
+}
+.content-between {
+    display: flex;
+    justify-content: space-between;
 }
 .mr-16 {
     margin-right: 16px;

@@ -8,15 +8,17 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import LocalStorageManager from '../../../utils/LocalStorageManager';
 
 import { StoreContext, actions } from '../../../store';
-import { Button, Input } from 'antd';
+import { Button, Input, Space, Tooltip } from 'antd';
 import { MdOutlineClose, MdOutlineMenu, MdSearch } from 'react-icons/md';
+import { IoLogOut } from 'react-icons/io5';
 const cx = classNames.bind(styles);
 
 function Header() {
-    const localStorageManager = LocalStorageManager.getInstance();
+    const [state, dispatch] = useContext(StoreContext);
+    const LS = LocalStorageManager.getInstance();
     const navigate = useNavigate();
     const [showMenuMb, setShowMenuMb] = useState(false);
-    const userLogin = true;
+    const userInfo = state.userInfo;
     const overlayRef = useRef();
     const handleDocumentClick = (event) => {
         if (overlayRef.current && overlayRef.current.contains(event.target)) {
@@ -35,6 +37,10 @@ function Header() {
     };
     const handleCloseMenuMb = () => {
         setShowMenuMb(false);
+    };
+    const handleLogOut = () => {
+        dispatch(actions.setUserInfo(null));
+        LS.removeItem('userInfo');
     };
     return (
         <>
@@ -73,11 +79,14 @@ function Header() {
                             </NavLink>
                         </nav>
                     </div>
-                    {!userLogin ? (
-                        <div className={cx('cart-wrapper')}>
-                            <h2 className={cx('cart-title')}>Giỏ hàng</h2>
-                            <Image src={images.shoppingCart} alt="cart" className={cx('cart-img')} />
-                            <span className={cx('cart-quantity')}>3</span>
+                    {userInfo ? (
+                        <div className={cx('align-center')} size={'large'}>
+                            <h3>{userInfo.data.username}</h3>
+                            <Tooltip title="Log out">
+                                <div onClick={handleLogOut} className={cx('logout-wrapper')}>
+                                    <IoLogOut />
+                                </div>
+                            </Tooltip>
                         </div>
                     ) : (
                         <div className={cx('header-actions')}>

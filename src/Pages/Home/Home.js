@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import Image from '../../components/Image';
 import images from '../../assets/images';
 import { Button, Col, Input, InputNumber, Row } from 'antd';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { StoreContext, actions } from '../../store';
 import { HiOutlineLocationMarker, HiOutlineMap, HiOutlineUsers } from 'react-icons/hi';
 import { BiSearch } from 'react-icons/bi';
@@ -11,6 +11,8 @@ import Slide from '../../components/Slide';
 import * as tourService from '../../services/tourService';
 import HOME_DATA from './data';
 import TourItem from '../../components/TourItem/TourItem';
+import { Link } from 'react-router-dom';
+import config from '../../config';
 const cx = classNames.bind(styles);
 
 function Home() {
@@ -19,6 +21,9 @@ function Home() {
     const [distanceValue, setDistanceValue] = useState('');
     const [maxPeopleValue, setMaxPeopleValue] = useState(0);
     const [featuredTours, setFeaturedTours] = useState([]);
+    const searchQuery = useMemo(() => {
+        return { locationValue, distanceValue, maxPeopleValue };
+    }, [locationValue, distanceValue, maxPeopleValue]);
     const getFeaturedTour = async () => {
         const results = await tourService.getFeaturedTours();
         setFeaturedTours(results.data);
@@ -52,20 +57,20 @@ function Home() {
                             and Saigon.
                         </p>
                     </Col>
-                    <Col lg={4}>
+                    <Col xs={0} lg={4}>
                         <Image
                             src="https://doan-eta.vercel.app/static/media/hero-img01.cdfa5451ce66d17ee1f8.jpg"
                             className={cx('banner-img')}
                         />
                     </Col>
-                    <Col lg={4}>
+                    <Col xs={24} lg={4}>
                         <video
                             controls
                             src="https://doan-eta.vercel.app/static/media/hero-video.9e800d0ad3a61e8c12f6.mp4"
                             className={cx('banner-img', 'mt-2')}
                         />
                     </Col>
-                    <Col lg={4}>
+                    <Col xs={0} lg={4}>
                         <Image
                             src="https://doan-eta.vercel.app/static/media/hero-img02.c5c2185a4223b66365fb.jpg"
                             className={cx('banner-img', 'mt-4')}
@@ -73,7 +78,7 @@ function Home() {
                     </Col>
                 </Row>
                 <div className={cx('search-bar')}>
-                    <Row align="center">
+                    <Row className={cx('align-center')}>
                         <Col>
                             <div className={cx('search-item')}>
                                 <HiOutlineMap className={cx('icon')} />
@@ -120,9 +125,11 @@ function Home() {
                             </div>
                         </Col>
                         <Col className={cx('d-flex')}>
-                            <div className={cx('search-btn')}>
-                                <BiSearch />
-                            </div>
+                            <Link state={searchQuery} to={config.routes.tour}>
+                                <div className={cx('search-btn')}>
+                                    <BiSearch />
+                                </div>
+                            </Link>
                         </Col>
                     </Row>
                 </div>
@@ -162,7 +169,7 @@ function Home() {
                 </h3>
                 <h2 className={cx('mt-1')}>Our Feature Tours</h2>
 
-                <Row gutter={32}>
+                <Row gutter={20}>
                     {featuredTours.map((item, index) => (
                         <Col key={index} lg={6}>
                             <TourItem data={item} />
@@ -172,7 +179,7 @@ function Home() {
             </section>
             <section>
                 <Row gutter={32}>
-                    <Col lg={10}>
+                    <Col md={10}>
                         <h3 className={cx('section-slogan')}>
                             <span className={cx('slogan-text')}>Experience</span>
                         </h3>
@@ -181,20 +188,20 @@ function Home() {
                             Our Vietnam is a beautiful country. We have a variety of landscapes which are widely
                             well-known such as Ha Long Bay, Hoi An Old quarter and Phong Nha Ke Bang cave.
                         </p>
-                        <Row gutter={32} className={cx('mt-3')}>
-                            <Col lg={8}>
+                        <Row gutter={[32, 16]} className={cx('mt-3')}>
+                            <Col xs={24} lg={8}>
                                 <span className={cx('statistic-item')}>
                                     <div className={cx('statistic-number')}>12k+</div>
                                     <p className={cx('statistic-title')}>Successful trip</p>
                                 </span>
                             </Col>
-                            <Col lg={8}>
+                            <Col xs={24} lg={8}>
                                 <span className={cx('statistic-item')}>
                                     <div className={cx('statistic-number')}>2k+</div>
                                     <p className={cx('statistic-title')}>Regular clients</p>
                                 </span>
                             </Col>
-                            <Col lg={8}>
+                            <Col xs={24} lg={8}>
                                 <span className={cx('statistic-item')}>
                                     <div className={cx('statistic-number')}>15</div>
                                     <p className={cx('statistic-title')}>Year experience</p>
@@ -202,7 +209,7 @@ function Home() {
                             </Col>
                         </Row>
                     </Col>
-                    <Col lg={12} offset={2}>
+                    <Col xs={0} md={12} offset={2}>
                         <Image src="https://doan-eta.vercel.app/static/media/experience.f276d1992082e5879afb.png" />
                     </Col>
                 </Row>
@@ -285,7 +292,7 @@ function Home() {
             </section>
             <section>
                 <Row>
-                    <Col lg={10}>
+                    <Col xs={0} md={10}>
                         <h3 className={cx('section-slogan')}>
                             <span className={cx('slogan-text')}>Subscribe</span>
                         </h3>
@@ -302,7 +309,7 @@ function Home() {
                             className={cx('w-100', 'mt-2')}
                         />
                     </Col>
-                    <Col lg={12} offset={2}>
+                    <Col xs={0} md={12} offset={2}>
                         <Image src="https://doan-eta.vercel.app/static/media/male-tourist.f000d0ad1ca492b2bcfb.png" />
                     </Col>
                 </Row>

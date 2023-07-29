@@ -1,2 +1,3 @@
-import { SET_LIST_COURSE, SET_TOAST } from './constraints';
-export const setToast = (payload) => ({ type: SET_TOAST, payload }, { type: SET_LIST_COURSE, payload });
+import { SET_TOAST, SET_USER_INFO } from './constraints';
+export const setToast = (payload) => ({ type: SET_TOAST, payload });
+export const setUserInfo = (payload) => ({ type: SET_USER_INFO, payload });

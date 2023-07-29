@@ -12,40 +12,50 @@
     height: 200px;
     object-fit: cover;
 }
-
+.featured {
+    position: absolute;
+    bottom: 5px;
+    right: 0;
+    padding: 5px;
+    color: #fff;
+    background-color: #ff7e01;
+}
 .body {
-    padding: 24px 12px;
+    padding: 10px 12px;
     position: relative;
 }
-
+.city-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.city {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+.rate-wrapper {
+    display: flex;
+    align-items: center;
+    color: #666;
+    font-size: 1.3rem;
+}
+.rate-icon {
+    margin-right: 4px;
+    color: var(--primary-color);
+}
 .title {
-    font-weight: 700;
-    margin-bottom: 15px;
-    max-width: 80%;
+    font-weight: 500;
+    margin: 10px 0 15px;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 1; /* number of lines to show */
     -webkit-box-orient: vertical;
 }
-.subtile {
-    color: #999;
-    font-size: 1.4rem;
-    span {
-        color: var(--primary-color);
-        font-weight: 700;
-    }
-}
-.distance {
-    font-weight: 600;
-    font-size: 1.4rem;
-    display: flex;
-    align-items: center;
-    span {
-        padding-left: 8px;
-        margin-left: 8px;
-        border-left: 1px solid #999;
-        color: var(--primary-color);
-    }
+
+.location-icon {
+    margin-right: 4px;
+    color: var(--primary-color);
 }
 .info {
     overflow: hidden;
@@ -57,34 +67,24 @@
     font-size: 1.4rem;
     color: #666;
 }
-
-.price {
-    color: #97340d;
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin-right: 10px;
-}
-.max-people {
-    font-size: 1.4rem;
-    font-weight: 700;
-    font-style: italic;
-    color: #666;
+.footer {
     display: flex;
     align-items: center;
-    .calendar-icon {
-        margin-right: 5px;
+    justify-content: space-between;
+    .price {
+        color: #888;
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-right: 10px;
+        span {
+            color: var(--primary-color);
+        }
     }
-}
-.divider {
-    height: 1px;
-    width: 100%;
-    background-color: #ddd;
-    margin: 10px 0;
-}
-.btn {
-    background-color: var(--primary-color);
-    width: 100%;
-    color: white;
-    font-weight: 700;
-    font-size: 1.6rem;
+    .btn {
+        background-color: var(--primary-color);
+        color: white;
+        font-weight: 600;
+        font-size: 1.6rem;
+        border-radius: 14px 0 14px 0;
+    }
 }

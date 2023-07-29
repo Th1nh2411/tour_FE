@@ -1,0 +1,106 @@
+.wrapper {
+    width: var(--default-layout-width);
+    padding: 0 var(--default-layout-horizontal-spacer);
+    max-width: 100%;
+    margin: auto;
+}
+.section-title {
+    font-size: 3.8rem;
+    line-height: 1.2;
+    margin: 16px 0 28px;
+    font-weight: 600;
+    span {
+        color: var(--primary-color);
+    }
+}
+.section-slogan {
+    display: flex;
+    align-items: center;
+    letter-spacing: 1px;
+    .slogan-text {
+        border-radius: 20px;
+        padding: 4px 12px;
+        background-color: var(--primary-color);
+        font-family: var(--subtitle-font-name);
+        font-weight: 500;
+    }
+    .slogan-icon {
+        height: 38px;
+        object-fit: contain;
+    }
+}
+
+.img {
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+.card {
+    border: 1px solid var(--primary-color);
+    border-radius: 0.5rem;
+    padding: 28px;
+    width: 100%;
+    h2 {
+        font-weight: 600;
+        font-size: 2.2rem;
+    }
+}
+.booking-wrapper {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 80px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.booking-header {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e5e7eb;
+}
+.booking-price {
+    color: #666;
+    font-size: 1.6rem;
+
+    span {
+        color: #333;
+        font-weight: 700;
+    }
+}
+.icon {
+    color: var(--primary-color);
+    margin-right: 4px;
+}
+.booking-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: #666;
+    font-weight: 600;
+}
+
+.price-calculate {
+}
+.price-calculated {
+}
+
+.charge-title {
+}
+.charge-calculated {
+}
+
+.total-title {
+    font-size: 1.8rem;
+    color: #333;
+}
+.total-calculated {
+    font-size: 1.8rem;
+    color: #333;
+}
+.customer-btn {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+.reviews-bar {
+    background-color: var(--primary-color);
+}

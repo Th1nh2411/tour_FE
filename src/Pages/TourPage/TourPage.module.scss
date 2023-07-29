@@ -1,2 +1,117 @@
 .wrapper {
 }
+.banner-section {
+    position: relative;
+    background: url('https://doan-eta.vercel.app/static/media/tour.4aa39fc95609710b19aa.jpg') center / cover no-repeat;
+    width: 100%;
+    padding: 50px 10px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.banner-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.592);
+}
+.banner-content {
+    position: relative;
+    margin: auto;
+}
+.banner-title {
+    font-weight: 700;
+    font-size: 4rem;
+    color: #fff;
+    text-align: center;
+    line-height: 1.2;
+}
+.breadcrumb-wrapper ol {
+    justify-content: center;
+}
+.breadcrumb-wrapper li {
+    color: #fff !important;
+    white-space: nowrap;
+    .breadcrumb-text {
+        color: #fff;
+        &:hover {
+            color: #ddd;
+        }
+    }
+}
+.tour-section {
+    width: var(--default-layout-width);
+    padding: 60px var(--default-layout-horizontal-spacer);
+    max-width: 100%;
+    margin: auto;
+}
+.search-bar {
+    border-radius: 50px;
+    box-shadow: 0 48px 100px 0 rgba(17, 12, 46, 0.15);
+    margin: 30px auto;
+    padding: 0.5rem 2.5rem;
+    width: fit-content;
+}
+.search-item {
+    display: flex;
+    align-items: center;
+    .icon {
+        color: #ee6e6e;
+        font-size: 3rem;
+        margin-right: 5px;
+    }
+    .search-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        padding: 4px 11px 0;
+        line-height: 1;
+    }
+    .search-input {
+        width: auto;
+        font-weight: 600;
+        font-size: 1.6rem;
+        &::placeholder {
+            color: #888;
+        }
+        input {
+            font-weight: 600;
+            font-size: 1.6rem;
+            &::placeholder {
+                color: #888;
+            }
+        }
+    }
+}
+.add-tour {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    &:hover {
+        cursor: pointer;
+        opacity: 0.9;
+    }
+}
+.add-btn {
+    padding: 8px;
+    font-size: 4rem;
+    color: var(--primary-color);
+}
+.search-btn {
+    margin: auto;
+    padding: 8px;
+    background-color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    border-radius: 10px 5px 10px 5px;
+    font-size: 2.8rem;
+    &:hover {
+        cursor: pointer;
+        opacity: 0.9;
+    }
+}
