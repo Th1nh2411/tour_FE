@@ -8,7 +8,9 @@ import { StoreContext, actions } from '../../store';
 import { HiOutlineLocationMarker, HiOutlineMap, HiOutlineUsers } from 'react-icons/hi';
 import { BiSearch } from 'react-icons/bi';
 import Slide from '../../components/Slide';
+import * as tourService from '../../services/tourService';
 import HOME_DATA from './data';
+import TourItem from '../../components/TourItem/TourItem';
 const cx = classNames.bind(styles);
 
 function Home() {
@@ -16,6 +18,14 @@ function Home() {
     const [locationValue, setLocationValue] = useState('');
     const [distanceValue, setDistanceValue] = useState('');
     const [maxPeopleValue, setMaxPeopleValue] = useState(0);
+    const [featuredTours, setFeaturedTours] = useState([]);
+    const getFeaturedTour = async () => {
+        const results = await tourService.getFeaturedTours();
+        setFeaturedTours(results.data);
+    };
+    useEffect(() => {
+        getFeaturedTour();
+    }, []);
     return (
         <div className={cx('wrapper')}>
             {/* Banner Section */}
@@ -151,7 +161,14 @@ function Home() {
                     <span className={cx('slogan-text')}>Explore</span>
                 </h3>
                 <h2 className={cx('mt-1')}>Our Feature Tours</h2>
-                <Row gutter={32}></Row>
+
+                <Row gutter={32}>
+                    {featuredTours.map((item, index) => (
+                        <Col key={index} lg={6}>
+                            <TourItem data={item} />
+                        </Col>
+                    ))}
+                </Row>
             </section>
             <section>
                 <Row gutter={32}>
