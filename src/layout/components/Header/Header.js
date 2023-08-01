@@ -5,17 +5,15 @@ import Image from '../../../components/Image';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import config from '../../../config';
 import { useContext, useEffect, useRef, useState } from 'react';
-import LocalStorageManager from '../../../utils/LocalStorageManager';
-
 import { StoreContext, actions } from '../../../store';
 import { Button, Input, Space, Tooltip } from 'antd';
 import { MdOutlineClose, MdOutlineMenu, MdSearch } from 'react-icons/md';
 import { IoLogOut } from 'react-icons/io5';
+import Cookies from 'js-cookie';
 const cx = classNames.bind(styles);
 
 function Header() {
     const [state, dispatch] = useContext(StoreContext);
-    const LS = LocalStorageManager.getInstance();
     const navigate = useNavigate();
     const [showMenuMb, setShowMenuMb] = useState(false);
     const userInfo = state.userInfo;
@@ -40,8 +38,10 @@ function Header() {
     };
     const handleLogOut = () => {
         dispatch(actions.setUserInfo(null));
-        LS.removeItem('userInfo');
+        Cookies.remove('accessToken');
+        Cookies.remove('userInfo');
     };
+    console.log(userInfo);
     return (
         <>
             <header className={cx('wrapper', { active: showMenuMb })}>
@@ -54,7 +54,9 @@ function Header() {
                                 alt="logo"
                             />
                         </Link>
-                        <MdOutlineClose onClick={handleCloseMenuMb} className={cx('close-btn-mb')} />
+                        <div onClick={handleCloseMenuMb} className={cx('close-btn-mb')}>
+                            <MdOutlineClose />
+                        </div>
                     </div>
                     <div className={cx('side-group')}>
                         <nav className={cx('header-nav')}>
@@ -81,7 +83,7 @@ function Header() {
                     </div>
                     {userInfo ? (
                         <div className={cx('align-center')} size={'large'}>
-                            <h3>{userInfo.data.username}</h3>
+                            <h3>{userInfo.username}</h3>
                             <Tooltip title="Log out">
                                 <div onClick={handleLogOut} className={cx('logout-wrapper')}>
                                     <IoLogOut />

@@ -32,7 +32,7 @@ function TourPage() {
         const results = await tourService.getSearchTours(locationValue, distanceValue, maxPeopleValue);
         setListTours(results.data);
         setTitle('Tour Search Result');
-        if (results.data && results.data.length !== 0) {
+        if (results && results.data && results.data.length !== 0) {
             state.showToast(results.message, `Found ${results.data.length} Tour`, 'success');
         } else {
             state.showToast(results.message, `No Tour Found`, 'error');

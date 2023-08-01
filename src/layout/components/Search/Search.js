@@ -23,7 +23,6 @@ function Search() {
         }
         const fetchApi = async () => {
             setLoading(true);
-            const token = localStorage.getItem('token');
             // const results = await searchServices.search(debouncedValue, token);
             // setSearchResult(results.recipeJson);
 
@@ -46,7 +45,6 @@ function Search() {
         }
     };
     const getDetailRecipeData = async (id) => {
-        const token = localStorage.getItem('token');
         // const results = await recipeService.getDetailRecipe(id, token);
         // setDetailRecipe(results.recipe);
         setShowDetailRecipe(true);

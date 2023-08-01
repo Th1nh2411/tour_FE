@@ -48,14 +48,8 @@
     align-items: center;
     padding: 10px 0;
     font-size: 1.8rem;
-    &:hover {
-        cursor: pointer;
-        opacity: 0.9;
-    }
 }
-.info-subtitle + .info-subtitle {
-    margin-top: 2px;
-}
+
 .info-icon {
     font-size: 2.2rem;
     margin: 5px 8px 5px 0;

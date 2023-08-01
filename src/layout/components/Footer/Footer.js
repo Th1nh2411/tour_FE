@@ -11,8 +11,8 @@ function Header() {
     return (
         <footer className={cx('wrapper')}>
             <div className={cx('inner')}>
-                <Row className={cx('g-3')} gutter={{ lg: 32 }}>
-                    <Col xs={24} md={6}>
+                <Row className={cx('g-3')} gutter={[32, 32]}>
+                    <Col xs={24} sm={12} lg={6}>
                         <div className={cx('info-wrapper')}>
                             <Image src="https://www.learnworlds.com/app/themes/learnworlds/dist/images/logo.svg" />
                             <div className={cx('introduce')}>
@@ -28,7 +28,7 @@ function Header() {
                             </div>
                         </div>
                     </Col>
-                    <Col xs={24} md={6}>
+                    <Col xs={24} sm={12} lg={6}>
                         <div className={cx('info-wrapper')}>
                             <div className={cx('info-title')}>Discover</div>
                             <div className={cx('info-subtitle')}>Home</div>
@@ -36,7 +36,7 @@ function Header() {
                             <div className={cx('info-subtitle')}>Tours</div>
                         </div>
                     </Col>
-                    <Col xs={24} md={6}>
+                    <Col xs={24} sm={12} lg={6}>
                         <div className={cx('info-wrapper')}>
                             <div className={cx('info-title')}>Quick Links</div>
                             <div className={cx('info-subtitle')}>Gallery</div>
@@ -44,7 +44,7 @@ function Header() {
                             <div className={cx('info-subtitle')}>Register</div>
                         </div>
                     </Col>
-                    <Col xs={24} md={6}>
+                    <Col xs={24} sm={12} lg={6}>
                         <div className={cx('info-wrapper')}>
                             <div className={cx('info-title')}>Contact</div>
                             <div className={cx('info-subtitle')}>

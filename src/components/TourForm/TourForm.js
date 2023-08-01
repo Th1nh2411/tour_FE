@@ -30,10 +30,14 @@ const TourForm = ({ showTourForm, onClose = () => {} }) => {
         console.log(results);
         onClose();
     };
-
-    console.log(showTourForm);
     return (
-        <Modal title="Add Tour" open={showTourForm} okText="Confirm Add" onOk={addTour} onCancel={onClose}>
+        <Modal
+            title={<h2 className={cx('text-center')}>Add Tour</h2>}
+            open={showTourForm}
+            okText="Confirm Add"
+            onOk={addTour}
+            onCancel={onClose}
+        >
             <Row gutter={[10, 10]} className={cx('mt-2')}>
                 <Col md={12}>
                     <Input

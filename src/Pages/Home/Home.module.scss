@@ -9,9 +9,7 @@
     color: #fff;
     font-weight: 600;
 }
-.customer-input::placeholder {
-    color: #666;
-}
+
 .section-slogan {
     display: flex;
     align-items: center;
@@ -74,15 +72,10 @@
         width: auto;
         font-weight: 600;
         font-size: 1.6rem;
-        &::placeholder {
-            color: #888;
-        }
+
         input {
             font-weight: 600;
             font-size: 1.6rem;
-            &::placeholder {
-                color: #888;
-            }
         }
     }
 }

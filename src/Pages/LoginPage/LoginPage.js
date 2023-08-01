@@ -8,21 +8,21 @@ import { FaUser } from 'react-icons/fa';
 import * as authService from '../../services/authService';
 import { useNavigate } from 'react-router';
 import config from '../../config';
-import LocalStorageManager from '../../utils/LocalStorageManager';
 import { StoreContext, actions } from '../../store';
+import Cookies from 'js-cookie';
 const cx = classNames.bind(styles);
 
 function LoginPage() {
     const [state, dispatch] = useContext(StoreContext);
-    const localStorageManage = LocalStorageManager.getInstance();
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const login = async () => {
         const results = await authService.login(email, password);
         if (results.token) {
-            localStorageManage.setItem('userInfo', results);
-            dispatch(actions.setUserInfo(results));
+            dispatch(actions.setUserInfo(results.data));
+            Cookies.set('userInfo', JSON.stringify(results.data));
+            Cookies.set('accessToken', results.token);
             const toast = state.showToast('Success', 'Đăng nhập thành công', 'success');
             navigate(config.routes.home);
         } else {
@@ -31,7 +31,6 @@ function LoginPage() {
             setPassword('');
         }
     };
-
     return (
         <div className={cx('wrapper')}>
             <Row style={{ boxShadow: '0 48px 100px 0 rgba(17, 12, 46, 0.15)' }}>

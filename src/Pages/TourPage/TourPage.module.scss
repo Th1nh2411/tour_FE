@@ -74,15 +74,10 @@
         width: auto;
         font-weight: 600;
         font-size: 1.6rem;
-        &::placeholder {
-            color: #888;
-        }
+
         input {
             font-weight: 600;
             font-size: 1.6rem;
-            &::placeholder {
-                color: #888;
-            }
         }
     }
 }

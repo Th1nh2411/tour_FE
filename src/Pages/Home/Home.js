@@ -26,7 +26,7 @@ function Home() {
     }, [locationValue, distanceValue, maxPeopleValue]);
     const getFeaturedTour = async () => {
         const results = await tourService.getFeaturedTours();
-        setFeaturedTours(results.data);
+        setFeaturedTours(results ? results.data : []);
     };
     useEffect(() => {
         getFeaturedTour();
@@ -135,7 +135,7 @@ function Home() {
                 </div>
             </section>
             <section>
-                <Row align="center" gutter={28}>
+                <Row align="center" gutter={[28, 28]}>
                     <Col lg={6}>
                         <h3 className={cx('service-slogan')}>What we serve</h3>
                         <h3 className={cx('section-title')}>We offer out best services</h3>
@@ -171,14 +171,14 @@ function Home() {
 
                 <Row gutter={20}>
                     {featuredTours.map((item, index) => (
-                        <Col key={index} lg={6}>
+                        <Col key={index} sm={12} lg={6}>
                             <TourItem data={item} />
                         </Col>
                     ))}
                 </Row>
             </section>
             <section>
-                <Row gutter={32}>
+                <Row gutter={[32, 16]} className={cx('align-center')}>
                     <Col md={10}>
                         <h3 className={cx('section-slogan')}>
                             <span className={cx('slogan-text')}>Experience</span>
@@ -209,8 +209,11 @@ function Home() {
                             </Col>
                         </Row>
                     </Col>
-                    <Col xs={0} md={12} offset={2}>
-                        <Image src="https://doan-eta.vercel.app/static/media/experience.f276d1992082e5879afb.png" />
+                    <Col xs={24} md={12} offset={2}>
+                        <Image
+                            src="https://doan-eta.vercel.app/static/media/experience.f276d1992082e5879afb.png"
+                            className={cx('w-100')}
+                        />
                     </Col>
                 </Row>
             </section>
@@ -219,7 +222,7 @@ function Home() {
                     <span className={cx('slogan-text')}>Gallery</span>
                 </h3>
                 <h2 className={cx('mt-1')}>Visit our customers tour gallery</h2>
-                <Row gutter={16} className={cx('mt-3')}>
+                <Row gutter={[16, 16]} className={cx('mt-3')}>
                     <Col lg={6}>
                         <div className={cx('gallery-img-group')}>
                             <Image
@@ -292,7 +295,7 @@ function Home() {
             </section>
             <section>
                 <Row>
-                    <Col xs={0} md={10}>
+                    <Col xs={24} md={10}>
                         <h3 className={cx('section-slogan')}>
                             <span className={cx('slogan-text')}>Subscribe</span>
                         </h3>
@@ -309,8 +312,11 @@ function Home() {
                             className={cx('w-100', 'mt-2')}
                         />
                     </Col>
-                    <Col xs={0} md={12} offset={2}>
-                        <Image src="https://doan-eta.vercel.app/static/media/male-tourist.f000d0ad1ca492b2bcfb.png" />
+                    <Col xs={24} md={12} offset={2}>
+                        <Image
+                            src="https://doan-eta.vercel.app/static/media/male-tourist.f000d0ad1ca492b2bcfb.png"
+                            className={cx('w-100')}
+                        />
                     </Col>
                 </Row>
             </section>

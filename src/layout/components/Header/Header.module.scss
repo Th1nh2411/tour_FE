@@ -19,6 +19,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 80px;
     transition: all 0.1s ease-in-out;
 }
 .side-group {
@@ -27,7 +28,8 @@
 }
 
 .logo-wrapper {
-    min-width: 510px;
+    flex: 1;
+    max-width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -153,7 +155,7 @@
 .cart-title {
     display: none;
 }
-@media (max-width: 875px) {
+@media (max-width: 992px) {
     .logo-wrapper {
         display: none;
     }
@@ -183,13 +185,11 @@
         width: 100%;
     }
     .logo-wrapper {
+        flex: 0;
         width: 100%;
         display: flex;
         padding-bottom: 20px;
         border-bottom: 1px solid #ccc;
-    }
-    .close-btn-mb {
-        display: block;
     }
 
     .logo {
@@ -197,6 +197,7 @@
     }
     .header-nav {
         flex-direction: column;
+        gap: 20px;
         padding: 20px 20px 0;
     }
 

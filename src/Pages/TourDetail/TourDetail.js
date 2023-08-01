@@ -10,6 +10,8 @@ import { HiLocationMarker, HiOutlineLocationMarker, HiOutlineMap } from 'react-i
 import { useLocation, useNavigate } from 'react-router';
 import { BsFillStarFill, BsPeople } from 'react-icons/bs';
 import { RiMoneyDollarCircleLine } from 'react-icons/ri';
+import * as bookingService from '../../services/bookingService';
+import * as reviewService from '../../services/reviewService';
 const cx = classNames.bind(styles);
 
 function TourDetail({}) {
@@ -17,28 +19,61 @@ function TourDetail({}) {
     const data = useLocation().state;
     const navigate = useNavigate();
     const serverPath = process.env.SERVER_PATH || 'https://doan-eta.vercel.app';
-    const [fullNameValue, setFullNameValue] = useState('');
-    const [phoneValue, setPhoneValue] = useState('');
-    const [dateValue, setDateValue] = useState('');
-    const [numPeopleValue, setNumPeopleValue] = useState('');
+    const [fullName, setFullNameValue] = useState('');
+    const [phone, setPhoneValue] = useState('');
+    const [bookAt, setBookAtValue] = useState('');
+    const [guestSize, setGuestSizeValue] = useState('');
+    const [reviewText, setReviewTextValue] = useState('');
+    const [rating, setRatingValue] = useState(5);
     const onChangeDate = (date, dateString) => {
-        setDateValue(dateString);
+        setBookAtValue(dateString);
     };
-    const handleSubmitReview = () => {
-        if (state.userInfo) {
-            state.showToast('Successfully', `Successfully booked tickets on ${dateValue}`);
+    const createReview = async () => {
+        const results = await reviewService.createReview(
+            {
+                productId: data._id,
+                username: state.userInfo.username,
+                reviewText,
+                rating,
+            },
+            data._id,
+        );
+        if (results.success) {
+            state.showToast('Successfully', results.message);
         } else {
-            state.showToast('Fail', `Please Sign In`, 'error');
+            state.showToast('Failure', results.message, 'error');
+        }
+    };
+    const createBooking = async () => {
+        const results = await bookingService.createBooking({
+            phone,
+            bookAt,
+            guestSize,
+            fullName,
+            tourName: data.title,
+            userEmail: state.userInfo.email,
+            userId: state.userInfo._id,
+        });
+        if (results.success) {
+            state.showToast('Successfully', results.message);
+        } else {
+            state.showToast('Failure', results.message, 'error');
         }
     };
     const handleBookTour = () => {
         if (state.userInfo) {
-            state.showToast('Successfully', `Submit review successful`);
+            createBooking();
         } else {
             state.showToast('Fail', `Please Sign In`, 'error');
         }
     };
-
+    const handleSubmitReview = () => {
+        if (state.userInfo) {
+            createReview();
+        } else {
+            state.showToast('Fail', `Please Sign In`, 'error');
+        }
+    };
     return (
         <div className={cx('wrapper')}>
             <section>
@@ -78,14 +113,18 @@ function TourDetail({}) {
                         </Space>
                         <Space direction="vertical" size={'small'} className={cx('card', 'mt-2')}>
                             <h2>Reviews ({data.reviews.length} reviews)</h2>
-                            <Rate defaultValue={5} />
+                            <Rate value={rating} onChange={(value) => setRatingValue(value)} />
                             <Space.Compact
                                 size="large"
                                 style={{
                                     width: '100%',
                                 }}
                             >
-                                <Input placeholder="Share your thoughts" />
+                                <Input
+                                    value={reviewText}
+                                    onChange={(e) => setReviewTextValue(e.target.value)}
+                                    placeholder="Share your thoughts"
+                                />
                                 <Button onClick={handleSubmitReview} className={cx('customer-btn')} type="ghost">
                                     Submit
                                 </Button>
@@ -106,13 +145,13 @@ function TourDetail({}) {
                                 <h2>Information</h2>
                                 <Input
                                     onChange={(e) => setFullNameValue(e.target.value)}
-                                    value={fullNameValue}
+                                    value={fullName}
                                     size="large"
                                     placeholder="Full Name"
                                 />
                                 <InputNumber
                                     onChange={(value) => setPhoneValue(value)}
-                                    value={phoneValue}
+                                    value={phone}
                                     size="large"
                                     placeholder="Phone"
                                     controls={false}
@@ -124,8 +163,9 @@ function TourDetail({}) {
                                     </Col>
                                     <Col span={12}>
                                         <InputNumber
-                                            onChange={(value) => setNumPeopleValue(value)}
-                                            value={numPeopleValue}
+                                            min="0"
+                                            onChange={(value) => setGuestSizeValue(value)}
+                                            value={guestSize}
                                             size="large"
                                             placeholder="Guest"
                                             className={cx('w-100')}
@@ -134,7 +174,7 @@ function TourDetail({}) {
                                 </Row>
                                 <div className={cx('align-center', 'content-between')}>
                                     <p className={cx('price-calculate')}>${data.price} x 1 person</p>
-                                    <p className={cx('price-calculated')}>${data.price * numPeopleValue}</p>
+                                    <p className={cx('price-calculated')}>${data.price * guestSize}</p>
                                 </div>
                                 <div className={cx('align-center', 'content-between')}>
                                     <p className={cx('charge-title')}>Service charge</p>
@@ -142,7 +182,7 @@ function TourDetail({}) {
                                 </div>
                                 <div className={cx('align-center', 'content-between')}>
                                     <p className={cx('total-title')}>Total</p>
-                                    <p className={cx('total-calculated')}>${data.price * numPeopleValue + 10}</p>
+                                    <p className={cx('total-calculated')}>${data.price * guestSize + 10}</p>
                                 </div>
                             </div>
                             <Button
