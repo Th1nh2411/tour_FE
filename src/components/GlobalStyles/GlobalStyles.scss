@@ -107,10 +107,9 @@ input,
     font-family: 'Nunito', sans-serif;
 }
 
-.ant-input::placeholder,
-.ant-input-number-input::placeholder {
-    color: #888 !important;
-    font-weight: 500;
+input::placeholder {
+    color: #999 !important;
+    font-weight: 400;
 }
 
 a[href] {

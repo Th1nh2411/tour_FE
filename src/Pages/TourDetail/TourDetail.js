@@ -12,6 +12,7 @@ import { BsFillStarFill, BsPeople } from 'react-icons/bs';
 import { RiMoneyDollarCircleLine } from 'react-icons/ri';
 import * as bookingService from '../../services/bookingService';
 import * as reviewService from '../../services/reviewService';
+import dayjs from 'dayjs';
 const cx = classNames.bind(styles);
 
 function TourDetail({}) {
@@ -28,6 +29,7 @@ function TourDetail({}) {
     const onChangeDate = (date, dateString) => {
         setBookAtValue(dateString);
     };
+
     const createReview = async () => {
         const results = await reviewService.createReview(
             {
@@ -55,7 +57,7 @@ function TourDetail({}) {
             userId: state.userInfo._id,
         });
         if (results.success) {
-            state.showToast('Successfully', results.message);
+            state.showToast('Successfully booked on ' + dayjs(bookAt).format('DD/MM/YYYY'), results.message);
         } else {
             state.showToast('Failure', results.message, 'error');
         }
