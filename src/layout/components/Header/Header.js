@@ -6,9 +6,9 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import config from '../../../config';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { StoreContext, actions } from '../../../store';
-import { Button, Input, Space, Tooltip } from 'antd';
-import { MdOutlineClose, MdOutlineMenu, MdSearch } from 'react-icons/md';
-import { IoLogOut } from 'react-icons/io5';
+import { Button, Dropdown, Input, Space, Tooltip } from 'antd';
+import { MdOutlineClose, MdOutlineMenu } from 'react-icons/md';
+import { IoLogOut, IoPerson } from 'react-icons/io5';
 import Cookies from 'js-cookie';
 const cx = classNames.bind(styles);
 
@@ -41,7 +41,27 @@ function Header() {
         Cookies.remove('accessToken');
         Cookies.remove('userInfo');
     };
-    console.log(userInfo);
+
+    const dropdownItems = [
+        {
+            key: '1',
+            label: (
+                <Link style={{ fontSize: '1.6rem' }} to={config.routes.profile}>
+                    Your Profile
+                </Link>
+            ),
+            icon: <IoPerson style={{ fontSize: '1.8rem' }} />,
+        },
+        {
+            key: '2',
+            label: (
+                <div style={{ fontSize: '1.6rem' }} onClick={handleLogOut}>
+                    Log Out
+                </div>
+            ),
+            icon: <IoLogOut style={{ fontSize: '1.8rem' }} />,
+        },
+    ];
     return (
         <>
             <header className={cx('wrapper', { active: showMenuMb })}>
@@ -84,11 +104,9 @@ function Header() {
                     {userInfo ? (
                         <div className={cx('align-center')} size={'large'}>
                             <h3>{userInfo.username}</h3>
-                            <Tooltip title="Log out">
-                                <div onClick={handleLogOut} className={cx('logout-wrapper')}>
-                                    <IoLogOut />
-                                </div>
-                            </Tooltip>
+                            <Dropdown menu={{ items: dropdownItems }}>
+                                <Image src={images.shoppingCart} className={cx('cart-img')} />
+                            </Dropdown>
                         </div>
                     ) : (
                         <div className={cx('header-actions')}>

@@ -3,6 +3,7 @@ const routes = {
     aboutUs: '/aboutUs',
     tour: '/tour',
     tourDetail: '/tour/:idTour',
+    profile: '/profile',
     login: '/login',
     register: '/register',
 };

@@ -2,7 +2,7 @@ import styles from './Home.module.scss';
 import classNames from 'classnames/bind';
 import Image from '../../components/Image';
 import images from '../../assets/images';
-import { Button, Col, Input, InputNumber, Row } from 'antd';
+import { Button, Col, Input, InputNumber, Row, Skeleton, Spin } from 'antd';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { StoreContext, actions } from '../../store';
 import { HiOutlineLocationMarker, HiOutlineMap, HiOutlineUsers } from 'react-icons/hi';
@@ -17,6 +17,7 @@ const cx = classNames.bind(styles);
 
 function Home() {
     const [state, dispatch] = useContext(StoreContext);
+    const [loading, setLoading] = useState(false);
     const [locationValue, setLocationValue] = useState('');
     const [distanceValue, setDistanceValue] = useState('');
     const [maxPeopleValue, setMaxPeopleValue] = useState(0);
@@ -25,8 +26,10 @@ function Home() {
         return { locationValue, distanceValue, maxPeopleValue };
     }, [locationValue, distanceValue, maxPeopleValue]);
     const getFeaturedTour = async () => {
+        setLoading(true);
         const results = await tourService.getFeaturedTours();
         setFeaturedTours(results ? results.data : []);
+        setLoading(false);
     };
     useEffect(() => {
         getFeaturedTour();
@@ -105,6 +108,7 @@ function Home() {
                                         bordered={false}
                                         value={distanceValue}
                                         onChange={(e) => setDistanceValue(e.target.value)}
+                                        min={0}
                                     />
                                 </div>
                             </div>
@@ -120,6 +124,7 @@ function Home() {
                                         bordered={false}
                                         value={maxPeopleValue}
                                         onChange={(value) => setMaxPeopleValue(value)}
+                                        min={0}
                                     />
                                 </div>
                             </div>
@@ -169,13 +174,15 @@ function Home() {
                 </h3>
                 <h2 className={cx('mt-1')}>Our Feature Tours</h2>
 
-                <Row gutter={20}>
-                    {featuredTours.map((item, index) => (
-                        <Col key={index} sm={12} lg={6}>
-                            <TourItem data={item} />
-                        </Col>
-                    ))}
-                </Row>
+                <Skeleton loading={loading}>
+                    <Row gutter={20}>
+                        {featuredTours.map((item, index) => (
+                            <Col key={index} sm={12} lg={6}>
+                                <TourItem data={item} />
+                            </Col>
+                        ))}
+                    </Row>
+                </Skeleton>
             </section>
             <section>
                 <Row gutter={[32, 16]} className={cx('align-center')}>

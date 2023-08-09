@@ -4,22 +4,23 @@ import classNames from 'classnames/bind';
 import { AiFillCheckCircle, AiFillCloseCircle, AiFillExclamationCircle, AiFillInfoCircle } from 'react-icons/ai';
 import { useContext, useEffect, useRef, useState } from 'react';
 import * as tourService from '../../services/tourService';
-import { Button, Col, Input, InputNumber, Modal, Row, Upload, message } from 'antd';
+import { Button, Checkbox, Col, Input, InputNumber, Modal, Row, Upload, message } from 'antd';
 import { BsUpload } from 'react-icons/bs';
 import { StoreContext } from '../../store';
 const cx = classNames.bind(styles);
 
-const TourForm = ({ showTourForm, onClose = () => {} }) => {
+const TourForm = ({ data, showTourForm, onClose = () => {} }) => {
     const [state, dispatch] = useContext(StoreContext);
-    const [title, setTitle] = useState('');
-    const [address, setAddress] = useState('');
-    const [city, setCity] = useState('');
-    const [maxGroupSize, setMaxGroupSize] = useState('');
-    const [distance, setDistance] = useState('');
-    const [price, setPrice] = useState('');
-    const [desc, setDesc] = useState('');
-    const [featured, setFeatured] = useState(true);
+    const [title, setTitle] = useState(data ? data.title : '');
+    const [address, setAddress] = useState(data ? data.address : '');
+    const [city, setCity] = useState(data ? data.city : '');
+    const [maxGroupSize, setMaxGroupSize] = useState(data ? data.maxGroupSize : '');
+    const [distance, setDistance] = useState(data ? data.distance : '');
+    const [price, setPrice] = useState(data ? data.price : '');
+    const [desc, setDesc] = useState(data ? data.desc : '');
+    const [featured, setFeatured] = useState(data ? data.featured : false);
     const [photo, setPhoto] = useState();
+
     const addTour = async () => {
         const results = await tourService.addTour({
             title,
@@ -39,20 +40,43 @@ const TourForm = ({ showTourForm, onClose = () => {} }) => {
         }
         onClose();
     };
+    const editTour = async () => {
+        const results = await tourService.editTour(
+            {
+                title,
+                address,
+                city,
+                maxGroupSize,
+                distance,
+                price,
+                desc,
+                featured,
+                photo,
+            },
+            data._id,
+        );
+        if (results.success) {
+            state.showToast('Success', results.message);
+        } else {
+            state.showToast('Fail', results.message, 'error');
+        }
+        onClose();
+    };
     const handleChangeUpload = (info) => {
         setPhoto('/tour-images/' + info.fileList[0].name);
     };
     return (
         <Modal
-            title={<h2 className={cx('text-center')}>Add Tour</h2>}
+            title={<h2 className={cx('text-center')}>{data ? 'Edit Tour' : 'Add Tour'}</h2>}
             open={showTourForm}
-            okText="Confirm Add"
-            onOk={addTour}
+            okText="Confirm Edit"
+            onOk={data ? editTour : addTour}
             onCancel={onClose}
         >
-            <Row gutter={[10, 10]} className={cx('mt-2')}>
+            <Row gutter={[10, 10]} className={cx('mt-2', 'align-center')}>
                 <Col md={12}>
                     <Input
+                        value={address}
                         size="large"
                         className={cx('data-input')}
                         placeholder="Address"
@@ -61,6 +85,7 @@ const TourForm = ({ showTourForm, onClose = () => {} }) => {
                 </Col>
                 <Col md={12}>
                     <Input
+                        value={city}
                         size="large"
                         className={cx('data-input')}
                         placeholder="City"
@@ -70,6 +95,7 @@ const TourForm = ({ showTourForm, onClose = () => {} }) => {
 
                 <Col md={12}>
                     <Input
+                        value={title}
                         size="large"
                         className={cx('data-input')}
                         placeholder="Title"
@@ -78,23 +104,25 @@ const TourForm = ({ showTourForm, onClose = () => {} }) => {
                 </Col>
                 <Col md={12}>
                     <Input
+                        value={desc}
                         size="large"
                         className={cx('data-input')}
                         placeholder="Description"
                         onChange={(e) => setDesc(e.target.value)}
                     />
                 </Col>
-                <Col md={8}>
+                <Col>
                     <InputNumber
+                        value={maxGroupSize}
                         size="large"
                         className={cx('w-100')}
                         placeholder="Max People"
                         onChange={(value) => setMaxGroupSize(value)}
                     />
                 </Col>
-                <Col md={8}>
+                <Col>
                     <InputNumber
-                        after
+                        value={distance}
                         size="large"
                         className={cx('w-100')}
                         placeholder="Distance"
@@ -103,8 +131,9 @@ const TourForm = ({ showTourForm, onClose = () => {} }) => {
                         addonAfter="km"
                     />
                 </Col>
-                <Col md={8}>
+                <Col>
                     <InputNumber
+                        value={price}
                         prefix="$"
                         size="large"
                         className={cx('w-100')}
@@ -113,7 +142,7 @@ const TourForm = ({ showTourForm, onClose = () => {} }) => {
                         controls={false}
                     />
                 </Col>
-                <Col md={12}>
+                <Col>
                     <Upload
                         beforeUpload={() => false}
                         accept="image/*"
@@ -123,6 +152,11 @@ const TourForm = ({ showTourForm, onClose = () => {} }) => {
                     >
                         <Button icon={<BsUpload />}>Upload image</Button>
                     </Upload>
+                </Col>
+                <Col>
+                    <Checkbox checked={featured} onChange={() => setFeatured(!featured)}>
+                        Featured
+                    </Checkbox>
                 </Col>
             </Row>
         </Modal>

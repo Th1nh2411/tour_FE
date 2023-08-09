@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import UserContext from './Context';
 import reducer from './reducer';
 import { actions } from '.';
@@ -19,6 +19,7 @@ function Provider({ children }) {
     const initState = {
         userInfo: JSON.parse(Cookies.get('userInfo') || null),
         showToast,
+        loading: false,
     };
     const [state, dispatch] = useReducer(reducer, initState);
 

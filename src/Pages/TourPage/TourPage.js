@@ -5,7 +5,7 @@ import images from '../../assets/images';
 import { useContext, useEffect, useState } from 'react';
 import { StoreContext, actions } from '../../store';
 import config from '../../config';
-import { Col, Input, InputNumber, Modal, Pagination, Row } from 'antd';
+import { Col, Input, InputNumber, Modal, Pagination, Row, Skeleton } from 'antd';
 import { HiOutlineLocationMarker, HiOutlineMap, HiOutlineUsers } from 'react-icons/hi';
 import * as tourService from '../../services/tourService';
 import { BiPlusCircle, BiSearch } from 'react-icons/bi';
@@ -17,6 +17,7 @@ const cx = classNames.bind(styles);
 function TourPage() {
     const [state, dispatch] = useContext(StoreContext);
     const searchQueryFromHome = useLocation().state;
+    const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState('All Tours');
     const [locationValue, setLocationValue] = useState(searchQueryFromHome ? searchQueryFromHome.locationValue : '');
     const [distanceValue, setDistanceValue] = useState(searchQueryFromHome ? searchQueryFromHome.distanceValue : '');
@@ -25,8 +26,10 @@ function TourPage() {
     const [showTourForm, setShowTourForm] = useState(false);
 
     const getAllTours = async () => {
+        setLoading(true);
         const results = await tourService.getAllTours();
         setListTours(results.data);
+        setLoading(false);
     };
     const getSearchTours = async () => {
         const results = await tourService.getSearchTours(locationValue, distanceValue, maxPeopleValue);
@@ -85,6 +88,7 @@ function TourPage() {
                                             bordered={false}
                                             value={distanceValue}
                                             onChange={(e) => setDistanceValue(e.target.value)}
+                                            min={0}
                                         />
                                     </div>
                                 </div>
@@ -100,6 +104,7 @@ function TourPage() {
                                             bordered={false}
                                             value={maxPeopleValue}
                                             onChange={(value) => setMaxPeopleValue(value)}
+                                            min={0}
                                         />
                                     </div>
                                 </div>
@@ -117,17 +122,19 @@ function TourPage() {
                             Add tour
                         </h4>
                     )}
-                    <Row gutter={20}>
-                        {listTours ? (
-                            listTours.map((item, index) => (
-                                <Col key={index} lg={6}>
-                                    <TourItem data={item} />
-                                </Col>
-                            ))
-                        ) : (
-                            <h3>No tour found</h3>
-                        )}
-                    </Row>
+                    <Skeleton loading={loading}>
+                        <Row gutter={20}>
+                            {listTours ? (
+                                listTours.map((item, index) => (
+                                    <Col key={index} sm={12} lg={6}>
+                                        <TourItem data={item} />
+                                    </Col>
+                                ))
+                            ) : (
+                                <h3>No tour found</h3>
+                            )}
+                        </Row>
+                    </Skeleton>
                     <Pagination style={{ textAlign: 'center' }} className={cx('mt-2')} defaultCurrent={1} total={50} />
                 </section>
             </div>

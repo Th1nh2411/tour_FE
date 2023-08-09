@@ -25,6 +25,18 @@ export const addTour = async (data) => {
         return error.response && error.response.data;
     }
 };
+export const editTour = async (data, id) => {
+    const config = {
+        withCredentials: true,
+    };
+    try {
+        const res = await httpRequest.put(`api/v1/tours/${id}`, data, config);
+        return res;
+    } catch (error) {
+        console.log(error);
+        return error.response && error.response.data;
+    }
+};
 export const getFeaturedTours = async (token) => {
     const config = {};
 

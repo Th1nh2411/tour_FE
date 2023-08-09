@@ -72,6 +72,7 @@ function TourDetail({}) {
     const handleSubmitReview = () => {
         if (state.userInfo) {
             createReview();
+            setReviewTextValue('');
         } else {
             state.showToast('Fail', `Please Sign In`, 'error');
         }
@@ -79,7 +80,7 @@ function TourDetail({}) {
     return (
         <div className={cx('wrapper')}>
             <section>
-                <Row gutter={28}>
+                <Row gutter={[24, 24]}>
                     <Col lg={16}>
                         <Image src={serverPath + data.photo} className={cx('img')} />
                         <Space direction="vertical" size={'small'} className={cx('card')}>
@@ -133,7 +134,7 @@ function TourDetail({}) {
                             </Space.Compact>
                         </Space>
                     </Col>
-                    <Col lg={8}>
+                    <Col xs={24} lg={8}>
                         <div className={cx('booking-wrapper', 'card')}>
                             <div className={cx('content-between', 'booking-header')}>
                                 <div className={cx('booking-price')}>
