@@ -28,8 +28,10 @@ function TourPage() {
     const getAllTours = async () => {
         setLoading(true);
         const results = await tourService.getAllTours();
-        setListTours(results.data);
-        setLoading(false);
+        if (results) {
+            setListTours(results.data);
+            setLoading(false);
+        }
     };
     const getSearchTours = async () => {
         const results = await tourService.getSearchTours(locationValue, distanceValue, maxPeopleValue);

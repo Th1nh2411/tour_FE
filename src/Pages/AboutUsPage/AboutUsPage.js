@@ -12,7 +12,15 @@ function AboutUsPage() {
     const [menu, setMenu] = useState([]);
     const [state, dispatch] = useContext(StoreContext);
 
-    return <div className={cx('wrapper')}>AboutUsPage page</div>;
+    return (
+        <div className={cx('wrapper')}>
+            <section className={cx('banner-section')}>
+                <div className={cx('banner-content')}>
+                    <div className={cx('banner-title')}>About Us</div>
+                </div>
+            </section>
+        </div>
+    );
 }
 
 export default AboutUsPage;

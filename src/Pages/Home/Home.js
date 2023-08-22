@@ -48,7 +48,7 @@ function Home() {
                             />
                         </h3>
                         <h1 className={cx('section-title')}>
-                            Traveling opens the door to creating <span>memories with duong</span>
+                            Traveling opens the door to creating <span>memories with TickZ</span>
                         </h1>
                         <p className={cx('section-desc')}>
                             Our Vietnam is a beautiful country. We have a variety of landscapes which are widely
@@ -176,11 +176,12 @@ function Home() {
 
                 <Skeleton loading={loading}>
                     <Row gutter={20}>
-                        {featuredTours.map((item, index) => (
-                            <Col key={index} sm={12} lg={6}>
-                                <TourItem data={item} />
-                            </Col>
-                        ))}
+                        {featuredTours &&
+                            featuredTours.map((item, index) => (
+                                <Col key={index} sm={12} lg={6}>
+                                    <TourItem data={item} />
+                                </Col>
+                            ))}
                     </Row>
                 </Skeleton>
             </section>
