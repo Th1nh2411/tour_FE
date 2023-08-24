@@ -19,7 +19,7 @@ function Home() {
     const [state, dispatch] = useContext(StoreContext);
     const [loading, setLoading] = useState(false);
     const [locationValue, setLocationValue] = useState('');
-    const [distanceValue, setDistanceValue] = useState('');
+    const [distanceValue, setDistanceValue] = useState(400);
     const [maxPeopleValue, setMaxPeopleValue] = useState(0);
     const [featuredTours, setFeaturedTours] = useState([]);
     const searchQuery = useMemo(() => {
@@ -101,7 +101,7 @@ function Home() {
                             <div className={cx('search-item')}>
                                 <HiOutlineLocationMarker className={cx('icon')} />
                                 <div>
-                                    <h5 className={cx('search-title')}>Distance</h5>
+                                    <h5 className={cx('search-title')}>Max Distance</h5>
                                     <Input
                                         className={cx('search-input')}
                                         placeholder="Distance k/m"

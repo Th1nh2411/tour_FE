@@ -19,7 +19,6 @@ function TourDetail({}) {
     const [state, dispatch] = useContext(StoreContext);
     const data = useLocation().state;
     const navigate = useNavigate();
-    const serverPath = process.env.SERVER_PATH || 'https://doan-eta.vercel.app';
     const [fullName, setFullNameValue] = useState('');
     const [phone, setPhoneValue] = useState('');
     const [bookAt, setBookAtValue] = useState('');
@@ -82,7 +81,7 @@ function TourDetail({}) {
             <section>
                 <Row gutter={[24, 24]}>
                     <Col lg={16}>
-                        <Image src={serverPath + data.photo} className={cx('img')} />
+                        <Image src={data.photo} className={cx('img')} />
                         <Space direction="vertical" size={'small'} className={cx('card')}>
                             <h2>{data.title}</h2>
                             <div style={{ color: '#555' }} className={cx('align-center')}>

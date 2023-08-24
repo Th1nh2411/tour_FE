@@ -1,8 +1,11 @@
 import * as httpRequest from '../utils/httpRequest';
 
-export const getAllTours = async (token) => {
+export const getAllTours = async (page) => {
     const config = {
         withCredentials: true,
+        params: {
+            page,
+        },
     };
 
     try {

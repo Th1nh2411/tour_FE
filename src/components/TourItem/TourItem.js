@@ -14,20 +14,34 @@ import { StoreContext } from '../../store';
 import TourForm from '../TourForm/TourForm';
 const cx = classNames.bind(styles);
 
-function TourItem({ className, data }) {
+function TourItem({ className, data, onEdit }) {
     const [state, dispatch] = useContext(StoreContext);
     const userInfo = state.userInfo;
     const navigate = useNavigate();
     const [showTourForm, setShowTourForm] = useState(false);
     return (
         <>
-            <TourForm data={data} showTourForm={showTourForm} onClose={() => setShowTourForm(false)} />
+            {/* <TourForm
+                data={data}
+                showTourForm={showTourForm}
+                onClose={(edited) => {
+                    console.log(edited);
+                    // if (edited) {
+                    //     if (searchQueryFromHome) {
+                    //          getSearchTours();
+                    //     } else {
+                    //          getAllTours();
+                    //     }
+                    // }
+                    setShowTourForm(false);
+                }}
+            /> */}
             <div className={cx('wrapper', className)}>
                 <div className={cx('header')}>
-                    <Image src={'https://doan-eta.vercel.app' + data.photo} className={cx('img')} />
-                    <div className={cx('featured')}>Featured</div>
-                    {userInfo && userInfo.role === 'admin' && (
-                        <HiPencil onClick={() => setShowTourForm(true)} className={cx('edit-icon')} />
+                    <Image src={data.photo} className={cx('img')} />
+                    {data.featured && <div className={cx('featured')}>Featured</div>}
+                    {userInfo && userInfo.role === 'admin' && onEdit && (
+                        <HiPencil onClick={onEdit} className={cx('edit-icon')} />
                     )}
                 </div>
                 <div className={cx('body')}>

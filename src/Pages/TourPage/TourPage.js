@@ -20,22 +20,28 @@ function TourPage() {
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState('All Tours');
     const [locationValue, setLocationValue] = useState(searchQueryFromHome ? searchQueryFromHome.locationValue : '');
-    const [distanceValue, setDistanceValue] = useState(searchQueryFromHome ? searchQueryFromHome.distanceValue : '');
+    const [distanceValue, setDistanceValue] = useState(searchQueryFromHome ? searchQueryFromHome.distanceValue : 400);
     const [maxPeopleValue, setMaxPeopleValue] = useState(searchQueryFromHome ? searchQueryFromHome.maxPeopleValue : 0);
     const [listTours, setListTours] = useState([]);
+    const [totalTours, setTotalTours] = useState([]);
+    const [currentPageTours, setCurrentPageTours] = useState(1);
+
     const [showTourForm, setShowTourForm] = useState(false);
+    const [tourDetail, setTourDetail] = useState(null);
 
     const getAllTours = async () => {
         setLoading(true);
-        const results = await tourService.getAllTours();
+        const results = await tourService.getAllTours(currentPageTours - 1);
         if (results) {
             setListTours(results.data);
+            setTotalTours(results.count);
             setLoading(false);
         }
     };
     const getSearchTours = async () => {
         const results = await tourService.getSearchTours(locationValue, distanceValue, maxPeopleValue);
         setListTours(results.data);
+        setTotalTours(results.count);
         setTitle('Tour Search Result');
         if (results && results.data && results.data.length !== 0) {
             state.showToast(results.message, `Found ${results.data.length} Tour`, 'success');
@@ -50,11 +56,24 @@ function TourPage() {
         } else {
             getAllTours();
         }
-    }, []);
-
+    }, [currentPageTours]);
     return (
         <>
-            <TourForm showTourForm={showTourForm} onClose={() => setShowTourForm(false)} />
+            <TourForm
+                data={tourDetail}
+                showTourForm={showTourForm}
+                onClose={(edited) => {
+                    if (edited === true) {
+                        if (searchQueryFromHome) {
+                            getSearchTours();
+                        } else {
+                            getAllTours();
+                        }
+                    }
+                    setShowTourForm(false);
+                    setTourDetail(null);
+                }}
+            />
             <div>
                 <section className={cx('banner-section')}>
                     <div className={cx('banner-content')}>
@@ -83,7 +102,7 @@ function TourPage() {
                                 <div className={cx('search-item')}>
                                     <HiOutlineLocationMarker className={cx('icon')} />
                                     <div>
-                                        <h5 className={cx('search-title')}>Distance</h5>
+                                        <h5 className={cx('search-title')}>Max Distance</h5>
                                         <Input
                                             className={cx('search-input')}
                                             placeholder="Distance k/m"
@@ -129,7 +148,13 @@ function TourPage() {
                             {listTours ? (
                                 listTours.map((item, index) => (
                                     <Col key={index} sm={12} lg={6}>
-                                        <TourItem data={item} />
+                                        <TourItem
+                                            onEdit={() => {
+                                                setTourDetail(item);
+                                                setShowTourForm(true);
+                                            }}
+                                            data={item}
+                                        />
                                     </Col>
                                 ))
                             ) : (
@@ -137,7 +162,14 @@ function TourPage() {
                             )}
                         </Row>
                     </Skeleton>
-                    <Pagination style={{ textAlign: 'center' }} className={cx('mt-2')} defaultCurrent={1} total={50} />
+                    <Pagination
+                        onChange={(page) => setCurrentPageTours(page)}
+                        style={{ textAlign: 'center' }}
+                        className={cx('mt-2')}
+                        current={currentPageTours}
+                        total={totalTours}
+                        pageSize={8}
+                    />
                 </section>
             </div>
         </>
