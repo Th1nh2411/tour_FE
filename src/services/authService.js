@@ -13,11 +13,11 @@ export const register = async (username, email, password) => {
         return error.response && error.response.data;
     }
 };
-export const login = async (email, password) => {
+export const login = async (username, password) => {
     // const config = {
     //     headers: { access_token: token },
     // };
-    const body = { email, password };
+    const body = { username, password };
 
     try {
         const res = await httpRequest.post(`api/v1/auth/login`, body);
