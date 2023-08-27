@@ -15,10 +15,10 @@ const cx = classNames.bind(styles);
 function LoginPage() {
     const [state, dispatch] = useContext(StoreContext);
     const navigate = useNavigate();
-    const [email, setEmail] = useState('');
+    const [username, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const login = async () => {
-        const results = await authService.login(email, password);
+        const results = await authService.login(username, password);
         if (results.token) {
             dispatch(actions.setUserInfo(results.data));
             Cookies.set('userInfo', JSON.stringify(results.data));
@@ -44,7 +44,7 @@ function LoginPage() {
                     <Space size={'middle'} direction="vertical" className={cx('form')}>
                         <h1 className={cx('form-title')}>Login</h1>
                         <Input
-                            value={email}
+                            value={username}
                             size="large"
                             placeholder="Email"
                             onChange={(e) => {
