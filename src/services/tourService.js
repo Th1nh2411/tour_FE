@@ -2,7 +2,6 @@ import * as httpRequest from '../utils/httpRequest';
 
 export const getAllTours = async (page) => {
     const config = {
-        withCredentials: true,
         params: {
             page,
         },
@@ -17,9 +16,7 @@ export const getAllTours = async (page) => {
     }
 };
 export const addTour = async (data) => {
-    const config = {
-        withCredentials: true,
-    };
+    const config = {};
     try {
         const res = await httpRequest.post(`api/v1/tours`, data, config);
         return res;
@@ -29,9 +26,7 @@ export const addTour = async (data) => {
     }
 };
 export const editTour = async (data, id) => {
-    const config = {
-        withCredentials: true,
-    };
+    const config = {};
     try {
         const res = await httpRequest.put(`api/v1/tours/${id}`, data, config);
         return res;

@@ -1,6 +1,9 @@
 import axios from 'axios';
 const httpRequest = axios.create({
-    baseURL: 'https://tour-be.vercel.app/',
+    withCredentials: true,
+    baseURL: 'https://holidate-be.vercel.app/',
+    headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
+    credentials: 'include',
 });
 export const get = async (path, config = {}) => {
     const response = await httpRequest.get(path, config);
