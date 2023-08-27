@@ -22,7 +22,7 @@ function LoginPage() {
         if (results.token) {
             dispatch(actions.setUserInfo(results.data));
             Cookies.set('userInfo', JSON.stringify(results.data));
-            Cookies.set('accessToken', results.token);
+            // Cookies.set('accessToken', results.token);
             const toast = state.showToast('Success', 'Đăng nhập thành công', 'success');
             navigate(config.routes.home);
         } else {
