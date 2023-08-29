@@ -7,4 +7,5 @@ A Website with basic features such as tourism promotion, travel, booking, travel
 Logining with admin account, you can add & edit tour
 * Admin account :
 username: admin
+
 password: 123456
