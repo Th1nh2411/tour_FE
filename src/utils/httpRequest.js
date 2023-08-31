@@ -1,6 +1,6 @@
 import axios from 'axios';
 const httpRequest = axios.create({
-    baseURL: 'https://tour-be.vercel.app/',
+    baseURL: 'http://localhost:4000/',
 });
 export const get = async (path, config = {}) => {
     const response = await httpRequest.get(path, config);

@@ -3,37 +3,38 @@ import classNames from 'classnames/bind';
 import Image from '../../components/Image';
 import images from '../../assets/images';
 import { useContext, useEffect, useState } from 'react';
-import { Button, Col, Input, Row, Space, notification } from 'antd';
+import { Button, Col, Form, Input, Row, Space, notification } from 'antd';
 import { FaUser } from 'react-icons/fa';
 import * as authService from '../../services/authService';
 import { useNavigate } from 'react-router';
 import config from '../../config';
 import { StoreContext, actions } from '../../store';
 import Cookies from 'js-cookie';
+import { Link } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 function LoginPage() {
     const [state, dispatch] = useContext(StoreContext);
     const navigate = useNavigate();
-    const [username, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const login = async () => {
-        const results = await authService.login(username, password);
-        if (results.token) {
-            dispatch(actions.setUserInfo(results.data));
-            Cookies.set('userInfo', JSON.stringify(results.data));
-            Cookies.set('accessToken', results.token);
-            const toast = state.showToast('Success', 'Đăng nhập thành công', 'success');
-            navigate(config.routes.home);
-        } else {
-            const toast = state.showToast('Fail', results.message, 'error');
-            setEmail('');
-            setPassword('');
+    const login = async (values) => {
+        const results = await authService.login(values);
+        if (results) {
+            notification.open({
+                message: 'Success',
+                description: 'Login Successful!',
+                placement: 'bottomRight',
+                type: 'success',
+            });
+            navigate(config.routes.login);
         }
     };
     return (
         <div className={cx('wrapper')}>
-            <Row style={{ boxShadow: '0 48px 100px 0 rgba(17, 12, 46, 0.15)' }}>
+            <Row style={{ boxShadow: '0 48px 100px 0 rgba(17, 12, 46, 0.15)', position: 'relative' }}>
+                <div className={cx('form-icon')}>
+                    <FaUser />
+                </div>
+                <div xs={0} className={cx('sep')}></div>
                 <Col xs={0} md={12}>
                     <Image
                         className={cx('bg-img')}
@@ -41,35 +42,51 @@ function LoginPage() {
                     />
                 </Col>
                 <Col xs={24} md={12}>
-                    <Space size={'middle'} direction="vertical" className={cx('form')}>
+                    <div className={cx('form')}>
                         <h1 className={cx('form-title')}>Login</h1>
-                        <Input
-                            value={username}
-                            size="large"
-                            placeholder="Email"
-                            onChange={(e) => {
-                                setEmail(e.target.value);
+                        <Form
+                            labelCol={{
+                                span: 8,
+                                style: { fontWeight: 600 },
                             }}
-                        />
-                        <Input.Password
-                            value={password}
+                            onFinish={login}
                             size="large"
-                            placeholder="Password"
-                            type=""
-                            onChange={(e) => {
-                                setPassword(e.target.value);
-                            }}
-                        />
-                        <Button onClick={() => login()} type="ghost" size="large" className={cx('login-btn')}>
-                            Login
-                        </Button>
+                        >
+                            <Form.Item
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please input your username!',
+                                    },
+                                ]}
+                                label="Username"
+                                name="username"
+                            >
+                                <Input placeholder="Username" />
+                            </Form.Item>
+                            <Form.Item
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please input your password!',
+                                    },
+                                ]}
+                                label="Password"
+                                name="password"
+                            >
+                                <Input.Password placeholder="Password" />
+                            </Form.Item>
+                            <Button type="ghost" size="large" className={cx('login-btn')} htmlType="submit">
+                                Login
+                            </Button>
+                        </Form>
                         <h3 className={cx('option-title')}>
-                            Don't have an account?<span> Create</span>
+                            Don't have an account?{' '}
+                            <span>
+                                <Link to={config.routes.register}>Create</Link>
+                            </span>
                         </h3>
-                        <div className={cx('form-icon')}>
-                            <FaUser />
-                        </div>
-                    </Space>
+                    </div>
                 </Col>
             </Row>
         </div>
