@@ -28,10 +28,11 @@
     align-items: center;
     justify-content: space-between;
 }
-.city {
-    font-weight: 600;
+.address {
+    font-weight: 700;
     display: flex;
     align-items: center;
+    font-size: 1.8rem;
 }
 .rate-wrapper {
     display: flex;
@@ -44,14 +45,33 @@
     color: var(--primary-color);
 }
 .title {
+    // margin: 10px 0 0px;
+    font-size: 1.5rem;
     font-weight: 500;
-    margin: 10px 0 15px;
+    color: #333;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 1; /* number of lines to show */
     -webkit-box-orient: vertical;
 }
-
+.quantity-seats {
+    font-weight: 600;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    .ticket-icon {
+        margin-right: 5px;
+    }
+    span {
+        padding-left: 8px;
+        margin-left: 8px;
+        border-left: 1px solid #999;
+        color: var(--primary-color);
+    }
+    span.active {
+        color: #629b19;
+    }
+}
 .location-icon {
     margin-right: 4px;
     color: var(--primary-color);
@@ -67,6 +87,7 @@
     color: #666;
 }
 .footer {
+    margin-top: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
