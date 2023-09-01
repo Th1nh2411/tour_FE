@@ -152,6 +152,10 @@ section {
 .d-flex {
     display: flex;
 }
+.align-end {
+    display: flex;
+    align-items: end;
+}
 .align-center {
     display: flex;
     align-items: center;
@@ -163,6 +167,10 @@ section {
 .content-between {
     display: flex;
     justify-content: space-between;
+}
+.content-end {
+    display: flex;
+    justify-content: end;
 }
 .mr-16 {
     margin-right: 16px;

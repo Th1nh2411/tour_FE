@@ -19,9 +19,8 @@ function TourPage() {
     const pageState = useLocation().state;
     const { searchQueryFromHome, category } = pageState || {};
     const [loading, setLoading] = useState(false);
-    const [title, setTitle] = useState('Tất Cả Tours');
-    const [addressValue, setLocationValue] = useState(searchQueryFromHome ? searchQueryFromHome.locationValue : '');
-    const [availableSeats, setAvailableSeats] = useState(searchQueryFromHome ? searchQueryFromHome.maxPeopleValue : 0);
+    const [keyword, setLocationValue] = useState(searchQueryFromHome ? searchQueryFromHome.locationValue : '');
+    const [availableSeats, setAvailableSeats] = useState(searchQueryFromHome ? searchQueryFromHome.maxPeopleValue : 1);
     const [listTours, setListTours] = useState([]);
     const [totalTours, setTotalTours] = useState([]);
     const [currentPageTours, setCurrentPageTours] = useState(1);
@@ -29,33 +28,36 @@ function TourPage() {
     const [showTourForm, setShowTourForm] = useState(false);
     const [tourDetail, setTourDetail] = useState(null);
 
-    const getAllTours = async () => {
+    const getSearchTours = async (reset) => {
         setLoading(true);
-        const results = await tourService.getAllTours(currentPageTours - 1);
-        if (results) {
-            setListTours(results.data);
-            setTotalTours(results.count);
-            setLoading(false);
+        let results;
+        if (reset) {
+            results = await tourService.getSearchTours({ category: category && category._id });
+        } else {
+            results = await tourService.getSearchTours({
+                keyword,
+                availableSeats,
+                category: category && category._id,
+                page: currentPageTours - 1,
+            });
         }
-    };
-    const getSearchTours = async () => {
-        const results = await tourService.getSearchTours(addressValue, availableSeats);
+
+        setLoading(false);
+        if (results && currentPageTours === 1 && category) {
+            state.showToast('Thành công', `Tìm thấy ` + results.count + ' chuyến phù hợp');
+        }
         setListTours(results.data);
         setTotalTours(results.count);
-        setTitle('Tour Search Result');
-        if (results && results.data && results.data.length !== 0) {
-            state.showToast(results.message, `Found ${results.data.length} Tour`, 'success');
-        } else {
-            state.showToast(results.message, `No Tour Found`, 'error');
-        }
     };
 
     useEffect(() => {
-        if (searchQueryFromHome) {
-            getSearchTours();
-        } else {
-            getAllTours();
-        }
+        setLocationValue('');
+        setAvailableSeats(1);
+        setCurrentPageTours(1);
+        getSearchTours(true);
+    }, [category]);
+    useEffect(() => {
+        getSearchTours();
     }, [currentPageTours]);
     return (
         <>
@@ -64,11 +66,7 @@ function TourPage() {
                 showTourForm={showTourForm}
                 onClose={(edited) => {
                     if (edited === true) {
-                        if (searchQueryFromHome) {
-                            getSearchTours();
-                        } else {
-                            getAllTours();
-                        }
+                        getSearchTours();
                     }
                     setShowTourForm(false);
                     setTourDetail(null);
@@ -77,46 +75,47 @@ function TourPage() {
             <div>
                 <section className={cx('banner-section')}>
                     <div className={cx('banner-content')}>
-                        <div className={cx('banner-title')}>{(category && category.categoryName) || title}</div>
+                        <div className={cx('banner-title')}>
+                            {(category && category.categoryName) || 'Danh sách Tất Cả Tour'}
+                        </div>
                         <h4 className={cx('banner-desc')}>{category && category.description}</h4>
                     </div>
                 </section>
                 <section className={cx('tour-section')}>
                     <div className={cx('search-bar')}>
                         <Row>
-                            <Col>
+                            <Col md={14}>
                                 <div className={cx('search-item')}>
                                     <HiOutlineMap className={cx('icon')} />
                                     <div>
-                                        <h5 className={cx('search-title')}>Location</h5>
+                                        <h5 className={cx('search-title')}>Du lịch đâu nè?</h5>
                                         <Input
                                             className={cx('search-input')}
                                             placeholder="Where are you going"
                                             bordered={false}
-                                            value={addressValue}
+                                            value={keyword}
                                             onChange={(e) => setLocationValue(e.target.value)}
                                         />
                                     </div>
                                 </div>
                             </Col>
-
-                            <Col>
+                            <Col md={7}>
                                 <div className={cx('search-item')}>
                                     <HiOutlineUsers className={cx('icon')} />
                                     <div>
-                                        <h5 className={cx('search-title')}>Max Seats</h5>
+                                        <h5 className={cx('search-title')}>Chỗ có sẵn</h5>
                                         <InputNumber
                                             className={cx('search-input')}
-                                            placeholder="0"
+                                            placeholder="1"
                                             bordered={false}
                                             value={availableSeats}
                                             onChange={(value) => setAvailableSeats(value)}
-                                            min={0}
+                                            min={1}
                                         />
                                     </div>
                                 </div>
                             </Col>
-                            <Col className={cx('d-flex')}>
+                            <Col md={3} className={cx('content-end')}>
                                 <div onClick={() => getSearchTours()} className={cx('search-btn')}>
                                     <BiSearch />
                                 </div>
@@ -130,10 +129,24 @@ function TourPage() {
                         </h4>
                     )}
                     <Skeleton loading={loading}>
-                        <Row gutter={20}>
+                        <div className={cx('align-end', 'content-between')}>
+                            <h4>Số lượng chuyến: {totalTours}</h4>
+                            <h4
+                                onClick={() => {
+                                    setLocationValue('');
+                                    setAvailableSeats(1);
+                                    setCurrentPageTours(1);
+                                    getSearchTours(true);
+                                }}
+                                className={cx('undo-filter')}
+                            >
+                                Bỏ lọc
+                            </h4>
+                        </div>
+                        <Row style={{ marginTop: 5 }} gutter={[20, 20]}>
                             {listTours ? (
                                 listTours.map((item, index) => (
-                                    <Col key={index} sm={12} lg={6}>
+                                    <Col key={index} xs={24} sm={12} lg={8} xl={6}>
                                         <TourItem
                                             onEdit={() => {
                                                 setTourDetail(item);

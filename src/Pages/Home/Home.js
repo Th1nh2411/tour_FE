@@ -178,7 +178,7 @@ function Home() {
                     <Row gutter={20}>
                         {featuredTours &&
                             featuredTours.map((item, index) => (
-                                <Col key={index} sm={12} lg={6}>
+                                <Col key={index} xs={24} sm={12} lg={8} xl={6}>
                                     <TourItem data={item} />
                                 </Col>
                             ))}

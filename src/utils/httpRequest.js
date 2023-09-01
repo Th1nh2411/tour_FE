@@ -1,6 +1,9 @@
 import axios from 'axios';
 const httpRequest = axios.create({
     baseURL: 'http://localhost:4000/api/v1/',
+    withCredentials: true,
+    headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
+    credentials: 'include',
 });
 export const get = async (path, config = {}) => {
     const response = await httpRequest.get(path, config);

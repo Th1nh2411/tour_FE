@@ -48,18 +48,18 @@ function TourItem({ className, data, onEdit }) {
                     <div className={cx('city-wrapper')}>
                         <h3 className={cx('city')}>
                             <HiOutlineLocationMarker className={cx('location-icon')} />
-                            {data.city}
+                            {data.address}
                         </h3>
                         <div className={cx('rate-wrapper')}>
                             <BsFillStarFill className={cx('rate-icon')} />
                             {data.rate || 'Not rated'}
                         </div>
                     </div>
-                    <h3 className={cx('title')}>{data.title}</h3>
+                    <h3 className={cx('title')}>{data.tourName}</h3>
 
                     <div className={cx('footer')}>
                         <div className={cx('price')}>
-                            <span>${priceFormat(data.price)}</span> /per person{' '}
+                            <span>{priceFormat(data.price)}đ</span> /per person{' '}
                         </div>
                         <Button
                             onClick={() => navigate(`/tour/${data._id}`, { state: data })}

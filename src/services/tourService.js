@@ -9,7 +9,7 @@ export const getAllTours = async (page) => {
     };
 
     try {
-        const res = await httpRequest.get(`tours`, config);
+        const res = await httpRequest.get(`tour`, config);
         return res;
     } catch (error) {
         console.log(error);
@@ -21,7 +21,7 @@ export const addTour = async (data) => {
         withCredentials: true,
     };
     try {
-        const res = await httpRequest.post(`tours`, data, config);
+        const res = await httpRequest.post(`tour`, data, config);
         return res;
     } catch (error) {
         console.log(error);
@@ -33,7 +33,7 @@ export const editTour = async (data, id) => {
         withCredentials: true,
     };
     try {
-        const res = await httpRequest.put(`tours/${id}`, data, config);
+        const res = await httpRequest.put(`tour/${id}`, data, config);
         return res;
     } catch (error) {
         console.log(error);
@@ -44,20 +44,20 @@ export const getFeaturedTours = async (token) => {
     const config = {};
 
     try {
-        const res = await httpRequest.get(`tours/search/getFeaturedTour`, config);
+        const res = await httpRequest.get(`tour/search/getFeaturedTour`, config);
         return res;
     } catch (error) {
         console.log(error);
         return error.response && error.response.data;
     }
 };
-export const getSearchTours = async (address = '', availableSeats, category) => {
+export const getSearchTours = async (params) => {
     const config = {
-        params: { address, availableSeats, category },
+        params,
     };
 
     try {
-        const res = await httpRequest.get(`tours/search/getTourBySearch`, config);
+        const res = await httpRequest.get(`tour/search/getTourBySearch`, config);
         return res;
     } catch (error) {
         console.log(error);
