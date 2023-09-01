@@ -52,7 +52,7 @@ function TourItem({ className, data, onEdit }) {
                         </h3>
                         <div className={cx('rate-wrapper')}>
                             <BsFillStarFill className={cx('rate-icon')} />
-                            {data.rate || 'Not rated'}
+                            {data.averageRating || 'Not rated'}
                         </div>
                     </div>
                     <h3 className={cx('title')}>{data.tourName}</h3>

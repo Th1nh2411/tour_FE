@@ -43,7 +43,7 @@ function TourPage() {
         }
 
         setLoading(false);
-        if (results && currentPageTours === 1 && category) {
+        if ((keyword || availableSeats > 1) && currentPageTours === 1) {
             state.showToast('Thành công', `Tìm thấy ` + results.count + ' chuyến phù hợp');
         }
         setListTours(results.data);
