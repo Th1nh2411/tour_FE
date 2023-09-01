@@ -34,13 +34,13 @@ function RegisterPage() {
                         <FaUser />
                     </div>
                     <div xs={0} className={cx('sep')}></div>
-                    <Col xs={0} md={12}>
+                    <Col xs={0} md={11}>
                         <Image
                             className={cx('bg-img')}
                             src="https://doan-eta.vercel.app/static/media/login.0ef8aace597cf40e2588.png"
                         />
                     </Col>
-                    <Col xs={24} md={12}>
+                    <Col xs={24} md={13}>
                         <div className={cx('form')}>
                             <h1 className={cx('form-title')}>Register</h1>
                             <Form
@@ -110,12 +110,32 @@ function RegisterPage() {
                                             message: 'Please input your password!',
                                         },
                                         {
-                                            pattern: /^(\d{9,}|)$/,
+                                            min: 9,
                                             message: 'Your password has at least 9 digits!',
                                         },
                                     ]}
                                 >
                                     <Input.Password placeholder="Password" />
+                                </Form.Item>
+                                <Form.Item
+                                    label="Confirm"
+                                    name="confirm"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Please input your confirm password!',
+                                        },
+                                        ({ getFieldValue }) => ({
+                                            validator(_, value) {
+                                                if (!value || getFieldValue('password') === value) {
+                                                    return Promise.resolve();
+                                                }
+                                                return Promise.reject(new Error('Confirm password do not match!'));
+                                            },
+                                        }),
+                                    ]}
+                                >
+                                    <Input.Password placeholder="Confirm Password" />
                                 </Form.Item>
                                 <Form.Item>
                                     <Button

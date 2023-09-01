@@ -19,13 +19,15 @@ function LoginPage() {
     const login = async (values) => {
         const results = await authService.login(values);
         if (results) {
+            dispatch(actions.setUserInfo(results.data));
+            Cookies.set('userInfo', JSON.stringify(results.data));
             notification.open({
                 message: 'Success',
                 description: 'Login Successful!',
                 placement: 'bottomRight',
                 type: 'success',
             });
-            navigate(config.routes.login);
+            navigate(config.routes.home);
         }
     };
     return (
@@ -35,13 +37,13 @@ function LoginPage() {
                     <FaUser />
                 </div>
                 <div xs={0} className={cx('sep')}></div>
-                <Col xs={0} md={12}>
+                <Col xs={0} md={11} style={{ textAlign: 'center' }}>
                     <Image
                         className={cx('bg-img')}
                         src="https://doan-eta.vercel.app/static/media/login.0ef8aace597cf40e2588.png"
                     />
                 </Col>
-                <Col xs={24} md={12}>
+                <Col xs={24} md={13}>
                     <div className={cx('form')}>
                         <h1 className={cx('form-title')}>Login</h1>
                         <Form

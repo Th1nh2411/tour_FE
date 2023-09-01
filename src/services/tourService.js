@@ -9,7 +9,7 @@ export const getAllTours = async (page) => {
     };
 
     try {
-        const res = await httpRequest.get(`api/v1/tours`, config);
+        const res = await httpRequest.get(`tours`, config);
         return res;
     } catch (error) {
         console.log(error);
@@ -21,7 +21,7 @@ export const addTour = async (data) => {
         withCredentials: true,
     };
     try {
-        const res = await httpRequest.post(`api/v1/tours`, data, config);
+        const res = await httpRequest.post(`tours`, data, config);
         return res;
     } catch (error) {
         console.log(error);
@@ -33,7 +33,7 @@ export const editTour = async (data, id) => {
         withCredentials: true,
     };
     try {
-        const res = await httpRequest.put(`api/v1/tours/${id}`, data, config);
+        const res = await httpRequest.put(`tours/${id}`, data, config);
         return res;
     } catch (error) {
         console.log(error);
@@ -44,7 +44,7 @@ export const getFeaturedTours = async (token) => {
     const config = {};
 
     try {
-        const res = await httpRequest.get(`api/v1/tours/search/getFeaturedTour`, config);
+        const res = await httpRequest.get(`tours/search/getFeaturedTour`, config);
         return res;
     } catch (error) {
         console.log(error);
@@ -57,7 +57,7 @@ export const getSearchTours = async (city = '', distance = 0, maxGroupSize) => {
     };
 
     try {
-        const res = await httpRequest.get(`api/v1/tours/search/getTourBySearch`, config);
+        const res = await httpRequest.get(`tours/search/getTourBySearch`, config);
         return res;
     } catch (error) {
         console.log(error);

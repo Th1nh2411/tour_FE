@@ -8,7 +8,7 @@ export const createReview = async (body, tourId) => {
         // },
     };
     try {
-        const res = await httpRequest.post(`api/v1/review/${tourId}`, body, config);
+        const res = await httpRequest.post(`review/${tourId}`, body, config);
         return res;
     } catch (error) {
         console.log(error);

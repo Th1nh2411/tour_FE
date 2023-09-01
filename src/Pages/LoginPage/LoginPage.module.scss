@@ -7,13 +7,13 @@
     position: relative;
 }
 .bg-img {
-    width: 100%;
+    width: 80%;
     height: 100%;
     object-fit: contain;
 }
 .sep {
     position: absolute;
-    left: 50%;
+    left: calc((11% / 24) * 100);
     transform: translateX(-50%);
     width: 3px;
     height: 100%;
@@ -47,7 +47,7 @@
 .form-icon {
     position: absolute;
     top: -30px;
-    left: 50%;
+    left: calc((11% / 24) * 100);
     transform: translateX(-50%);
     color: #fff;
     background-color: var(--primary-color);

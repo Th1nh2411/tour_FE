@@ -6,7 +6,7 @@ export const register = async (body) => {
     //     headers: { access_token: token },
     // };
     try {
-        const res = await httpRequest.post(`api/v1/auth/register`, body);
+        const res = await httpRequest.post(`auth/register`, body);
         return res;
     } catch (error) {
         console.log(error);
@@ -24,7 +24,7 @@ export const login = async (body) => {
     // };
 
     try {
-        const res = await httpRequest.post(`api/v1/auth/login`, body);
+        const res = await httpRequest.post(`auth/login`, body);
         return res;
     } catch (error) {
         console.log(error);
