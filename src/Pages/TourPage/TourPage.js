@@ -16,12 +16,12 @@ const cx = classNames.bind(styles);
 
 function TourPage() {
     const [state, dispatch] = useContext(StoreContext);
-    const searchQueryFromHome = useLocation().state;
+    const pageState = useLocation().state;
+    const { searchQueryFromHome, category } = pageState || {};
     const [loading, setLoading] = useState(false);
-    const [title, setTitle] = useState('All Tours');
-    const [locationValue, setLocationValue] = useState(searchQueryFromHome ? searchQueryFromHome.locationValue : '');
-    const [distanceValue, setDistanceValue] = useState(searchQueryFromHome ? searchQueryFromHome.distanceValue : 400);
-    const [maxPeopleValue, setMaxPeopleValue] = useState(searchQueryFromHome ? searchQueryFromHome.maxPeopleValue : 0);
+    const [title, setTitle] = useState('Tất Cả Tours');
+    const [addressValue, setLocationValue] = useState(searchQueryFromHome ? searchQueryFromHome.locationValue : '');
+    const [availableSeats, setAvailableSeats] = useState(searchQueryFromHome ? searchQueryFromHome.maxPeopleValue : 0);
     const [listTours, setListTours] = useState([]);
     const [totalTours, setTotalTours] = useState([]);
     const [currentPageTours, setCurrentPageTours] = useState(1);
@@ -39,7 +39,7 @@ function TourPage() {
         }
     };
     const getSearchTours = async () => {
-        const results = await tourService.getSearchTours(locationValue, distanceValue, maxPeopleValue);
+        const results = await tourService.getSearchTours(addressValue, availableSeats);
         setListTours(results.data);
         setTotalTours(results.count);
         setTitle('Tour Search Result');
@@ -77,7 +77,8 @@ function TourPage() {
             <div>
                 <section className={cx('banner-section')}>
                     <div className={cx('banner-content')}>
-                        <div className={cx('banner-title')}>{title}</div>
+                        <div className={cx('banner-title')}>{(category && category.categoryName) || title}</div>
+                        <h4 className={cx('banner-desc')}>{category && category.description}</h4>
                     </div>
                 </section>
                 <section className={cx('tour-section')}>
@@ -92,39 +93,24 @@ function TourPage() {
                                             className={cx('search-input')}
                                             placeholder="Where are you going"
                                             bordered={false}
-                                            value={locationValue}
+                                            value={addressValue}
                                             onChange={(e) => setLocationValue(e.target.value)}
                                         />
                                     </div>
                                 </div>
                             </Col>
-                            <Col>
-                                <div className={cx('search-item')}>
-                                    <HiOutlineLocationMarker className={cx('icon')} />
-                                    <div>
-                                        <h5 className={cx('search-title')}>Max Distance</h5>
-                                        <Input
-                                            className={cx('search-input')}
-                                            placeholder="Distance k/m"
-                                            bordered={false}
-                                            value={distanceValue}
-                                            onChange={(e) => setDistanceValue(e.target.value)}
-                                            min={0}
-                                        />
-                                    </div>
-                                </div>
-                            </Col>
+
                             <Col>
                                 <div className={cx('search-item')}>
                                     <HiOutlineUsers className={cx('icon')} />
                                     <div>
-                                        <h5 className={cx('search-title')}>Max People</h5>
+                                        <h5 className={cx('search-title')}>Max Seats</h5>
                                         <InputNumber
                                             className={cx('search-input')}
                                             placeholder="0"
                                             bordered={false}
-                                            value={maxPeopleValue}
-                                            onChange={(value) => setMaxPeopleValue(value)}
+                                            value={availableSeats}
+                                            onChange={(value) => setAvailableSeats(value)}
                                             min={0}
                                         />
                                     </div>

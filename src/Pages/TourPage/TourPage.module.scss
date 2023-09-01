@@ -4,7 +4,7 @@
     position: relative;
     background: url('https://doan-eta.vercel.app/static/media/tour.4aa39fc95609710b19aa.jpg') center / cover no-repeat;
     width: 100%;
-    padding: 50px 10px;
+    padding: 50px;
     height: 400px;
     display: flex;
     flex-direction: column;
@@ -22,13 +22,14 @@
 .banner-content {
     position: relative;
     margin: auto;
+    color: #fff;
+    text-align: center;
 }
 .banner-title {
     font-weight: 700;
     font-size: 4rem;
-    color: #fff;
-    text-align: center;
     line-height: 1.2;
+    margin-bottom: 8px;
 }
 .breadcrumb-wrapper ol {
     justify-content: center;

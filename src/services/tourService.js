@@ -51,9 +51,9 @@ export const getFeaturedTours = async (token) => {
         return error.response && error.response.data;
     }
 };
-export const getSearchTours = async (city = '', distance = 0, maxGroupSize) => {
+export const getSearchTours = async (address = '', availableSeats, category) => {
     const config = {
-        params: { city, distance, maxGroupSize },
+        params: { address, availableSeats, category },
     };
 
     try {

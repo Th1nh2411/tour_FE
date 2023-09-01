@@ -130,7 +130,7 @@ function Home() {
                             </div>
                         </Col>
                         <Col className={cx('d-flex')}>
-                            <Link state={searchQuery} to={config.routes.tour}>
+                            <Link state={{ searchQueryFromHome: searchQuery }} to={config.routes.tour}>
                                 <div className={cx('search-btn')}>
                                     <BiSearch />
                                 </div>
