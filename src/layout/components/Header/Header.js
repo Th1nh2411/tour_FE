@@ -94,7 +94,7 @@ function Header() {
                     <div className={cx('logo-wrapper')}>
                         <Link to={config.routes.home}>
                             <img
-                                src="https://www.learnworlds.com/app/themes/learnworlds/dist/images/logo.svg"
+                                src="https://res.cloudinary.com/dgsumh8ih/image/upload/v1693657591/logoFull.png"
                                 className={cx('logo')}
                                 alt="logo"
                             />
@@ -109,13 +109,13 @@ function Header() {
                                 className={(nav) => cx('header-nav_item', { active: nav.isActive })}
                                 to={config.routes.home}
                             >
-                                Home
+                                Trang chủ
                             </NavLink>
                             <NavLink
                                 className={(nav) => cx('header-nav_item', { active: nav.isActive })}
                                 to={config.routes.aboutUs}
                             >
-                                About
+                                Về chúng tôi
                             </NavLink>
 
                             <NavLink
@@ -124,7 +124,7 @@ function Header() {
                             >
                                 <Dropdown placement="bottom" menu={{ items: tourCategories }}>
                                     <span className={cx('align-center')}>
-                                        Tours <MdArrowDropDown />
+                                        Du lịch <MdArrowDropDown />
                                     </span>
                                 </Dropdown>
                             </NavLink>
@@ -140,7 +140,7 @@ function Header() {
                     ) : (
                         <div className={cx('header-actions')}>
                             <Link to={config.routes.login} className={cx('custom-btn')}>
-                                Login
+                                Đăng nhập
                             </Link>
                             <Button
                                 onClick={() => navigate(config.routes.register)}
@@ -148,7 +148,7 @@ function Header() {
                                 type="ghost"
                                 className={cx('custom-btn', 'active')}
                             >
-                                Register
+                                Đăng ký
                             </Button>
                         </div>
                     )}

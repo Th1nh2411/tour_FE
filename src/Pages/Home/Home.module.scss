@@ -16,11 +16,13 @@
     align-items: center;
     letter-spacing: 1px;
     .slogan-text {
+        font-size: 2.2rem;
         border-radius: 20px;
-        padding: 4px 12px;
+        padding: 2px 12px;
         background-color: var(--primary-color);
         font-family: var(--subtitle-font-name);
         font-weight: 500;
+        color: white;
     }
     .slogan-icon {
         height: 38px;
@@ -50,9 +52,9 @@
 }
 .search-bar {
     border-radius: 50px;
-    box-shadow: 0 48px 100px 0 rgba(17, 12, 46, 0.15);
-    margin: 30px auto 0;
-    padding: 0.5rem 2.5rem;
+    box-shadow: 1px 5px 20px 0px rgba(17, 12, 46, 0.15);
+    margin: 0 auto 30px;
+    padding: 0.6rem 2.5rem;
     width: fit-content;
 }
 .search-item {
@@ -62,6 +64,7 @@
         color: #ee6e6e;
         font-size: 3rem;
         margin-right: 5px;
+        flex-shrink: 0;
     }
     .search-title {
         font-size: 1.8rem;
@@ -73,16 +76,18 @@
         width: auto;
         font-weight: 600;
         font-size: 1.6rem;
+        color: #666;
 
         input {
             font-weight: 600;
             font-size: 1.6rem;
+            color: #666;
         }
     }
 }
 
 .search-btn {
-    margin: auto;
+    margin: auto 0;
     padding: 8px;
     background-color: var(--primary-color);
     display: flex;

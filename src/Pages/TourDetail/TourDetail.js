@@ -13,6 +13,7 @@ import { RiMoneyDollarCircleLine } from 'react-icons/ri';
 import * as bookingService from '../../services/bookingService';
 import * as reviewService from '../../services/reviewService';
 import dayjs from 'dayjs';
+import { priceFormat } from '../../utils/format';
 const cx = classNames.bind(styles);
 
 function TourDetail({}) {
@@ -99,7 +100,8 @@ function TourDetail({}) {
                                     {data.city}
                                 </div>
                                 <div className={cx('align-center', 'ml-3')}>
-                                    <RiMoneyDollarCircleLine className={cx('icon')} />${data.price} /per person
+                                    <RiMoneyDollarCircleLine className={cx('icon')} />
+                                    {priceFormat(data.price)}đ /per person
                                 </div>
                                 <div className={cx('align-center', 'ml-3')}>
                                     <HiOutlineMap className={cx('icon')} />
@@ -114,7 +116,7 @@ function TourDetail({}) {
                             <p style={{ color: '#555' }}>{data.desc}</p>
                         </Space>
                         <Space direction="vertical" size={'small'} className={cx('card', 'mt-2')}>
-                            <h2>Reviews ({data.reviews.length} reviews)</h2>
+                            <h2>Reviews ({data.reviews && data.reviews.length} reviews)</h2>
                             <Rate value={rating} onChange={(value) => setRatingValue(value)} />
                             <Space.Compact
                                 size="large"

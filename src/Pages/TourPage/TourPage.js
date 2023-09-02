@@ -20,7 +20,7 @@ function TourPage() {
     const { searchQueryFromHome, category } = pageState || {};
     const [loading, setLoading] = useState(false);
     const [keyword, setLocationValue] = useState(searchQueryFromHome ? searchQueryFromHome.locationValue : '');
-    const [availableSeats, setAvailableSeats] = useState(searchQueryFromHome ? searchQueryFromHome.maxPeopleValue : 1);
+    const [availableSeats, setAvailableSeats] = useState(searchQueryFromHome ? searchQueryFromHome.availableSeats : 1);
     const [listTours, setListTours] = useState([]);
     const [totalTours, setTotalTours] = useState([]);
     const [currentPageTours, setCurrentPageTours] = useState(1);
@@ -51,10 +51,12 @@ function TourPage() {
     };
 
     useEffect(() => {
-        setLocationValue('');
-        setAvailableSeats(1);
-        setCurrentPageTours(1);
-        getSearchTours(true);
+        if (!searchQueryFromHome) {
+            setLocationValue('');
+            setAvailableSeats(1);
+            setCurrentPageTours(1);
+            getSearchTours(true);
+        }
     }, [category]);
     useEffect(() => {
         getSearchTours();
@@ -103,7 +105,7 @@ function TourPage() {
                                 <div className={cx('search-item')}>
                                     <HiOutlineUsers className={cx('icon')} />
                                     <div>
-                                        <h5 className={cx('search-title')}>Chỗ có sẵn</h5>
+                                        <h5 className={cx('search-title')}>Chỗ trống</h5>
                                         <InputNumber
                                             className={cx('search-input')}
                                             placeholder="1"

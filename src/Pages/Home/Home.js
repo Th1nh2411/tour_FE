@@ -19,12 +19,11 @@ function Home() {
     const [state, dispatch] = useContext(StoreContext);
     const [loading, setLoading] = useState(false);
     const [locationValue, setLocationValue] = useState('');
-    const [distanceValue, setDistanceValue] = useState(400);
-    const [maxPeopleValue, setMaxPeopleValue] = useState(0);
+    const [availableSeats, setAvailableSeats] = useState(0);
     const [featuredTours, setFeaturedTours] = useState([]);
     const searchQuery = useMemo(() => {
-        return { locationValue, distanceValue, maxPeopleValue };
-    }, [locationValue, distanceValue, maxPeopleValue]);
+        return { locationValue, availableSeats };
+    }, [locationValue, availableSeats]);
     const getFeaturedTour = async () => {
         setLoading(true);
         const results = await tourService.getFeaturedTours();
@@ -41,23 +40,22 @@ function Home() {
                 <Row gutter={[{ lg: 24 }, 0]}>
                     <Col lg={12}>
                         <h3 className={cx('section-slogan')}>
-                            <span className={cx('slogan-text')}>Know Before You Go</span>
+                            <span className={cx('slogan-text')}>Những điều cần biết</span>
                             <Image
                                 className={cx('slogan-icon')}
                                 src="https://doan-eta.vercel.app/static/media/world.12b28835610f2449f5e9.png"
                             />
                         </h3>
                         <h1 className={cx('section-title')}>
-                            Traveling opens the door to creating <span>memories with TickZ</span>
+                            Du hành khắp thế giới và tạo nhiều <span>kỉ niệm đẹp với Holidate</span>
                         </h1>
                         <p className={cx('section-desc')}>
-                            Our Vietnam is a beautiful country. We have a variety of landscapes which are widely
-                            well-known such as Ha Long Bay, Hoi An Old quarter and Phong Nha Ke Bang cave. A long coast
-                            with many attractive beaches is also our recognized reputation. Although Vietnam was a rich
-                            traditional culture country, it has undergone a great change since 1945 due to the war. But
-                            you can still find spiritual values in traditional arts performances such as singing Tru,
-                            Cheo, Tuong, water puppet, ancient artifacts at the museums at the cultural centers in Hanoi
-                            and Saigon.
+                            Chúng tôi cung cấp một loạt các tour du lịch đa dạng, từ những kỳ nghỉ thư giãn tại các điểm
+                            đẹp như biển biển và núi rừng cho đến những chuyến phiêu lưu mạo hiểm đầy thú vị.
+                            <br />
+                            <br /> Bất kể bạn là người yêu thiên nhiên, người muốn khám phá văn hóa mới, hay bạn đang
+                            tìm kiếm những trải nghiệm ẩm thực độc đáo, chúng tôi sẽ đưa bạn đến những địa điểm tuyệt
+                            vời nhất.
                         </p>
                     </Col>
                     <Col xs={0} lg={4}>
@@ -80,13 +78,52 @@ function Home() {
                         />
                     </Col>
                 </Row>
+            </section>
+            <section>
+                <Row align="center" gutter={[28, 28]}>
+                    <Col lg={6}>
+                        <h3 className={cx('service-slogan')}>Chuyến đi đáng nhớ</h3>
+                        <h3 className={cx('section-title')}>Chúng tôi cung cấp những dịch vụ tốt nhất</h3>
+                    </Col>
+                    <Col lg={6}>
+                        <div className={cx('service-item')}>
+                            <Image src={images.cloudIcon} className={cx('service-icon')} />
+                            <h2 className={cx('mt-1')}>Đặt tour</h2>
+                            <p>
+                                Bạn có thể dễ dàng tìm và đặt tour du lịch mà bạn mong muốn chỉ trong vài bước đơn giản.
+                            </p>
+                        </div>
+                    </Col>
+                    <Col lg={6}>
+                        <div className={cx('service-item')}>
+                            <Image src={images.chainIcon} className={cx('service-icon')} />
+                            <h2 className={cx('mt-1')}>Hướng dẫn viên</h2>
+                            <p>
+                                Chúng tôi tập hợp đội ngũ hướng dẫn viên du lịch chất lượng, có kiến thức sâu rộng về
+                                địa điểm bạn muốn khám phá.
+                            </p>
+                        </div>
+                    </Col>
+                    <Col lg={6}>
+                        <div className={cx('service-item')}>
+                            <Image src={images.gearIcon} className={cx('service-icon')} />
+                            <h2 className={cx('mt-1')}>Hỗ trợ khách hàng</h2>
+                            <p>
+                                Đội ngũ hỗ trợ của chúng tôi luôn sẵn sàng giải quyết mọi vấn đề và câu hỏi của bạn
+                                trong suốt chuyến đi của bạn.
+                            </p>
+                        </div>
+                    </Col>
+                </Row>
+            </section>
+            <section>
                 <div className={cx('search-bar')}>
                     <Row className={cx('align-center')}>
                         <Col>
                             <div className={cx('search-item')}>
                                 <HiOutlineMap className={cx('icon')} />
                                 <div>
-                                    <h5 className={cx('search-title')}>Location</h5>
+                                    <h5 className={cx('search-title')}>Du lịch đâu nè?</h5>
                                     <Input
                                         className={cx('search-input')}
                                         placeholder="Where are you going"
@@ -101,34 +138,19 @@ function Home() {
                             <div className={cx('search-item')}>
                                 <HiOutlineLocationMarker className={cx('icon')} />
                                 <div>
-                                    <h5 className={cx('search-title')}>Max Distance</h5>
-                                    <Input
+                                    <h5 className={cx('search-title')}>Chỗ trống</h5>
+                                    <InputNumber
                                         className={cx('search-input')}
                                         placeholder="Distance k/m"
                                         bordered={false}
-                                        value={distanceValue}
-                                        onChange={(e) => setDistanceValue(e.target.value)}
+                                        value={availableSeats}
+                                        onChange={(value) => setAvailableSeats(value)}
                                         min={0}
                                     />
                                 </div>
                             </div>
                         </Col>
-                        <Col>
-                            <div className={cx('search-item')}>
-                                <HiOutlineUsers className={cx('icon')} />
-                                <div>
-                                    <h5 className={cx('search-title')}>Max People</h5>
-                                    <InputNumber
-                                        className={cx('search-input')}
-                                        placeholder="0"
-                                        bordered={false}
-                                        value={maxPeopleValue}
-                                        onChange={(value) => setMaxPeopleValue(value)}
-                                        min={0}
-                                    />
-                                </div>
-                            </div>
-                        </Col>
+
                         <Col className={cx('d-flex')}>
                             <Link state={{ searchQueryFromHome: searchQuery }} to={config.routes.tour}>
                                 <div className={cx('search-btn')}>
@@ -138,44 +160,13 @@ function Home() {
                         </Col>
                     </Row>
                 </div>
-            </section>
-            <section>
-                <Row align="center" gutter={[28, 28]}>
-                    <Col lg={6}>
-                        <h3 className={cx('service-slogan')}>What we serve</h3>
-                        <h3 className={cx('section-title')}>We offer out best services</h3>
-                    </Col>
-                    <Col lg={6}>
-                        <div className={cx('service-item')}>
-                            <Image src={images.cloudIcon} className={cx('service-icon')} />
-                            <h2 className={cx('mt-1')}>Calculate Weather</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                        </div>
-                    </Col>
-                    <Col lg={6}>
-                        <div className={cx('service-item')}>
-                            <Image src={images.chainIcon} className={cx('service-icon')} />
-                            <h2 className={cx('mt-1')}>Best Tour Guide</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                        </div>
-                    </Col>
-                    <Col lg={6}>
-                        <div className={cx('service-item')}>
-                            <Image src={images.gearIcon} className={cx('service-icon')} />
-                            <h2 className={cx('mt-1')}>Customization</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                        </div>
-                    </Col>
-                </Row>
-            </section>
-            <section>
                 <h3 className={cx('section-slogan')}>
-                    <span className={cx('slogan-text')}>Explore</span>
+                    <span className={cx('slogan-text')}>Khám phá</span>
                 </h3>
-                <h2 className={cx('mt-1')}>Our Feature Tours</h2>
+                <h2 className={cx('mt-1')}>Những chuyến đi nổi bật</h2>
 
                 <Skeleton loading={loading}>
-                    <Row gutter={20}>
+                    <Row style={{ marginTop: 10 }} gutter={[20, 20]}>
                         {featuredTours &&
                             featuredTours.map((item, index) => (
                                 <Col key={index} xs={24} sm={12} lg={8} xl={6}>
@@ -189,12 +180,13 @@ function Home() {
                 <Row gutter={[32, 16]} className={cx('align-center')}>
                     <Col md={10}>
                         <h3 className={cx('section-slogan')}>
-                            <span className={cx('slogan-text')}>Experience</span>
+                            <span className={cx('slogan-text')}>Kinh nghiệm</span>
                         </h3>
-                        <h1 className={cx('section-title')}>With Duong our all experience we will serve you</h1>
+                        <h1 className={cx('section-title')}>Với tất cả kinh nghiệm và tâm huyết</h1>
                         <p className={cx('section-desc')}>
-                            Our Vietnam is a beautiful country. We have a variety of landscapes which are widely
-                            well-known such as Ha Long Bay, Hoi An Old quarter and Phong Nha Ke Bang cave.
+                            Những hướng dẫn viên du lịch tận tâm và có kinh nghiệm sẽ hướng dẫn bạn qua mỗi bước đi,
+                            mang đến cho bạn cái nhìn sâu rộng về văn hóa, lịch sử và địa điểm mà bạn sắp đặt chân đến.
+                            Điều này giúp tạo ra những trải nghiệm thú vị và đáng nhớ.
                         </p>
                         <Row gutter={[32, 16]} className={cx('mt-3')}>
                             <Col xs={24} lg={8}>
@@ -219,7 +211,7 @@ function Home() {
                     </Col>
                     <Col xs={24} md={12} offset={2}>
                         <Image
-                            src="https://doan-eta.vercel.app/static/media/experience.f276d1992082e5879afb.png"
+                            src="https://res.cloudinary.com/dgsumh8ih/image/upload/v1693636842/tour.jpg"
                             className={cx('w-100')}
                         />
                     </Col>
@@ -227,9 +219,9 @@ function Home() {
             </section>
             <section>
                 <h3 className={cx('section-slogan')}>
-                    <span className={cx('slogan-text')}>Gallery</span>
+                    <span className={cx('slogan-text')}>Bộ sưu tập</span>
                 </h3>
-                <h2 className={cx('mt-1')}>Visit our customers tour gallery</h2>
+                <h2 className={cx('mt-1')}>Tham quan bộ sưu tập tour của khách hàng trước đó</h2>
                 <Row gutter={[16, 16]} className={cx('mt-3')}>
                     <Col lg={6}>
                         <div className={cx('gallery-img-group')}>
@@ -283,9 +275,9 @@ function Home() {
             </section>
             <section>
                 <h3 className={cx('section-slogan')}>
-                    <span className={cx('slogan-text')}>Fans Love</span>
+                    <span className={cx('slogan-text')}>Đánh giá</span>
                 </h3>
-                <h2 className={cx('mt-1')}>What our fans say about us</h2>
+                <h2 className={cx('mt-1')}>Những gì khách hàng đánh giá</h2>
                 <Slide className={cx('mt-2')} navigation={false} numItemPerSlide={3} autoPlay>
                     {HOME_DATA.reviews.map((item, index) => (
                         <div key={index} className={cx('reviews-item')}>
@@ -305,9 +297,11 @@ function Home() {
                 <Row>
                     <Col xs={24} md={10}>
                         <h3 className={cx('section-slogan')}>
-                            <span className={cx('slogan-text')}>Subscribe</span>
+                            <span className={cx('slogan-text')}>Theo dõi</span>
                         </h3>
-                        <h2 className={cx('mt-1')}>Subscribe us now to get useful traveling information</h2>
+                        <h2 className={cx('mt-1')}>
+                            Theo dõi và nhận thông báo từ chúng tôi để biết thông tin khuyến mãi sớm nhất
+                        </h2>
                         <div className={cx('mt-3', 'd-flex')}>
                             <Input placeholder="Enter your email" size="large" className={cx('customer-input')} />
 

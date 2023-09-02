@@ -1,6 +1,5 @@
 @import 'normalize.css';
-
-// @import '../../../node_modules/bootstrap/scss/bootstrap-grid.scss';
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500&display=swap');
 /* vietnamese */
 @font-face {
     font-family: 'IBM Plex Sans';
@@ -50,6 +49,7 @@
     font-style: italic;
     src: url(../../assets/fonts/Nunito-Italic-VariableFont_wght.ttf);
 }
+
 :root {
     --primary-color: #faa935;
     --radial-gradient-bg: linear-gradient(45deg, #27be70 0%, #0c713d 100%);
@@ -68,7 +68,7 @@
     --search-border-radius: 92px;
     --search-height: 40px;
     --search-space-height: 9px;
-    --subtitle-font-name: 'Island Moments', cursive;
+    --subtitle-font-name: 'Dancing Script', cursive;
 }
 
 * {

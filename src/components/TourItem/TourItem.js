@@ -79,7 +79,7 @@ function TourItem({ className, data, onEdit }) {
                             type="ghost"
                             className={cx('btn')}
                         >
-                            Xem chi tiết
+                            Chi tiết
                         </Button>
                     </div>
                 </div>

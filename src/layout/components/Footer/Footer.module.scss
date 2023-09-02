@@ -14,7 +14,7 @@
 }
 .introduce {
     font-size: 1.4rem;
-    margin: 20px 0;
+    margin: 10px 0 2px;
     text-align: justify;
 }
 .follow-wrapper {
@@ -40,21 +40,27 @@
     margin-top: 15px;
 }
 .info-title {
-    font-size: 2rem;
-    font-weight: 600;
+    font-size: 2.2rem;
+    font-weight: 700;
     color: var(--primary-color);
     margin-bottom: 5px;
+    text-align: center;
 }
 .info-subtitle {
     display: flex;
+    justify-content: center;
     align-items: center;
     padding: 10px 0;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+    font-weight: 500;
+    &:hover {
+        opacity: 0.8;
+    }
 }
 
 .info-icon {
     font-size: 2.2rem;
-    margin: 5px 8px 5px 0;
+    margin-right: 5px;
     color: var(--primary-color);
     flex-shrink: 0;
 }
