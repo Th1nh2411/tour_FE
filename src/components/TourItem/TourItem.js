@@ -61,7 +61,7 @@ function TourItem({ className, data, onEdit }) {
                     <h4 className={cx('quantity-seats')}>
                         <IoTicketSharp className={cx('ticket-icon')} />
                         {data.availableSeats} còn lại
-                        <span className={cx('duration')}>{dayjs(data.endDate).diff(data.startDate, 'day')} ngày</span>
+                        <span className={cx('duration')}>{data.duration} ngày</span>
                     </h4>
                     <div className={cx('footer')}>
                         <div>

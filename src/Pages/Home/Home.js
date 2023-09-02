@@ -11,19 +11,17 @@ import Slide from '../../components/Slide';
 import * as tourService from '../../services/tourService';
 import HOME_DATA from './data';
 import TourItem from '../../components/TourItem/TourItem';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import config from '../../config';
+import SearchBar from '../../components/SearchBar/SearchBar';
 const cx = classNames.bind(styles);
 
 function Home() {
     const [state, dispatch] = useContext(StoreContext);
     const [loading, setLoading] = useState(false);
-    const [locationValue, setLocationValue] = useState('');
-    const [availableSeats, setAvailableSeats] = useState(0);
+    const navigate = useNavigate();
     const [featuredTours, setFeaturedTours] = useState([]);
-    const searchQuery = useMemo(() => {
-        return { locationValue, availableSeats };
-    }, [locationValue, availableSeats]);
+
     const getFeaturedTour = async () => {
         setLoading(true);
         const results = await tourService.getFeaturedTours();
@@ -117,49 +115,11 @@ function Home() {
                 </Row>
             </section>
             <section>
-                <div className={cx('search-bar')}>
-                    <Row className={cx('align-center')}>
-                        <Col>
-                            <div className={cx('search-item')}>
-                                <HiOutlineMap className={cx('icon')} />
-                                <div>
-                                    <h5 className={cx('search-title')}>Du lịch đâu nè?</h5>
-                                    <Input
-                                        className={cx('search-input')}
-                                        placeholder="Where are you going"
-                                        bordered={false}
-                                        value={locationValue}
-                                        onChange={(e) => setLocationValue(e.target.value)}
-                                    />
-                                </div>
-                            </div>
-                        </Col>
-                        <Col>
-                            <div className={cx('search-item')}>
-                                <HiOutlineLocationMarker className={cx('icon')} />
-                                <div>
-                                    <h5 className={cx('search-title')}>Chỗ trống</h5>
-                                    <InputNumber
-                                        className={cx('search-input')}
-                                        placeholder="Distance k/m"
-                                        bordered={false}
-                                        value={availableSeats}
-                                        onChange={(value) => setAvailableSeats(value)}
-                                        min={0}
-                                    />
-                                </div>
-                            </div>
-                        </Col>
-
-                        <Col className={cx('d-flex')}>
-                            <Link state={{ searchQueryFromHome: searchQuery }} to={config.routes.tour}>
-                                <div className={cx('search-btn')}>
-                                    <BiSearch />
-                                </div>
-                            </Link>
-                        </Col>
-                    </Row>
-                </div>
+                <SearchBar
+                    onSearch={(searchQuery) =>
+                        navigate(config.routes.tour, { state: { searchQueryFromHome: searchQuery } })
+                    }
+                />
                 <h3 className={cx('section-slogan')}>
                     <span className={cx('slogan-text')}>Khám phá</span>
                 </h3>

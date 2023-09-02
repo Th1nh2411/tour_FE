@@ -12,6 +12,7 @@ import { BiPlusCircle, BiSearch } from 'react-icons/bi';
 import TourItem from '../../components/TourItem/TourItem';
 import { useLocation } from 'react-router';
 import TourForm from '../../components/TourForm';
+import SearchBar from '../../components/SearchBar/SearchBar';
 const cx = classNames.bind(styles);
 
 function TourPage() {
@@ -19,47 +20,50 @@ function TourPage() {
     const pageState = useLocation().state;
     const { searchQueryFromHome, category } = pageState || {};
     const [loading, setLoading] = useState(false);
-    const [keyword, setLocationValue] = useState(searchQueryFromHome ? searchQueryFromHome.locationValue : '');
-    const [availableSeats, setAvailableSeats] = useState(searchQueryFromHome ? searchQueryFromHome.availableSeats : 1);
+
     const [listTours, setListTours] = useState([]);
-    const [totalTours, setTotalTours] = useState([]);
+    const [numTours, setNumTours] = useState([]);
     const [currentPageTours, setCurrentPageTours] = useState(1);
 
     const [showTourForm, setShowTourForm] = useState(false);
     const [tourDetail, setTourDetail] = useState(null);
 
-    const getSearchTours = async (reset) => {
+    const [resetQuery, setResetQuery] = useState(false);
+
+    const getSearchTours = async (query = {}, reset) => {
         setLoading(true);
         let results;
         if (reset) {
             results = await tourService.getSearchTours({ category: category && category._id });
         } else {
             results = await tourService.getSearchTours({
-                keyword,
-                availableSeats,
+                keyword: query.keyword,
+                availableSeats: query.availableSeats,
                 category: category && category._id,
                 page: currentPageTours - 1,
+                minDuration: query.duration ? 4 : 1,
+                maxDuration: query.duration ? 365 : 3,
             });
         }
 
         setLoading(false);
-        if ((keyword || availableSeats > 1) && currentPageTours === 1) {
+        if ((query.keyword || query.availableSeats > 1) && currentPageTours === 1) {
             state.showToast('Thành công', `Tìm thấy ` + results.count + ' chuyến phù hợp');
         }
         setListTours(results.data);
-        setTotalTours(results.count);
+        setNumTours(results.count);
     };
 
     useEffect(() => {
         if (!searchQueryFromHome) {
-            setLocationValue('');
-            setAvailableSeats(1);
+            setResetQuery(true);
+
             setCurrentPageTours(1);
-            getSearchTours(true);
+            getSearchTours({}, true);
         }
     }, [category]);
     useEffect(() => {
-        getSearchTours();
+        getSearchTours(searchQueryFromHome);
     }, [currentPageTours]);
     return (
         <>
@@ -84,46 +88,14 @@ function TourPage() {
                     </div>
                 </section>
                 <section className={cx('tour-section')}>
-                    <div className={cx('search-bar')}>
-                        <Row>
-                            <Col md={14}>
-                                <div className={cx('search-item')}>
-                                    <HiOutlineMap className={cx('icon')} />
-                                    <div>
-                                        <h5 className={cx('search-title')}>Du lịch đâu nè?</h5>
-                                        <Input
-                                            className={cx('search-input')}
-                                            placeholder="Where are you going"
-                                            bordered={false}
-                                            value={keyword}
-                                            onChange={(e) => setLocationValue(e.target.value)}
-                                        />
-                                    </div>
-                                </div>
-                            </Col>
-                            <Col md={7}>
-                                <div className={cx('search-item')}>
-                                    <HiOutlineUsers className={cx('icon')} />
-                                    <div>
-                                        <h5 className={cx('search-title')}>Chỗ trống</h5>
-                                        <InputNumber
-                                            className={cx('search-input')}
-                                            placeholder="1"
-                                            bordered={false}
-                                            value={availableSeats}
-                                            onChange={(value) => setAvailableSeats(value)}
-                                            min={1}
-                                        />
-                                    </div>
-                                </div>
-                            </Col>
-                            <Col md={3} className={cx('content-end')}>
-                                <div onClick={() => getSearchTours()} className={cx('search-btn')}>
-                                    <BiSearch />
-                                </div>
-                            </Col>
-                        </Row>
-                    </div>
+                    <SearchBar
+                        defaultValue={searchQueryFromHome}
+                        onSearch={(query) => {
+                            getSearchTours(query);
+                        }}
+                        resetQuery={resetQuery}
+                        doneReset={() => setResetQuery(false)}
+                    />
                     {state.userInfo && state.userInfo.role === 'admin' && (
                         <h4 onClick={() => setShowTourForm(true)} className={cx('add-tour')}>
                             <BiPlusCircle className={cx('add-btn')} />
@@ -132,13 +104,13 @@ function TourPage() {
                     )}
                     <Skeleton loading={loading}>
                         <div className={cx('align-end', 'content-between')}>
-                            <h4>Số lượng chuyến: {totalTours}</h4>
+                            <h4>Số lượng chuyến: {numTours}</h4>
                             <h4
                                 onClick={() => {
-                                    setLocationValue('');
-                                    setAvailableSeats(1);
+                                    setResetQuery(true);
+
                                     setCurrentPageTours(1);
-                                    getSearchTours(true);
+                                    getSearchTours({}, true);
                                 }}
                                 className={cx('undo-filter')}
                             >
@@ -168,7 +140,7 @@ function TourPage() {
                         style={{ textAlign: 'center' }}
                         className={cx('mt-2')}
                         current={currentPageTours}
-                        total={totalTours}
+                        total={numTours}
                         pageSize={8}
                     />
                 </section>
