@@ -5,29 +5,16 @@ import images from '../../assets/images';
 import { useContext, useEffect, useState } from 'react';
 import { StoreContext, actions } from '../../store';
 import config from '../../config';
-import {
-    Alert,
-    Button,
-    Col,
-    DatePicker,
-    Descriptions,
-    Input,
-    InputNumber,
-    Rate,
-    Row,
-    Select,
-    Space,
-    Tooltip,
-} from 'antd';
+import { Alert, Button, Col, Descriptions, Input, InputNumber, Row, Select, Space } from 'antd';
 import { HiLocationMarker, HiOutlineLocationMarker, HiOutlineMap } from 'react-icons/hi';
 import { useLocation, useNavigate } from 'react-router';
 import { BsFillStarFill, BsPeople } from 'react-icons/bs';
-import { RiMoneyDollarCircleLine } from 'react-icons/ri';
+import { AiOutlineFieldTime } from 'react-icons/ai';
 import * as bookingService from '../../services/bookingService';
-import * as reviewService from '../../services/reviewService';
 import dayjs from 'dayjs';
 import { priceFormat } from '../../utils/format';
-import { BiInfoCircle } from 'react-icons/bi';
+import { MdTour } from 'react-icons/md';
+import { TbPlaneDeparture, TbTicket } from 'react-icons/tb';
 const cx = classNames.bind(styles);
 
 function TourDetail({}) {
@@ -38,22 +25,6 @@ function TourDetail({}) {
     const [reviewText, setReviewTextValue] = useState('');
     const [rating, setRatingValue] = useState(5);
 
-    const createReview = async () => {
-        const results = await reviewService.createReview(
-            {
-                productId: data._id,
-                username: state.userInfo.username,
-                reviewText,
-                rating,
-            },
-            data._id,
-        );
-        if (results.success) {
-            state.showToast('Successfully', results.message);
-        } else {
-            state.showToast('Failure', results.message, 'error');
-        }
-    };
     const createBooking = async () => {
         const results = await bookingService.createBooking({
             guestSize,
@@ -65,10 +36,6 @@ function TourDetail({}) {
         }
     };
 
-    const handleSubmitReview = () => {
-        createReview();
-        setReviewTextValue('');
-    };
     const infoItems = [
         {
             key: '1',
@@ -86,7 +53,6 @@ function TourDetail({}) {
             children: state.userInfo && state.userInfo.email,
         },
     ];
-    console.log(state.userInfo);
     return (
         <div className={cx('wrapper')}>
             <section>
@@ -94,60 +60,40 @@ function TourDetail({}) {
                     <Col lg={14}>
                         <Image src={data.photo} className={cx('img')} />
                         <Space direction="vertical" size={'small'} className={cx('card')}>
-                            <h2>{data.title}</h2>
+                            <h2>{data.tourName}</h2>
                             <div style={{ color: '#555' }} className={cx('align-center')}>
                                 <div className={cx('align-center')}>
-                                    <BsFillStarFill className={cx('icon')} />({data.rate || 0})
+                                    <BsFillStarFill className={cx('icon')} />
+                                    {data.averageRating || 0}
                                 </div>
                                 <div className={cx('align-center', 'ml-3')}>
                                     <HiLocationMarker className={cx('icon')} />
                                     {data.address}
                                 </div>
+                                <div className={cx('align-center', 'ml-3')}>
+                                    <MdTour className={cx('icon')} />
+                                    {data.category.categoryName}
+                                </div>
                             </div>
                             <div style={{ color: '#555' }} className={cx('align-center')}>
                                 <div className={cx('align-center')}>
-                                    <HiOutlineLocationMarker className={cx('icon')} />
-                                    {data.city}
+                                    <TbPlaneDeparture className={cx('icon')} />
+                                    {dayjs(data.startDate).format('DD/MM/YYYY')}
+                                </div>{' '}
+                                <div className={cx('align-center', 'ml-3')}>
+                                    <AiOutlineFieldTime className={cx('icon')} />
+                                    {data.duration} ngày
                                 </div>
                                 <div className={cx('align-center', 'ml-3')}>
-                                    <RiMoneyDollarCircleLine className={cx('icon')} />
-                                    {priceFormat(data.price)}đ /1 vé
-                                </div>
-                                <div className={cx('align-center', 'ml-3')}>
-                                    <HiOutlineMap className={cx('icon')} />
-                                    {data.distance} k/m
-                                </div>
-                                <div className={cx('align-center', 'ml-3')}>
-                                    <BsPeople className={cx('icon')} />
-                                    {data.maxGroupSize} people
+                                    <TbTicket className={cx('icon')} />
+                                    Còn lại: {data.availableSeats} /{data.maxSeats} vé
                                 </div>
                             </div>
                             <h2 className={cx('mt-2')}>Description</h2>
-                            <p style={{ color: '#555' }}>{data.desc}</p>
+                            <p style={{ color: '#555' }}>{data.description}</p>
                         </Space>
                         <Space direction="vertical" size={'small'} className={cx('card', 'mt-2')}>
                             <h2>Reviews ({data.reviews && data.reviews.length} reviews)</h2>
-                            <Rate value={rating} onChange={(value) => setRatingValue(value)} />
-                            <Space.Compact
-                                size="large"
-                                style={{
-                                    width: '100%',
-                                }}
-                            >
-                                <Input
-                                    value={reviewText}
-                                    onChange={(e) => setReviewTextValue(e.target.value)}
-                                    placeholder="Share your thoughts"
-                                />
-                                <Button
-                                    disabled={!state.userInfo}
-                                    onClick={handleSubmitReview}
-                                    className={cx('customer-btn')}
-                                    type="primary"
-                                >
-                                    Submit
-                                </Button>
-                            </Space.Compact>
                         </Space>
                     </Col>
                     <Col xs={24} lg={10}>
@@ -162,7 +108,7 @@ function TourDetail({}) {
                             </div>
                             <div className={cx('booking-form')}>
                                 <h2>Thông tin đặt vé</h2>
-                                <Descriptions size="small" column={2} items={infoItems} />
+                                <Descriptions size="small" column={1} items={infoItems} />
                                 <Row gutter={12}>
                                     <Col span={16}>
                                         <Select
@@ -183,6 +129,7 @@ function TourDetail({}) {
                                     </Col>
                                     <Col span={8}>
                                         <InputNumber
+                                            max={data.availableSeats}
                                             min="0"
                                             onChange={(value) => setGuestSizeValue(value)}
                                             value={guestSize}
@@ -205,7 +152,15 @@ function TourDetail({}) {
                                 </div>
                             </div>
                             {(!state.userInfo || !state.userInfo.isActive) && (
-                                <Alert type="error" message="Error text" banner />
+                                <Alert
+                                    type="error"
+                                    message={
+                                        !state.userInfo
+                                            ? 'Vui lòng đăng nhập để đặt vé'
+                                            : 'Tài khoản chưa được kích hoạt'
+                                    }
+                                    banner
+                                />
                             )}
                             <Button
                                 onClick={createBooking}
