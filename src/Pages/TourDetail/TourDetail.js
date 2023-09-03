@@ -101,7 +101,7 @@ function TourDetail({}) {
                                 </div>
                                 <div className={cx('align-center', 'ml-3')}>
                                     <RiMoneyDollarCircleLine className={cx('icon')} />
-                                    {priceFormat(data.price)}đ /per person
+                                    {priceFormat(data.price)}đ /1 vé
                                 </div>
                                 <div className={cx('align-center', 'ml-3')}>
                                     <HiOutlineMap className={cx('icon')} />
@@ -139,14 +139,14 @@ function TourDetail({}) {
                         <div className={cx('booking-wrapper', 'card')}>
                             <div className={cx('content-between', 'booking-header')}>
                                 <div className={cx('booking-price')}>
-                                    <span>${data.price}</span> /per person
+                                    <span>{priceFormat(data.price)}đ</span> /1 vé
                                 </div>
                                 <div className={cx('align-center')}>
-                                    <BsFillStarFill className={cx('icon')} />({data.rate || 0})
+                                    <BsFillStarFill className={cx('icon')} />({data.averageRating || 0})
                                 </div>
                             </div>
                             <div className={cx('booking-form')}>
-                                <h2>Information</h2>
+                                <h2>Thông tin đặt vé</h2>
                                 <Input
                                     onChange={(e) => setFullNameValue(e.target.value)}
                                     value={fullName}
@@ -177,16 +177,20 @@ function TourDetail({}) {
                                     </Col>
                                 </Row>
                                 <div className={cx('align-center', 'content-between')}>
-                                    <p className={cx('price-calculate')}>${data.price} x 1 person</p>
-                                    <p className={cx('price-calculated')}>${data.price * guestSize}</p>
+                                    <p className={cx('price-calculate')}>
+                                        {priceFormat(data.price)}đ x {guestSize || 0} vé
+                                    </p>
+                                    <p className={cx('price-calculated')}>{priceFormat(data.price * guestSize)}đ</p>
                                 </div>
                                 <div className={cx('align-center', 'content-between')}>
                                     <p className={cx('charge-title')}>Service charge</p>
-                                    <p className={cx('charge-calculated')}>$10</p>
+                                    <p className={cx('charge-calculated')}>10.000đ</p>
                                 </div>
                                 <div className={cx('align-center', 'content-between')}>
                                     <p className={cx('total-title')}>Total</p>
-                                    <p className={cx('total-calculated')}>${data.price * guestSize + 10}</p>
+                                    <p className={cx('total-calculated')}>
+                                        {priceFormat(data.price * guestSize + 10000)}đ
+                                    </p>
                                 </div>
                             </div>
                             <Button
@@ -195,7 +199,7 @@ function TourDetail({}) {
                                 className={cx('customer-btn', 'mt-1')}
                                 type="ghost"
                             >
-                                Book Now
+                                Đặt vé
                             </Button>
                         </div>
                     </Col>

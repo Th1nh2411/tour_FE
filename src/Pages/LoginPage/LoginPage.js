@@ -45,7 +45,7 @@ function LoginPage() {
                 </Col>
                 <Col xs={24} md={13}>
                     <div className={cx('form')}>
-                        <h1 className={cx('form-title')}>Login</h1>
+                        <h1 className={cx('form-title')}>Đăng nhập</h1>
                         <Form
                             labelCol={{
                                 span: 8,
@@ -73,19 +73,19 @@ function LoginPage() {
                                         message: 'Please input your password!',
                                     },
                                 ]}
-                                label="Password"
+                                label="Mật khẩu"
                                 name="password"
                             >
                                 <Input.Password placeholder="Password" />
                             </Form.Item>
                             <Button type="ghost" size="large" className={cx('login-btn')} htmlType="submit">
-                                Login
+                                Đăng nhập
                             </Button>
                         </Form>
                         <h3 className={cx('option-title')}>
-                            Don't have an account?{' '}
+                            Chưa có tài khoản?{' '}
                             <span>
-                                <Link to={config.routes.register}>Create</Link>
+                                <Link to={config.routes.register}>Đăng ký</Link>
                             </span>
                         </h3>
                     </div>

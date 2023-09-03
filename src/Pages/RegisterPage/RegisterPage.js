@@ -42,7 +42,7 @@ function RegisterPage() {
                     </Col>
                     <Col xs={24} md={13}>
                         <div className={cx('form')}>
-                            <h1 className={cx('form-title')}>Register</h1>
+                            <h1 className={cx('form-title')}>Đăng ký</h1>
                             <Form
                                 labelCol={{
                                     span: 8,
@@ -52,37 +52,37 @@ function RegisterPage() {
                                 onFinish={register}
                             >
                                 <Form.Item
-                                    label="Username"
+                                    label="Tên tài khoản"
                                     name="username"
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Please input your username!',
+                                            message: 'Vui lòng nhập tên tài khoản!',
                                         },
                                     ]}
                                 >
                                     <Input placeholder="Username" />
                                 </Form.Item>
                                 <Form.Item
-                                    label="Full Name"
+                                    label="Tên đầy đủ"
                                     name="fullName"
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Please input your full name!',
+                                            message: 'Vui lòng nhập đủ tên đầy đủ!',
                                         },
                                     ]}
                                 >
                                     <Input placeholder="Full Name" />
                                 </Form.Item>
                                 <Form.Item
-                                    label="Phone"
+                                    label="Số điện thoại"
                                     name="phoneNumber"
                                     rules={[
                                         {
                                             required: true,
                                             pattern: /^\d{10}$/,
-                                            message: 'Please input valid phone number!',
+                                            message: 'Vui lòng nhập số điện thoại hợp lệ!',
                                         },
                                     ]}
                                 >
@@ -95,42 +95,42 @@ function RegisterPage() {
                                         {
                                             required: true,
                                             type: 'email',
-                                            message: 'Please input valid email!',
+                                            message: 'Vui lòng nhập tài khoản gmail hợp lệ!',
                                         },
                                     ]}
                                 >
                                     <Input placeholder="Email" />
                                 </Form.Item>
                                 <Form.Item
-                                    label="Password"
+                                    label="Mật khẩu"
                                     name="password"
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Please input your password!',
+                                            message: 'Vui lòng nhập mật khẩu!',
                                         },
                                         {
                                             min: 9,
-                                            message: 'Your password has at least 9 digits!',
+                                            message: 'Mật khẩu phải dài hơn 9 ký tự!',
                                         },
                                     ]}
                                 >
                                     <Input.Password placeholder="Password" />
                                 </Form.Item>
                                 <Form.Item
-                                    label="Confirm"
+                                    label="Xác nhận"
                                     name="confirm"
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Please input your confirm password!',
+                                            message: 'Vui lòng nhập xác nhận mật khẩu!',
                                         },
                                         ({ getFieldValue }) => ({
                                             validator(_, value) {
                                                 if (!value || getFieldValue('password') === value) {
                                                     return Promise.resolve();
                                                 }
-                                                return Promise.reject(new Error('Confirm password do not match!'));
+                                                return Promise.reject(new Error('Xác nhận mật khẩu không trùng!'));
                                             },
                                         }),
                                     ]}
@@ -144,14 +144,14 @@ function RegisterPage() {
                                         className={cx('login-btn')}
                                         htmlType="submit"
                                     >
-                                        Create account
+                                        Tạo tài khoản
                                     </Button>
                                 </Form.Item>
                             </Form>
                             <h3 className={cx('option-title')}>
-                                Already have an account?{' '}
+                                Đã có tài khoản?{' '}
                                 <span>
-                                    <Link to={config.routes.login}>Login</Link>
+                                    <Link to={config.routes.login}>Đăng nhập</Link>
                                 </span>
                             </h3>
                         </div>
