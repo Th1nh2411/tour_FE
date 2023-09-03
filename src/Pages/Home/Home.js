@@ -265,7 +265,7 @@ function Home() {
                         <div className={cx('mt-3', 'd-flex')}>
                             <Input placeholder="Enter your email" size="large" className={cx('customer-input')} />
 
-                            <Button type="ghost" size="large" className={cx('customer-btn', 'ml-2')}>
+                            <Button type="primary" size="large" className={cx('ml-2')}>
                                 Subscribe
                             </Button>
                         </div>

@@ -5,7 +5,20 @@ import images from '../../assets/images';
 import { useContext, useEffect, useState } from 'react';
 import { StoreContext, actions } from '../../store';
 import config from '../../config';
-import { Button, Col, DatePicker, Input, InputNumber, Rate, Row, Space } from 'antd';
+import {
+    Alert,
+    Button,
+    Col,
+    DatePicker,
+    Descriptions,
+    Input,
+    InputNumber,
+    Rate,
+    Row,
+    Select,
+    Space,
+    Tooltip,
+} from 'antd';
 import { HiLocationMarker, HiOutlineLocationMarker, HiOutlineMap } from 'react-icons/hi';
 import { useLocation, useNavigate } from 'react-router';
 import { BsFillStarFill, BsPeople } from 'react-icons/bs';
@@ -14,21 +27,16 @@ import * as bookingService from '../../services/bookingService';
 import * as reviewService from '../../services/reviewService';
 import dayjs from 'dayjs';
 import { priceFormat } from '../../utils/format';
+import { BiInfoCircle } from 'react-icons/bi';
 const cx = classNames.bind(styles);
 
 function TourDetail({}) {
     const [state, dispatch] = useContext(StoreContext);
     const data = useLocation().state;
     const navigate = useNavigate();
-    const [fullName, setFullNameValue] = useState('');
-    const [phone, setPhoneValue] = useState('');
-    const [bookAt, setBookAtValue] = useState('');
     const [guestSize, setGuestSizeValue] = useState('');
     const [reviewText, setReviewTextValue] = useState('');
     const [rating, setRatingValue] = useState(5);
-    const onChangeDate = (date, dateString) => {
-        setBookAtValue(dateString);
-    };
 
     const createReview = async () => {
         const results = await reviewService.createReview(
@@ -48,40 +56,42 @@ function TourDetail({}) {
     };
     const createBooking = async () => {
         const results = await bookingService.createBooking({
-            phone,
-            bookAt,
             guestSize,
-            fullName,
-            tourName: data.title,
-            userEmail: state.userInfo.email,
-            userId: state.userInfo._id,
         });
         if (results.success) {
-            state.showToast('Successfully booked on ' + dayjs(bookAt).format('DD/MM/YYYY'), results.message);
+            state.showToast('Successfully booked on ' + dayjs(data.createAt).format('DD/MM/YYYY'), results.message);
         } else {
             state.showToast('Failure', results.message, 'error');
         }
     };
-    const handleBookTour = () => {
-        if (state.userInfo) {
-            createBooking();
-        } else {
-            state.showToast('Fail', `Please Sign In`, 'error');
-        }
-    };
+
     const handleSubmitReview = () => {
-        if (state.userInfo) {
-            createReview();
-            setReviewTextValue('');
-        } else {
-            state.showToast('Fail', `Please Sign In`, 'error');
-        }
+        createReview();
+        setReviewTextValue('');
     };
+    const infoItems = [
+        {
+            key: '1',
+            label: 'Tên đầy đủ',
+            children: state.userInfo && state.userInfo.fullName,
+        },
+        {
+            key: '2',
+            label: 'Số điện thoại',
+            children: state.userInfo && state.userInfo.phoneNumber,
+        },
+        {
+            key: '3',
+            label: 'Tài khoản gmail',
+            children: state.userInfo && state.userInfo.email,
+        },
+    ];
+    console.log(state.userInfo);
     return (
         <div className={cx('wrapper')}>
             <section>
                 <Row gutter={[24, 24]}>
-                    <Col lg={16}>
+                    <Col lg={14}>
                         <Image src={data.photo} className={cx('img')} />
                         <Space direction="vertical" size={'small'} className={cx('card')}>
                             <h2>{data.title}</h2>
@@ -129,13 +139,18 @@ function TourDetail({}) {
                                     onChange={(e) => setReviewTextValue(e.target.value)}
                                     placeholder="Share your thoughts"
                                 />
-                                <Button onClick={handleSubmitReview} className={cx('customer-btn')} type="ghost">
+                                <Button
+                                    disabled={!state.userInfo}
+                                    onClick={handleSubmitReview}
+                                    className={cx('customer-btn')}
+                                    type="primary"
+                                >
                                     Submit
                                 </Button>
                             </Space.Compact>
                         </Space>
                     </Col>
-                    <Col xs={24} lg={8}>
+                    <Col xs={24} lg={10}>
                         <div className={cx('booking-wrapper', 'card')}>
                             <div className={cx('content-between', 'booking-header')}>
                                 <div className={cx('booking-price')}>
@@ -147,25 +162,26 @@ function TourDetail({}) {
                             </div>
                             <div className={cx('booking-form')}>
                                 <h2>Thông tin đặt vé</h2>
-                                <Input
-                                    onChange={(e) => setFullNameValue(e.target.value)}
-                                    value={fullName}
-                                    size="large"
-                                    placeholder="Full Name"
-                                />
-                                <InputNumber
-                                    onChange={(value) => setPhoneValue(value)}
-                                    value={phone}
-                                    size="large"
-                                    placeholder="Phone"
-                                    controls={false}
-                                    className={cx('w-100')}
-                                />
+                                <Descriptions size="small" column={2} items={infoItems} />
                                 <Row gutter={12}>
-                                    <Col span={12}>
-                                        <DatePicker size="large" onChange={onChangeDate} className={cx('w-100')} />
+                                    <Col span={16}>
+                                        <Select
+                                            size="large"
+                                            className={cx('w-100')}
+                                            placeholder="Chọn kiểu thanh toán"
+                                            options={[
+                                                {
+                                                    value: 0,
+                                                    label: 'Thanh toán cọc (20%)',
+                                                },
+                                                {
+                                                    value: 1,
+                                                    label: 'Thanh toán toàn bộ',
+                                                },
+                                            ]}
+                                        />
                                     </Col>
-                                    <Col span={12}>
+                                    <Col span={8}>
                                         <InputNumber
                                             min="0"
                                             onChange={(value) => setGuestSizeValue(value)}
@@ -182,22 +198,20 @@ function TourDetail({}) {
                                     </p>
                                     <p className={cx('price-calculated')}>{priceFormat(data.price * guestSize)}đ</p>
                                 </div>
-                                <div className={cx('align-center', 'content-between')}>
-                                    <p className={cx('charge-title')}>Service charge</p>
-                                    <p className={cx('charge-calculated')}>10.000đ</p>
-                                </div>
+
                                 <div className={cx('align-center', 'content-between')}>
                                     <p className={cx('total-title')}>Total</p>
-                                    <p className={cx('total-calculated')}>
-                                        {priceFormat(data.price * guestSize + 10000)}đ
-                                    </p>
+                                    <p className={cx('total-calculated')}>{priceFormat(data.price * guestSize)}đ</p>
                                 </div>
                             </div>
+                            {(!state.userInfo || !state.userInfo.isActive) && (
+                                <Alert type="error" message="Error text" banner />
+                            )}
                             <Button
-                                onClick={handleBookTour}
+                                onClick={createBooking}
                                 size="large"
-                                className={cx('customer-btn', 'mt-1')}
-                                type="ghost"
+                                type="primary"
+                                disabled={!state.userInfo || !state.userInfo.isActive}
                             >
                                 Đặt vé
                             </Button>
@@ -215,7 +229,7 @@ function TourDetail({}) {
                         <div className={cx('mt-3', 'd-flex')}>
                             <Input placeholder="Enter your email" size="large" className={cx('customer-input')} />
 
-                            <Button type="ghost" size="large" className={cx('customer-btn', 'ml-2')}>
+                            <Button type="primary" size="large" className={cx('ml-2')}>
                                 Subscribe
                             </Button>
                         </div>
