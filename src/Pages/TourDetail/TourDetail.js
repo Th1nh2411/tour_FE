@@ -5,8 +5,22 @@ import images from '../../assets/images';
 import { useContext, useEffect, useState } from 'react';
 import { StoreContext, actions } from '../../store';
 import config from '../../config';
-import { Alert, Button, Col, Descriptions, Input, InputNumber, Row, Select, Space } from 'antd';
-import { HiLocationMarker, HiOutlineLocationMarker, HiOutlineMap } from 'react-icons/hi';
+import {
+    Alert,
+    Button,
+    Col,
+    Descriptions,
+    Input,
+    InputNumber,
+    Pagination,
+    Rate,
+    Row,
+    Select,
+    Skeleton,
+    Space,
+    Image as PreviewImage,
+} from 'antd';
+import { HiLocationMarker } from 'react-icons/hi';
 import { useLocation, useNavigate } from 'react-router';
 import { BsFillStarFill, BsPeople } from 'react-icons/bs';
 import { AiOutlineFieldTime } from 'react-icons/ai';
@@ -15,6 +29,7 @@ import dayjs from 'dayjs';
 import { priceFormat } from '../../utils/format';
 import { MdTour } from 'react-icons/md';
 import { TbPlaneDeparture, TbTicket } from 'react-icons/tb';
+import * as reviewService from '../../services/reviewService';
 const cx = classNames.bind(styles);
 
 function TourDetail({}) {
@@ -22,8 +37,11 @@ function TourDetail({}) {
     const data = useLocation().state;
     const navigate = useNavigate();
     const [guestSize, setGuestSizeValue] = useState('');
-    const [reviewText, setReviewTextValue] = useState('');
-    const [rating, setRatingValue] = useState(5);
+
+    const [reviews, setReviews] = useState([]);
+    const [numReviews, setNumReviews] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const [currentPageReview, setCurrentPageReview] = useState(1);
 
     const createBooking = async () => {
         const results = await bookingService.createBooking({
@@ -35,7 +53,16 @@ function TourDetail({}) {
             state.showToast('Failure', results.message, 'error');
         }
     };
-
+    const getTourReview = async () => {
+        setLoading(true);
+        const results = await reviewService.getAllReview(data._id, currentPageReview - 1);
+        setNumReviews(results.count || 0);
+        setReviews(results.data || []);
+        setLoading(false);
+    };
+    useEffect(() => {
+        getTourReview();
+    }, [currentPageReview]);
     const infoItems = [
         {
             key: '1',
@@ -89,11 +116,47 @@ function TourDetail({}) {
                                     Còn lại: {data.availableSeats} /{data.maxSeats} vé
                                 </div>
                             </div>
-                            <h2 className={cx('mt-2')}>Description</h2>
+                            <h2 className={cx('mt-1')}>Mô tả</h2>
                             <p style={{ color: '#555' }}>{data.description}</p>
+                            <h2 className={cx('mt-1')}>Hành trình</h2>
+                            {data.itineraries.map((item, index) => (
+                                <p style={{ color: '#555' }}>{item}</p>
+                            ))}
                         </Space>
                         <Space direction="vertical" size={'small'} className={cx('card', 'mt-2')}>
-                            <h2>Reviews ({data.reviews && data.reviews.length} reviews)</h2>
+                            <h2>Đánh giá chuyến đi ({numReviews} đánh giá)</h2>
+                            <Skeleton loading={loading}>
+                                {reviews &&
+                                    reviews.map((item, index) => (
+                                        <Space className={cx('review-item')} key={index} align="start">
+                                            <Image className={cx('user-photo')} src={item.userInfo.photo} />
+                                            <div>
+                                                <p style={{ fontWeight: 600 }}>{item.userInfo.fullName}</p>
+                                                <Rate
+                                                    disabled
+                                                    defaultValue={item.rating}
+                                                    allowHalf
+                                                    style={{ fontSize: 12 }}
+                                                />
+                                                <p style={{ color: '#555' }}>{item.comment}</p>
+                                                <Space className={cx('mt-1')} key={index}>
+                                                    {item.photo &&
+                                                        item.photo.map((item, index) => (
+                                                            <PreviewImage height={60} width={80} src={item} />
+                                                        ))}
+                                                </Space>
+                                            </div>
+                                        </Space>
+                                    ))}
+                            </Skeleton>
+                            <Pagination
+                                onChange={(page) => setCurrentPageReview(page)}
+                                style={{ textAlign: 'center' }}
+                                className={cx('mt-1')}
+                                current={currentPageReview}
+                                total={numReviews}
+                                pageSize={5}
+                            />
                         </Space>
                     </Col>
                     <Col xs={24} lg={10}>
@@ -112,6 +175,7 @@ function TourDetail({}) {
                                 <Row gutter={12}>
                                     <Col span={16}>
                                         <Select
+                                            disabled={!state.userInfo || !state.userInfo.isActive}
                                             size="large"
                                             className={cx('w-100')}
                                             placeholder="Chọn kiểu thanh toán"
@@ -129,6 +193,7 @@ function TourDetail({}) {
                                     </Col>
                                     <Col span={8}>
                                         <InputNumber
+                                            disabled={!state.userInfo || !state.userInfo.isActive}
                                             max={data.availableSeats}
                                             min="0"
                                             onChange={(value) => setGuestSizeValue(value)}
@@ -194,7 +259,10 @@ function TourDetail({}) {
                         />
                     </Col>
                     <Col lg={12} offset={2}>
-                        <Image src="https://doan-eta.vercel.app/static/media/male-tourist.f000d0ad1ca492b2bcfb.png" />
+                        <Image
+                            className={cx('w-100')}
+                            src="https://doan-eta.vercel.app/static/media/male-tourist.f000d0ad1ca492b2bcfb.png"
+                        />
                     </Col>
                 </Row>
             </section>

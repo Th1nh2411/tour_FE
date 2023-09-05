@@ -15,3 +15,18 @@ export const createReview = async (body, tourId) => {
         return error.response && error.response.data;
     }
 };
+export const getAllReview = async (tourId, page, rating) => {
+    const config = {
+        params: {
+            page,
+            rating,
+        },
+    };
+    try {
+        const res = await httpRequest.get(`review/${tourId}`, config);
+        return res;
+    } catch (error) {
+        console.log(error);
+        return error.response && error.response.data;
+    }
+};

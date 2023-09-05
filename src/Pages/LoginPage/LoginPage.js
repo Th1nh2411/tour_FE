@@ -11,11 +11,13 @@ import config from '../../config';
 import { StoreContext, actions } from '../../store';
 import Cookies from 'js-cookie';
 import { Link } from 'react-router-dom';
+import { useForm } from 'antd/es/form/Form';
 const cx = classNames.bind(styles);
 
 function LoginPage() {
     const [state, dispatch] = useContext(StoreContext);
     const navigate = useNavigate();
+    const [form] = useForm();
     const login = async (values) => {
         const results = await authService.login(values);
         if (results) {
@@ -28,6 +30,8 @@ function LoginPage() {
                 type: 'success',
             });
             navigate(config.routes.home);
+        } else {
+            form.resetFields();
         }
     };
     return (
@@ -47,6 +51,7 @@ function LoginPage() {
                     <div className={cx('form')}>
                         <h1 className={cx('form-title')}>Đăng nhập</h1>
                         <Form
+                            form={form}
                             labelCol={{
                                 span: 8,
                                 style: { fontWeight: 600 },

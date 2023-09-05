@@ -2,7 +2,6 @@ import classNames from 'classnames/bind';
 import PropTypes from 'prop-types';
 import { useContext, useEffect, useRef, useState } from 'react';
 import styles from './SearchBar.module.scss';
-import Image from '../Image';
 import images from '../../assets/images';
 import { Button, Col, Input, InputNumber, Rate, Row, Select } from 'antd';
 import { BsFillStarFill } from 'react-icons/bs';
