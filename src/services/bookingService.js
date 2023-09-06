@@ -15,7 +15,7 @@ export const createBooking = async (body) => {
         return error.response && error.response.data;
     }
 };
-export const getBooking = async (token, id) => {
+export const getBooking = async (id) => {
     const config = {
         withCredentials: true,
     };
@@ -27,11 +27,12 @@ export const getBooking = async (token, id) => {
         return error.response && error.response.data;
     }
 };
-export const getFeaturedTours = async (token) => {
-    const config = {};
-
+export const getAllBooking = async () => {
+    const config = {
+        withCredentials: true,
+    };
     try {
-        const res = await httpRequest.get(`tours/search/getFeaturedTour`, config);
+        const res = await httpRequest.get(`booking`, config);
         return res;
     } catch (error) {
         console.log(error);
