@@ -30,8 +30,6 @@ function LoginPage() {
                 type: 'success',
             });
             navigate(config.routes.home);
-        } else {
-            form.resetFields();
         }
     };
     return (

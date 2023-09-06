@@ -1,11 +1,16 @@
 .wrapper {
-    padding: 40px 20px;
+    width: var(--default-layout-width);
+    padding: 40px var(--default-layout-horizontal-spacer);
+    max-width: 100%;
+    margin: auto;
 }
 .card {
     border: 1px solid var(--primary-color);
     border-radius: 0.5rem;
     padding: 28px;
     width: 100%;
+    height: 65vh;
+    overflow-y: auto;
     h2 {
         font-weight: 600;
         font-size: 2.2rem;
@@ -23,16 +28,13 @@
     }
 }
 .body {
-    margin: 20px auto;
+    margin: 20px auto 0;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 .invoice-list {
-    padding-left: 30px;
-    overflow-y: auto;
-    height: 55vh;
 }
 .avatar {
     border-radius: 50%;

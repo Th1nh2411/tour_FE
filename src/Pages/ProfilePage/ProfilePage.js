@@ -1,13 +1,12 @@
 import styles from './ProfilePage.module.scss';
 import classNames from 'classnames/bind';
 import { BsFillClipboard2Fill, BsFillPhoneFill, BsPersonCircle, BsTicket } from 'react-icons/bs';
-import { Col, Row, Space } from 'antd';
+import { Alert, Col, Row, Space } from 'antd';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import * as bookingService from '../../services/bookingService';
 import { StoreContext, actions } from '../../store';
 import { priceFormat } from '../../utils/format';
-import { IoLocationSharp } from 'react-icons/io5';
-import { AiOutlineRight } from 'react-icons/ai';
+import { TbMoodSadSquint } from 'react-icons/tb';
 import Image from '../../components/Image';
 import dayjs from 'dayjs';
 import { MdEdit, MdLock } from 'react-icons/md';
@@ -21,10 +20,19 @@ function ProfilePage() {
     const [showChangePw, setShowChangePw] = useState();
     const [loading, setLoading] = useState();
     const [state, dispatch] = useContext(StoreContext);
+    const getTourReview = async () => {
+        setLoading(true);
+        const results = await bookingService.getAllBooking();
+        setListBooking(results.data || []);
+        setLoading(false);
+    };
+    useEffect(() => {
+        getTourReview();
+    }, []);
     return (
         <div className={cx('wrapper')}>
-            <Row>
-                <Col md={12}>
+            <Row gutter={[40, 40]}>
+                <Col xs={24} lg={12}>
                     <div className={cx('card')}>
                         <div className={cx('title')}>
                             <BsPersonCircle className={cx('title-icon')} /> Thông tin cá nhân
@@ -57,44 +65,58 @@ function ProfilePage() {
                         </div>
                     </div>
                 </Col>
-                <Col md={12}>
-                    <div className={cx('title')}>
-                        <BsFillClipboard2Fill className={cx('title-icon')} /> Lịch sử đặt hàng
-                    </div>
-                    <div className={cx('body', 'invoice-list')}>
-                        {listBooking &&
-                            listBooking.map((item, index) => (
-                                <div key={index} className={cx('invoice-wrapper')}>
-                                    <div className={cx('left-side')}>
-                                        <BsTicket className={cx('invoice-img')} />
-                                        <div className={cx('invoice-body')}>
-                                            <div className={cx('invoice-title')}>
-                                                Đơn hàng đặt lúc {dayjs(item.date).format('HH:mm')} ngày{' '}
-                                                {dayjs(item.date).format('DD/MM/YYYY')}
-                                            </div>
-                                            <div className={cx('invoice-info')}>
-                                                Trạng thái :{' '}
-                                                <span>
-                                                    {item.status === 0
-                                                        ? 'Chưa thanh toán'
-                                                        : item.status === 1
-                                                        ? 'Đang giao'
-                                                        : 'Đã giao'}
-                                                </span>
-                                            </div>
-                                            <div className={cx('invoice-info')}>
-                                                Tổng tiền : <span>{priceFormat(item.shippingFee + item.total)}đ</span>
+                <Col xs={24} lg={12}>
+                    <div className={cx('card')}>
+                        <div className={cx('title')}>
+                            <BsFillClipboard2Fill className={cx('title-icon')} /> Lịch sử đặt chuyến
+                        </div>
+                        <div className={cx('body', 'invoice-list')}>
+                            {listBooking && listBooking.length !== 0 ? (
+                                listBooking.map((item, index) => (
+                                    <div key={index} className={cx('invoice-wrapper')}>
+                                        <div className={cx('left-side')}>
+                                            <BsTicket className={cx('invoice-img')} />
+                                            <div className={cx('invoice-body')}>
+                                                <div className={cx('invoice-title')}>
+                                                    Đơn hàng đặt lúc {dayjs(item.date).format('HH:mm')} ngày{' '}
+                                                    {dayjs(item.date).format('DD/MM/YYYY')}
+                                                </div>
+                                                <div className={cx('invoice-info')}>
+                                                    Trạng thái :{' '}
+                                                    <span>
+                                                        {item.status === 0
+                                                            ? 'Chưa thanh toán'
+                                                            : item.status === 1
+                                                            ? 'Đang giao'
+                                                            : 'Đã giao'}
+                                                    </span>
+                                                </div>
+                                                <div className={cx('invoice-info')}>
+                                                    Tổng tiền :{' '}
+                                                    <span>{priceFormat(item.shippingFee + item.total)}đ</span>
+                                                </div>
                                             </div>
                                         </div>
+                                        <div
+                                            onClick={() => setDetailInvoice(item.id)}
+                                            className={cx('invoice-actions')}
+                                        >
+                                            Xem chi tiết
+                                        </div>
                                     </div>
-                                    <div onClick={() => setDetailInvoice(item.id)} className={cx('invoice-actions')}>
-                                        Xem chi tiết
-                                    </div>
-                                </div>
-                            ))}
+                                ))
+                            ) : (
+                                <Alert
+                                    icon={<TbMoodSadSquint />}
+                                    showIcon
+                                    type="warning"
+                                    message="Bạn chưa đặt chuyến đi nào cả"
+                                />
+                            )}
+                        </div>
                     </div>
                 </Col>
-            </Row>{' '}
+            </Row>
         </div>
     );
 }

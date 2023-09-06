@@ -42,6 +42,7 @@ function Header() {
         dispatch(actions.setUserInfo(null));
         Cookies.remove('accessToken');
         Cookies.remove('userInfo');
+        navigate(config.routes.home);
     };
     const getCategories = async () => {
         const results = await categoryService.getAllCategory();
@@ -134,7 +135,7 @@ function Header() {
                         <div className={cx('align-center')} size={'large'}>
                             <h3>{userInfo.username}</h3>
                             <Dropdown menu={{ items: optionItems }}>
-                                <Image src={images.shoppingCart} className={cx('cart-img')} />
+                                <Image src={state.userInfo && state.userInfo.photo} className={cx('user-img')} />
                             </Dropdown>
                         </div>
                     ) : (

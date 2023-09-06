@@ -69,30 +69,19 @@
         opacity: 0.9;
     }
 }
-.cart-img {
-    height: 50px;
+.user-img {
+    border-radius: 50%;
+    height: 40px;
     object-fit: contain;
 }
-.cart-quantity {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    line-height: 1;
-    font-size: 1.2rem;
-    padding: 3px 5px;
-    border-radius: 50%;
-    text-align: center;
-    color: #fff;
-    background-color: var(--primary-color);
-}
-
-.cart-img {
-    margin-left: 15px;
+.user-img {
+    margin-left: 20px;
     &:hover {
         opacity: 0.9;
         cursor: pointer;
     }
 }
+
 .header-actions {
     display: flex;
     align-items: center;

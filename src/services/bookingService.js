@@ -1,3 +1,4 @@
+import { notification } from 'antd';
 import * as httpRequest from '../utils/httpRequest';
 
 export const createBooking = async (body) => {
@@ -28,14 +29,16 @@ export const getBooking = async (id) => {
     }
 };
 export const getAllBooking = async () => {
-    const config = {
-        withCredentials: true,
-    };
     try {
-        const res = await httpRequest.get(`booking`, config);
+        const res = await httpRequest.get(`booking`);
         return res;
     } catch (error) {
         console.log(error);
-        return error.response && error.response.data;
+        notification.open({
+            message: 'Fail',
+            description: error.response.data.message,
+            placement: 'bottomRight',
+            type: 'error',
+        });
     }
 };
