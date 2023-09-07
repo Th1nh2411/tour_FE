@@ -37,22 +37,25 @@ function TourDetail({}) {
     const data = useLocation().state;
     const navigate = useNavigate();
     const [guestSize, setGuestSizeValue] = useState('');
+    const [flag, setFlagValue] = useState(2);
 
     const [reviews, setReviews] = useState([]);
     const [numReviews, setNumReviews] = useState(0);
     const [loading, setLoading] = useState(false);
     const [currentPageReview, setCurrentPageReview] = useState(1);
 
-    const createBooking = async () => {
+    const payment = async () => {
         const results = await bookingService.createBooking({
+            tourInfo: data._id,
             guestSize,
         });
         if (results.success) {
-            state.showToast('Successfully booked on ' + dayjs(data.createAt).format('DD/MM/YYYY'), results.message);
+            await bookingService.vnPayment({ id_order: results.data._id, flag });
         } else {
             state.showToast('Failure', results.message, 'error');
         }
     };
+
     const getTourReview = async () => {
         setLoading(true);
         const results = await reviewService.getAllReview(data._id, currentPageReview - 1);
@@ -179,13 +182,15 @@ function TourDetail({}) {
                                             size="large"
                                             className={cx('w-100')}
                                             placeholder="Chọn kiểu thanh toán"
+                                            value={flag}
+                                            onChange={(value) => setFlagValue(value)}
                                             options={[
                                                 {
-                                                    value: 0,
+                                                    value: 1,
                                                     label: 'Thanh toán cọc (20%)',
                                                 },
                                                 {
-                                                    value: 1,
+                                                    value: 2,
                                                     label: 'Thanh toán toàn bộ',
                                                 },
                                             ]}
@@ -228,7 +233,7 @@ function TourDetail({}) {
                                 />
                             )}
                             <Button
-                                onClick={createBooking}
+                                onClick={payment}
                                 size="large"
                                 type="primary"
                                 disabled={!state.userInfo || !state.userInfo.isActive}
