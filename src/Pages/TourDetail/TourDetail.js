@@ -36,7 +36,7 @@ function TourDetail({}) {
     const [state, dispatch] = useContext(StoreContext);
     const data = useLocation().state;
     const navigate = useNavigate();
-    const [guestSize, setGuestSizeValue] = useState('');
+    const [guestSize, setGuestSizeValue] = useState(1);
     const [flag, setFlagValue] = useState(2);
 
     const [reviews, setReviews] = useState([]);
@@ -52,7 +52,7 @@ function TourDetail({}) {
         if (results.success) {
             await bookingService.vnPayment({ id_order: results.data._id, flag });
         } else {
-            state.showToast('Failure', results.message, 'error');
+            state.showToast('Thất bại', results.message, 'error');
         }
     };
 

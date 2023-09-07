@@ -15,11 +15,8 @@ export const createBooking = async (body) => {
 };
 
 export const getBooking = async (id) => {
-    const config = {
-        withCredentials: true,
-    };
     try {
-        const res = await httpRequest.get(`booking/${id}`, config);
+        const res = await httpRequest.get(`booking/${id}`);
         return res;
     } catch (error) {
         console.log(error);
