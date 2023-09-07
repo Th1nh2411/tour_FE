@@ -12,6 +12,8 @@ import dayjs from 'dayjs';
 import { MdEdit, MdLock } from 'react-icons/md';
 import { Button } from 'antd';
 import BookingDetail from '../../components/BookingDetail/BookingDetail';
+import ProfileForm from './ProfileForm';
+import ChangePwForm from './ChangePwForm';
 const cx = classNames.bind(styles);
 
 function ProfilePage() {
@@ -33,6 +35,8 @@ function ProfilePage() {
     return (
         <>
             <BookingDetail bookingDetail={detailBooking} onClose={() => setDetailBooking(false)} />
+            <ProfileForm showForm={showEditProfile} onClose={() => setShowEditProfile(false)} />
+            <ChangePwForm showForm={showChangePw} onClose={() => setShowChangePw(false)} />
             <div className={cx('wrapper')}>
                 <Row gutter={[40, 40]}>
                     <Col xs={24} lg={12}>
@@ -63,6 +67,9 @@ function ProfilePage() {
                                     </h3>
                                     <h3 className={cx('profile-info')}>
                                         Tài khoản gmail: <span>{state.userInfo && state.userInfo.email}</span>
+                                    </h3>
+                                    <h3 className={cx('profile-info')}>
+                                        Địa chỉ: <span>{state.userInfo && state.userInfo.address}</span>
                                     </h3>
                                 </div>
                             </div>

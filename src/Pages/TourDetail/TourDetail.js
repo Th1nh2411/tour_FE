@@ -123,7 +123,9 @@ function TourDetail({}) {
                             <p style={{ color: '#555' }}>{data.description}</p>
                             <h2 className={cx('mt-1')}>Hành trình</h2>
                             {data.itineraries.map((item, index) => (
-                                <p style={{ color: '#555' }}>{item}</p>
+                                <p key={index} style={{ color: '#555' }}>
+                                    {item}
+                                </p>
                             ))}
                         </Space>
                         <Space direction="vertical" size={'small'} className={cx('card', 'mt-2')}>
