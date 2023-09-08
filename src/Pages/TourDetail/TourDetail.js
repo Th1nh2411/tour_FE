@@ -50,7 +50,8 @@ function TourDetail({}) {
             guestSize,
         });
         if (results.success) {
-            await bookingService.vnPayment({ id_order: results.data._id, flag });
+            const results2 = await bookingService.vnpayPayment({ id_order: results.data._id, flag });
+            if (results2) window.location.replace(results2.data);
         } else {
             state.showToast('Thất bại', results.message, 'error');
         }

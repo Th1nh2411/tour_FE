@@ -62,7 +62,7 @@ const TourForm = ({ data, showTourForm, onClose = () => {} }) => {
         if (results.success) {
             state.showToast('Success', results.message);
         } else {
-            state.showToast('Fail', results.message, 'error');
+            state.showToast('Thất bại', results.message, 'error');
         }
         onClose(true);
     };
@@ -87,7 +87,7 @@ const TourForm = ({ data, showTourForm, onClose = () => {} }) => {
         if (results.success) {
             state.showToast('Success', results.message);
         } else {
-            state.showToast('Fail', results.message, 'error');
+            state.showToast('Thất bại', results.message, 'error');
         }
         onClose(true);
     };

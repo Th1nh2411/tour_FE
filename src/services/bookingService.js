@@ -2,18 +2,28 @@ import { notification } from 'antd';
 import * as httpRequest from '../utils/httpRequest';
 
 export const createBooking = async (body) => {
-    const config = {
-        withCredentials: true,
-    };
     try {
-        const res = await httpRequest.post(`booking`, body, config);
+        const res = await httpRequest.post(`booking`, body);
         return res;
     } catch (error) {
         console.log(error);
         return error.response && error.response.data;
     }
 };
-
+export const cancelBooking = async (id) => {
+    try {
+        const res = await httpRequest.post(`booking/cancel/${id}`);
+        return res;
+    } catch (error) {
+        console.log(error);
+        notification.open({
+            message: 'Thất bại',
+            description: error.response && error.response.data.message,
+            placement: 'bottomRight',
+            type: 'error',
+        });
+    }
+};
 export const getBooking = async (id) => {
     try {
         const res = await httpRequest.get(`booking/${id}`);
@@ -30,22 +40,37 @@ export const getAllBooking = async () => {
     } catch (error) {
         console.log(error);
         notification.open({
-            message: 'Fail',
-            description: error.response.data.message,
+            message: 'Thất bại',
+            description: error.response && error.response.data.message,
             placement: 'bottomRight',
             type: 'error',
         });
     }
 };
-export const vnPayment = async (body) => {
-    const config = {
-        withCredentials: true,
-    };
+export const vnpayPayment = async (body) => {
     try {
-        const res = await httpRequest.post(`create_payment_url`, body, config);
+        const res = await httpRequest.post(`vnpay/create_payment_url`, body);
         return res;
     } catch (error) {
-        console.log(error);
-        return error.response && error.response.data;
+        notification.open({
+            message: 'Thất bại',
+            description: error.response && error.response.data.message,
+            placement: 'bottomRight',
+            type: 'error',
+        });
+    }
+};
+export const vnpayReturn = async (params) => {
+    const config = { params };
+    try {
+        const res = await httpRequest.get(`vnpay/vnpay_return`, config);
+        return res;
+    } catch (error) {
+        notification.open({
+            message: 'Thất bại',
+            description: error.response && error.response.data.message,
+            placement: 'bottomRight',
+            type: 'error',
+        });
     }
 };

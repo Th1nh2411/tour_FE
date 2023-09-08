@@ -74,7 +74,7 @@ const ProfileForm = ({ showForm, onClose = () => {} }) => {
                     <Button onClick={onClose} size="large">
                         Huỷ bỏ
                     </Button>
-                    <Button size="large" type="primary" htmlType="submit">
+                    <Button loading={loading} size="large" type="primary" htmlType="submit">
                         Xác nhận
                     </Button>
                 </Space>

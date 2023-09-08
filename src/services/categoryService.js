@@ -11,7 +11,7 @@ export const getAllCategory = async (body) => {
     } catch (error) {
         console.log(error);
         notification.open({
-            message: 'Fail',
+            message: 'Thất bại',
             description: error.response.data.message,
             placement: 'bottomRight',
             type: 'error',
@@ -28,7 +28,7 @@ export const getDetailCategory = async (id) => {
     } catch (error) {
         console.log(error);
         notification.open({
-            message: 'Fail',
+            message: 'Thất bại',
             description: error.response.data.message,
             placement: 'bottomRight',
             type: 'error',
@@ -46,7 +46,7 @@ export const createCategory = async (body) => {
     } catch (error) {
         console.log(error);
         notification.open({
-            message: 'Fail',
+            message: 'Thất bại',
             description: error.response.data.message,
             placement: 'bottomRight',
             type: 'error',
@@ -63,7 +63,7 @@ export const updateCategory = async (id, body) => {
     } catch (error) {
         console.log(error);
         notification.open({
-            message: 'Fail',
+            message: 'Thất bại',
             description: error.response.data.message,
             placement: 'bottomRight',
             type: 'error',

@@ -1,7 +1,7 @@
 import styles from './ProfilePage.module.scss';
 import classNames from 'classnames/bind';
 import { BsFillClipboard2Fill, BsFillPhoneFill, BsPersonCircle, BsTicket } from 'react-icons/bs';
-import { Alert, Badge, Col, Row, Space } from 'antd';
+import { Alert, Badge, Col, Row, Skeleton, Space, notification } from 'antd';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import * as bookingService from '../../services/bookingService';
 import { StoreContext, actions } from '../../store';
@@ -14,6 +14,7 @@ import { Button } from 'antd';
 import BookingDetail from '../../components/BookingDetail/BookingDetail';
 import ProfileForm from './ProfileForm';
 import ChangePwForm from './ChangePwForm';
+import { useSearchParams } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 function ProfilePage() {
@@ -23,18 +24,46 @@ function ProfilePage() {
     const [showChangePw, setShowChangePw] = useState();
     const [loading, setLoading] = useState();
     const [state, dispatch] = useContext(StoreContext);
-    const getTourReview = async () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const paymentStatus = searchParams.get('vnp_TransactionStatus');
+    const query = Object.fromEntries(searchParams.entries());
+    const confirmPaymentInvoice = async () => {
+        const results = await bookingService.vnpayReturn(query);
+        if (results) {
+            state.showToast('Thành công', results.message);
+        }
+        getAllBooking();
+    };
+    useEffect(() => {
+        if (paymentStatus === '00') {
+            confirmPaymentInvoice();
+        } else if (paymentStatus === '02') {
+            state.showToast('Đã huỷ thanh toán', null, 'info');
+        }
+    }, []);
+    const getAllBooking = async () => {
         setLoading(true);
         const results = await bookingService.getAllBooking();
-        setListBooking(results.data || []);
+        if (results) {
+            setListBooking(results.data || []);
+        }
         setLoading(false);
     };
     useEffect(() => {
-        getTourReview();
+        getAllBooking();
     }, []);
+
     return (
         <>
-            <BookingDetail bookingDetail={detailBooking} onClose={() => setDetailBooking(false)} />
+            <BookingDetail
+                bookingDetail={detailBooking}
+                onClose={(edited) => {
+                    if (edited === true) {
+                        getAllBooking();
+                    }
+                    setDetailBooking(false);
+                }}
+            />
             <ProfileForm showForm={showEditProfile} onClose={() => setShowEditProfile(false)} />
             <ChangePwForm showForm={showChangePw} onClose={() => setShowChangePw(false)} />
             <div className={cx('wrapper')}>
@@ -80,58 +109,62 @@ function ProfilePage() {
                             <div className={cx('title')}>
                                 <BsFillClipboard2Fill className={cx('title-icon')} /> Lịch sử đặt chuyến
                             </div>
-                            <div className={cx('body', 'invoice-list')}>
-                                {listBooking && listBooking.length !== 0 ? (
-                                    listBooking.map((item, index) => (
-                                        <div key={index} className={cx('invoice-wrapper')}>
-                                            <div className={cx('left-side')}>
-                                                <Image
-                                                    src="https://res.cloudinary.com/dgsumh8ih/image/upload/v1694075871/travel.png"
-                                                    className={cx('invoice-img')}
-                                                />
-                                                <div className={cx('invoice-body')}>
-                                                    <div className={cx('invoice-title')}>{item.tourInfo.tourName}</div>
-                                                    <div className={cx('invoice-info')}>
-                                                        Trạng thái :{' '}
-                                                        <Badge
-                                                            status={
-                                                                item.status === -1
-                                                                    ? 'default'
-                                                                    : item.status === 0
-                                                                    ? 'error'
-                                                                    : item.status === 1
-                                                                    ? 'processing'
-                                                                    : 'success'
-                                                            }
-                                                            text={
-                                                                item.status === -1
-                                                                    ? 'Đã huỷ'
-                                                                    : item.status === 0
-                                                                    ? 'Chưa thanh toán'
-                                                                    : item.status === 1
-                                                                    ? 'Đã thanh toán cọc (20%)'
-                                                                    : 'Đã thanh toán'
-                                                            }
-                                                        />
-                                                    </div>
-                                                    <div className={cx('invoice-info')}>
-                                                        Khởi hành :{' '}
-                                                        <span>{dayjs(item.startDate).format('DD/MM/YYYY')}</span>
+                            <Skeleton loading={loading}>
+                                <div className={cx('body', 'invoice-list')}>
+                                    {listBooking && listBooking.length !== 0 ? (
+                                        listBooking.map((item, index) => (
+                                            <div key={index} className={cx('invoice-wrapper')}>
+                                                <div className={cx('left-side')}>
+                                                    <Image
+                                                        src="https://res.cloudinary.com/dgsumh8ih/image/upload/v1694075871/travel.png"
+                                                        className={cx('invoice-img')}
+                                                    />
+                                                    <div className={cx('invoice-body')}>
+                                                        <div className={cx('invoice-title')}>
+                                                            {item.tourInfo.tourName}
+                                                        </div>
+                                                        <div className={cx('invoice-info')}>
+                                                            Trạng thái :{' '}
+                                                            <Badge
+                                                                status={
+                                                                    item.status === -1
+                                                                        ? 'default'
+                                                                        : item.status === 0
+                                                                        ? 'error'
+                                                                        : item.status === 1
+                                                                        ? 'processing'
+                                                                        : 'success'
+                                                                }
+                                                                text={
+                                                                    item.status === -1
+                                                                        ? 'Đã huỷ'
+                                                                        : item.status === 0
+                                                                        ? 'Chưa thanh toán'
+                                                                        : item.status === 1
+                                                                        ? 'Đã thanh toán cọc (20%)'
+                                                                        : 'Đã thanh toán'
+                                                                }
+                                                            />
+                                                        </div>
+                                                        <div className={cx('invoice-info')}>
+                                                            Khởi hành :{' '}
+                                                            <span>{dayjs(item.startDate).format('DD/MM/YYYY')}</span>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                <Button onClick={() => setDetailBooking(item)}>Chi tiết</Button>
                                             </div>
-                                            <Button onClick={() => setDetailBooking(item)}>Chi tiết</Button>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <Alert
-                                        icon={<TbMoodSadSquint />}
-                                        showIcon
-                                        type="warning"
-                                        message="Bạn chưa đặt chuyến đi nào cả"
-                                    />
-                                )}
-                            </div>
+                                        ))
+                                    ) : (
+                                        <Alert
+                                            icon={<TbMoodSadSquint />}
+                                            showIcon
+                                            type="warning"
+                                            message="Bạn chưa đặt chuyến đi nào cả"
+                                        />
+                                    )}
+                                </div>
+                            </Skeleton>
                         </div>
                     </Col>
                 </Row>

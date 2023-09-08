@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import PropTypes from 'prop-types';
 import { useContext, useEffect, useRef, useState } from 'react';
 import styles from './BookingDetail.module.scss';
-import { useNavigate } from 'react-router';
+import { redirect, useNavigate } from 'react-router';
 import { StoreContext } from '../../store';
 import { Badge, Button, Descriptions, Divider, Drawer, Space } from 'antd';
 import * as bookingService from '../../services/bookingService';
@@ -12,7 +12,27 @@ import { priceFormat } from '../../utils/format';
 const cx = classNames.bind(styles);
 
 function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
-    const [loading, setLoading] = useState();
+    const [state, dispatch] = useContext(StoreContext);
+    const [loading, setLoading] = useState({});
+
+    const payment = async (flag) => {
+        setLoading({ ...loading, payment1: flag === 1, payment2: flag === 2 });
+        const results = await bookingService.vnpayPayment({ id_order: bookingDetail._id, flag });
+        if (results) {
+            window.location.replace(results.data);
+        }
+        setLoading({});
+        onClose(true);
+    };
+    const cancel = async () => {
+        setLoading({ ...loading, cancel: true });
+        const results = await bookingService.cancelBooking(bookingDetail._id);
+        if (results) {
+            state.showToast('Thành công', 'Huỷ đơn thành công');
+        }
+        setLoading({});
+        onClose(true);
+    };
     const userInfo = [
         {
             key: '1',
@@ -108,11 +128,15 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
     ];
     const actions = (
         <Space className={cx('content-end')}>
-            <Button danger>Huỷ đơn</Button>
-            <Button type="primary" ghost>
+            <Button loading={loading.cancel} onClick={cancel} danger>
+                Huỷ đơn
+            </Button>
+            <Button loading={loading.payment1} onClick={() => payment(1)} type="primary" ghost>
                 Thanh toán cọc (20%)
             </Button>
-            <Button type="primary">Thanh toán toàn bộ</Button>
+            <Button loading={loading.payment2} onClick={() => payment(2)} type="primary">
+                Thanh toán toàn bộ
+            </Button>
         </Space>
     );
     return (

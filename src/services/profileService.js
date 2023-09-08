@@ -8,7 +8,7 @@ export const editProfile = async (body) => {
     } catch (error) {
         console.log(error);
         notification.open({
-            message: 'Fail',
+            message: 'Thất bại',
             description: error.response.data.message,
             placement: 'bottomRight',
             type: 'error',
@@ -22,7 +22,7 @@ export const changePassword = async (body) => {
     } catch (error) {
         console.log(error);
         notification.open({
-            message: 'Fail',
+            message: 'Thất bại',
             description: error.response.data.message,
             placement: 'bottomRight',
             type: 'error',
