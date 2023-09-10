@@ -118,7 +118,12 @@ function Header() {
                             >
                                 Về chúng tôi
                             </NavLink>
-
+                            <NavLink
+                                className={(nav) => cx('header-nav_item', { active: nav.isActive })}
+                                to={config.routes.staff}
+                            >
+                                Đội ngũ
+                            </NavLink>
                             <NavLink
                                 className={(nav) => cx('header-nav_item', { active: nav.isActive })}
                                 to={config.routes.tour}

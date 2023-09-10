@@ -4,7 +4,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import styles from './BookingDetail.module.scss';
 import { redirect, useNavigate } from 'react-router';
 import { StoreContext } from '../../store';
-import { Badge, Button, Descriptions, Divider, Drawer, Space } from 'antd';
+import { Badge, Button, Descriptions, Divider, Drawer, Popconfirm, Space } from 'antd';
 import * as bookingService from '../../services/bookingService';
 import dayjs from 'dayjs';
 import { priceFormat } from '../../utils/format';
@@ -24,7 +24,7 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
         setLoading({});
         onClose(true);
     };
-    const cancel = async () => {
+    const cancelBooking = async () => {
         setLoading({ ...loading, cancel: true });
         const results = await bookingService.cancelBooking(bookingDetail._id);
         if (results) {
@@ -128,9 +128,17 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
     ];
     const actions = (
         <Space className={cx('content-end')}>
-            <Button loading={loading.cancel} onClick={cancel} danger>
-                Huỷ đơn
-            </Button>
+            <Popconfirm
+                title="Delete the task"
+                description="Bạn chắc chắn huỷ chuyến này?"
+                onConfirm={cancelBooking}
+                okButtonProps={{ loading: loading.cancel }}
+                okText="Huỷ chuyến"
+                cancelText="Quay lại"
+            >
+                <Button danger>Huỷ đơn</Button>
+            </Popconfirm>
+
             <Button loading={loading.payment1} onClick={() => payment(1)} type="primary" ghost>
                 Thanh toán cọc (20%)
             </Button>

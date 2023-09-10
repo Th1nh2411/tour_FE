@@ -34,7 +34,7 @@ function LoginPage() {
     };
     return (
         <div className={cx('wrapper')}>
-            <Row style={{ boxShadow: '0 48px 100px 0 rgba(17, 12, 46, 0.15)', position: 'relative' }}>
+            <Row style={{ boxShadow: 'rgba(17, 12, 46, 0.15) -1px 5px 20px 0px', position: 'relative' }}>
                 <div className={cx('form-icon')}>
                     <FaUser />
                 </div>

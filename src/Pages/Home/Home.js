@@ -14,6 +14,7 @@ import TourItem from '../../components/TourItem/TourItem';
 import { Link, useNavigate } from 'react-router-dom';
 import config from '../../config';
 import SearchBar from '../../components/SearchBar/SearchBar';
+import TextArea from 'antd/es/input/TextArea';
 const cx = classNames.bind(styles);
 
 function Home() {
@@ -257,16 +258,20 @@ function Home() {
                 <Row>
                     <Col xs={24} md={10}>
                         <h3 className={cx('section-slogan')}>
-                            <span className={cx('slogan-text')}>Theo dõi</span>
+                            <span className={cx('slogan-text')}>Đánh giá</span>
                         </h3>
                         <h2 className={cx('mt-1')}>
-                            Theo dõi và nhận thông báo từ chúng tôi để biết thông tin khuyến mãi sớm nhất
+                            Đánh giá của quý khách có thể giúp chúng tôi có thể phục vụ tốt hơn trong tương lai.
                         </h2>
-                        <div className={cx('mt-3', 'd-flex')}>
-                            <Input placeholder="Enter your email" size="large" className={cx('customer-input')} />
+                        <div className={cx('mt-2', 'd-flex')}>
+                            <TextArea
+                                placeholder="Bạn nghĩ gì về chúng tôi"
+                                size="large"
+                                className={cx('customer-input')}
+                            />
 
                             <Button type="primary" size="large" className={cx('ml-2')}>
-                                Subscribe
+                                Gửi đánh giá
                             </Button>
                         </div>
                         <Image
