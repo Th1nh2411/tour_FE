@@ -7,7 +7,12 @@ export const createBooking = async (body) => {
         return res;
     } catch (error) {
         console.log(error);
-        return error.response && error.response.data;
+        notification.open({
+            message: 'Thất bại',
+            description: error.response && error.response.data.message,
+            placement: 'bottomRight',
+            type: 'error',
+        });
     }
 };
 export const cancelBooking = async (id) => {
@@ -30,7 +35,26 @@ export const getBooking = async (id) => {
         return res;
     } catch (error) {
         console.log(error);
-        return error.response && error.response.data;
+        notification.open({
+            message: 'Thất bại',
+            description: error.response && error.response.data.message,
+            placement: 'bottomRight',
+            type: 'error',
+        });
+    }
+};
+export const getUnpaidBooking = async () => {
+    try {
+        const res = await httpRequest.get(`booking/check/payment`);
+        return res;
+    } catch (error) {
+        console.log(error);
+        notification.open({
+            message: 'Thất bại',
+            description: error.response && error.response.data.message,
+            placement: 'bottomRight',
+            type: 'error',
+        });
     }
 };
 export const getAllBooking = async () => {

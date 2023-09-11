@@ -2,10 +2,12 @@ import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-
 import { privateRoutes, publicRoutes } from './Routes';
 import DefaultLayout from './layout/DefaultLayout';
 import { Fragment, useEffect, useState } from 'react';
+import ScrollToTop from './utils/scrollRestoration';
 
 function App() {
     return (
         <div className="App">
+            <ScrollToTop />
             <Routes>
                 {publicRoutes.map((route, index) => {
                     let Layout = DefaultLayout;

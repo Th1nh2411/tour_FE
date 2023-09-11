@@ -46,23 +46,25 @@ function Header() {
     };
     const getCategories = async () => {
         const results = await categoryService.getAllCategory();
-        setTourCategories(
-            results.data.map((item, index) => {
-                return {
-                    key: index,
-                    label: (
-                        <Link
-                            style={{ fontSize: '1.8rem', fontWeight: 500, lineHeight: 2 }}
-                            to={'/tour/category/' + item._id}
-                            state={{ category: item }}
-                        >
-                            {item.categoryName}
-                        </Link>
-                    ),
-                    icon: <MdTour style={{ fontSize: '2.2rem' }} />,
-                };
-            }),
-        );
+        if (results) {
+            setTourCategories(
+                results.data.map((item, index) => {
+                    return {
+                        key: index,
+                        label: (
+                            <Link
+                                style={{ fontSize: '1.8rem', fontWeight: 500, lineHeight: 2 }}
+                                to={'/tour/category/' + item._id}
+                                state={{ category: item }}
+                            >
+                                {item.categoryName}
+                            </Link>
+                        ),
+                        icon: <MdTour style={{ fontSize: '2.2rem' }} />,
+                    };
+                }),
+            );
+        }
     };
     useEffect(() => {
         getCategories();

@@ -18,11 +18,9 @@ import TextArea from 'antd/es/input/TextArea';
 const cx = classNames.bind(styles);
 
 function Home() {
-    const [state, dispatch] = useContext(StoreContext);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const [featuredTours, setFeaturedTours] = useState([]);
-
     const getFeaturedTour = async () => {
         setLoading(true);
         const results = await tourService.getFeaturedTours();
@@ -150,19 +148,19 @@ function Home() {
                             Điều này giúp tạo ra những trải nghiệm thú vị và đáng nhớ.
                         </p>
                         <Row gutter={[32, 16]} className={cx('mt-3')}>
-                            <Col xs={24} lg={8}>
+                            <Col xs={24} sm={8} md={24} lg={8}>
                                 <span className={cx('statistic-item')}>
                                     <div className={cx('statistic-number')}>12k+</div>
                                     <p className={cx('statistic-title')}>Successful trip</p>
                                 </span>
                             </Col>
-                            <Col xs={24} lg={8}>
+                            <Col xs={24} sm={8} md={24} lg={8}>
                                 <span className={cx('statistic-item')}>
                                     <div className={cx('statistic-number')}>2k+</div>
                                     <p className={cx('statistic-title')}>Regular clients</p>
                                 </span>
                             </Col>
-                            <Col xs={24} lg={8}>
+                            <Col xs={24} sm={8} md={24} lg={8}>
                                 <span className={cx('statistic-item')}>
                                     <div className={cx('statistic-number')}>15</div>
                                     <p className={cx('statistic-title')}>Year experience</p>
@@ -184,7 +182,7 @@ function Home() {
                 </h3>
                 <h2 className={cx('mt-1')}>Tham quan bộ sưu tập từ những chuyến đi của chúng tôi</h2>
                 <Row gutter={[16, 16]} className={cx('mt-3')}>
-                    <Col lg={6}>
+                    <Col md={6}>
                         <div className={cx('gallery-img-group')}>
                             <Image
                                 className={cx('gallery-img')}
@@ -196,7 +194,7 @@ function Home() {
                             />
                         </div>
                     </Col>
-                    <Col lg={6}>
+                    <Col md={6}>
                         <div className={cx('gallery-img-group')}>
                             <Image
                                 className={cx('gallery-img')}
@@ -208,7 +206,7 @@ function Home() {
                             />
                         </div>
                     </Col>
-                    <Col lg={6}>
+                    <Col md={6}>
                         <div className={cx('gallery-img-group')}>
                             <Image
                                 className={cx('gallery-img')}
@@ -220,7 +218,7 @@ function Home() {
                             />
                         </div>
                     </Col>
-                    <Col lg={6}>
+                    <Col md={6}>
                         <div className={cx('gallery-img-group')}>
                             <Image
                                 className={cx('gallery-img')}
