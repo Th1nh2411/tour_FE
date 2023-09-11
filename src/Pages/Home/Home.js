@@ -272,6 +272,35 @@ function Home() {
                     ))}
                 </Slide>
             </section>
+            <section>
+                <Row>
+                    <Col xs={24} md={10}>
+                        <h3 className={cx('section-slogan')}>
+                            <span className={cx('slogan-text')}>Góp ý</span>
+                        </h3>
+                        <h2 className={cx('mt-1')}>
+                            Góp ý của quý khách có thể giúp chúng tôi có thể phục vụ tốt hơn trong tương lai.
+                        </h2>
+                        <div className={cx('mt-2', 'd-flex')}>
+                            <TextArea placeholder="Bạn nghĩ gì về chúng tôi" size="large" />
+
+                            <Button type="primary" size="large" className={cx('ml-2')}>
+                                Gửi góp ý
+                            </Button>
+                        </div>
+                        <Image
+                            src="https://www.allianz-partners.com/en_global/products/travel/_jcr_content/root/parsys/wrapper_copy/wrapper/image.img.82.3360.jpeg/1656941434579/travel-1800x600px.jpeg"
+                            className={cx('w-100', 'mt-2')}
+                        />
+                    </Col>
+                    <Col xs={24} md={12} offset={2}>
+                        <Image
+                            src="https://doan-eta.vercel.app/static/media/male-tourist.f000d0ad1ca492b2bcfb.png"
+                            className={cx('w-100')}
+                        />
+                    </Col>
+                </Row>
+            </section>
         </div>
     );
 }
