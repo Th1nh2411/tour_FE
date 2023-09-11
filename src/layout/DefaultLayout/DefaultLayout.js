@@ -3,7 +3,7 @@ import Footer from '../components/Footer';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './DefaultLayout.module.scss';
-import { Spin } from 'antd';
+import { FloatButton, Spin } from 'antd';
 import { useContext } from 'react';
 import { StoreContext } from '../../store';
 
@@ -12,6 +12,7 @@ function DefaultLayout({ children }) {
     const [state, dispatch] = useContext(StoreContext);
     return (
         <>
+            <FloatButton.BackTop />
             {state.loading && (
                 <div className={cx('loading-wrapper')}>
                     <Spin className={cx('loading')} />

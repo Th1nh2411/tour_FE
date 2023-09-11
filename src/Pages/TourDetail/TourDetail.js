@@ -84,6 +84,28 @@ function TourDetail({}) {
             children: state.userInfo && state.userInfo.email,
         },
     ];
+    const guideItems = [
+        {
+            key: '1',
+            label: 'Tên đầy đủ',
+            children: data.guide.guideName,
+        },
+        {
+            key: '2',
+            label: 'Số điện thoại',
+            children: data.guide.phoneNumber,
+        },
+        {
+            key: '3',
+            label: 'Tài khoản gmail',
+            children: data.guide.email,
+        },
+        {
+            key: '4',
+            label: 'Ngôn ngữ',
+            children: data.guide.languages,
+        },
+    ];
     return (
         <div className={cx('wrapper')}>
             <section>
@@ -128,6 +150,9 @@ function TourDetail({}) {
                                     {item}
                                 </p>
                             ))}
+                            <h2 className={cx('mt-1')}>Hướng dẫn viên</h2>
+
+                            <Descriptions column={{ xs: 1, sm: 2, md: 2, lg: 1, xl: 2 }} items={guideItems} />
                         </Space>
                         <Space direction="vertical" size={'small'} className={cx('card', 'mt-2')}>
                             <h2>Đánh giá chuyến đi ({numReviews} đánh giá)</h2>
@@ -244,33 +269,6 @@ function TourDetail({}) {
                                 Đặt vé
                             </Button>
                         </div>
-                    </Col>
-                </Row>
-            </section>
-            <section>
-                <Row>
-                    <Col lg={10}>
-                        <h3 className={cx('section-slogan')}>
-                            <span className={cx('slogan-text')}>Subscribe</span>
-                        </h3>
-                        <h2 className={cx('mt-1')}>Subscribe us now to get useful traveling information</h2>
-                        <div className={cx('mt-3', 'd-flex')}>
-                            <Input placeholder="Enter your email" size="large" className={cx('customer-input')} />
-
-                            <Button type="primary" size="large" className={cx('ml-2')}>
-                                Subscribe
-                            </Button>
-                        </div>
-                        <Image
-                            src="https://www.allianz-partners.com/en_global/products/travel/_jcr_content/root/parsys/wrapper_copy/wrapper/image.img.82.3360.jpeg/1656941434579/travel-1800x600px.jpeg"
-                            className={cx('w-100', 'mt-2')}
-                        />
-                    </Col>
-                    <Col lg={12} offset={2}>
-                        <Image
-                            className={cx('w-100')}
-                            src="https://doan-eta.vercel.app/static/media/male-tourist.f000d0ad1ca492b2bcfb.png"
-                        />
                     </Col>
                 </Row>
             </section>

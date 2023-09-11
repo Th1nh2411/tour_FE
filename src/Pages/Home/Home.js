@@ -182,7 +182,7 @@ function Home() {
                 <h3 className={cx('section-slogan')}>
                     <span className={cx('slogan-text')}>Bộ sưu tập</span>
                 </h3>
-                <h2 className={cx('mt-1')}>Tham quan bộ sưu tập tour của khách hàng trước đó</h2>
+                <h2 className={cx('mt-1')}>Tham quan bộ sưu tập từ những chuyến đi của chúng tôi</h2>
                 <Row gutter={[16, 16]} className={cx('mt-3')}>
                     <Col lg={6}>
                         <div className={cx('gallery-img-group')}>
@@ -236,6 +236,26 @@ function Home() {
             </section>
             <section>
                 <h3 className={cx('section-slogan')}>
+                    <span className={cx('slogan-text')}>Đồng hành</span>
+                </h3>
+                <h2 className={cx('mt-1')}>Những hướng dẫn viên tận tâm và đầy kinh nghiệm từ đội ngũ của chúng tôi</h2>
+                <Slide className={cx('mt-2')} navigation={false} numItemPerSlide={3} autoPlay>
+                    {HOME_DATA.reviews.map((item, index) => (
+                        <div key={index} className={cx('reviews-item')}>
+                            <p>{item.desc}</p>
+                            <div className={cx('reviews-customer')}>
+                                <Image src={item.image} className={cx('customer-img')} />
+                                <div>
+                                    <h3 className={cx('customer-name')}>{item.name}</h3>
+                                    <p className={cx('customer-role')}>{item.role}</p>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </Slide>
+            </section>
+            <section>
+                <h3 className={cx('section-slogan')}>
                     <span className={cx('slogan-text')}>Đánh giá</span>
                 </h3>
                 <h2 className={cx('mt-1')}>Những gì khách hàng đánh giá</h2>
@@ -253,39 +273,6 @@ function Home() {
                         </div>
                     ))}
                 </Slide>
-            </section>
-            <section>
-                <Row>
-                    <Col xs={24} md={10}>
-                        <h3 className={cx('section-slogan')}>
-                            <span className={cx('slogan-text')}>Đánh giá</span>
-                        </h3>
-                        <h2 className={cx('mt-1')}>
-                            Đánh giá của quý khách có thể giúp chúng tôi có thể phục vụ tốt hơn trong tương lai.
-                        </h2>
-                        <div className={cx('mt-2', 'd-flex')}>
-                            <TextArea
-                                placeholder="Bạn nghĩ gì về chúng tôi"
-                                size="large"
-                                className={cx('customer-input')}
-                            />
-
-                            <Button type="primary" size="large" className={cx('ml-2')}>
-                                Gửi đánh giá
-                            </Button>
-                        </div>
-                        <Image
-                            src="https://www.allianz-partners.com/en_global/products/travel/_jcr_content/root/parsys/wrapper_copy/wrapper/image.img.82.3360.jpeg/1656941434579/travel-1800x600px.jpeg"
-                            className={cx('w-100', 'mt-2')}
-                        />
-                    </Col>
-                    <Col xs={24} md={12} offset={2}>
-                        <Image
-                            src="https://doan-eta.vercel.app/static/media/male-tourist.f000d0ad1ca492b2bcfb.png"
-                            className={cx('w-100')}
-                        />
-                    </Col>
-                </Row>
             </section>
         </div>
     );
