@@ -218,9 +218,7 @@ function Home() {
                 </h3>
                 <h2 className={cx('mt-1')}>Những hướng dẫn viên tận tâm và đầy kinh nghiệm từ đội ngũ của chúng tôi</h2>
                 <Slide className={cx('mt-2')} navigation={false} numItemPerSlide={3} autoPlay>
-                    {allGuide.map((item, index) => (
-                        <GuideItem key={index} data={item} />
-                    ))}
+                    {allGuide && allGuide.map((item, index) => <GuideItem key={index} data={item} />)}
                 </Slide>
             </section>
             <section>
@@ -229,18 +227,19 @@ function Home() {
                 </h3>
                 <h2 className={cx('mt-1')}>Những gì khách hàng đánh giá</h2>
                 <Slide className={cx('mt-2')} navigation={false} numItemPerSlide={3} autoPlay>
-                    {top8Reviews.map((item, index) => (
-                        <div key={index} className={cx('review-item')}>
-                            <p className={cx('review-comment')}>{item.comment}</p>
-                            <div className={cx('review-customer')}>
-                                <Image src={item.tourInfo.photo} className={cx('review-img')} />
-                                <div>
-                                    <h3 className={cx('customer-name')}>{item.userInfo.fullName}</h3>
-                                    <p className={cx('review-tourName')}>{item.tourInfo.tourName}</p>
+                    {top8Reviews &&
+                        top8Reviews.map((item, index) => (
+                            <div key={index} className={cx('review-item')}>
+                                <p className={cx('review-comment')}>{item.comment}</p>
+                                <div className={cx('review-customer')}>
+                                    <Image src={item.tourInfo.photo} className={cx('review-img')} />
+                                    <div>
+                                        <h3 className={cx('customer-name')}>{item.userInfo.fullName}</h3>
+                                        <p className={cx('review-tourName')}>{item.tourInfo.tourName}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
                 </Slide>
             </section>
             <section>
