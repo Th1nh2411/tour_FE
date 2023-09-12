@@ -12,7 +12,6 @@ export const createReview = async (body, tourId) => {
         return res;
     } catch (error) {
         console.log(error);
-        return error.response && error.response.data;
     }
 };
 export const getAllReview = async (tourId, page, rating) => {
@@ -27,7 +26,6 @@ export const getAllReview = async (tourId, page, rating) => {
         return res;
     } catch (error) {
         console.log(error);
-        return error.response && error.response.data;
     }
 };
 export const getTop8Review = async () => {
@@ -36,6 +34,5 @@ export const getTop8Review = async () => {
         return res;
     } catch (error) {
         console.log(error);
-        return error.response && error.response.data;
     }
 };

@@ -12,6 +12,5 @@ export const uploadFile = async (my_file, token) => {
         return res;
     } catch (error) {
         console.log(error);
-        return error.response && error.response.data;
     }
 };
