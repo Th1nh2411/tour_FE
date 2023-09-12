@@ -1,6 +1,6 @@
 import axios from 'axios';
 const httpRequest = axios.create({
-    baseURL: 'http://localhost:4000/api/v1/',
+    baseURL: 'https://holidate-be.vercel.app/',
     withCredentials: true,
     headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
     credentials: 'include',

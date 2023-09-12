@@ -25,10 +25,11 @@ function LoginPage() {
             Cookies.set('userInfo', JSON.stringify(results.data));
             notification.open({
                 message: 'Success',
-                description: 'Login Successful!',
+                description: 'Đăng nhập thành công!',
                 placement: 'bottomRight',
                 type: 'success',
             });
+
             navigate(config.routes.home);
         }
     };
