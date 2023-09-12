@@ -1,6 +1,5 @@
 @import 'normalize.css';
-
-// @import '../../../node_modules/bootstrap/scss/bootstrap-grid.scss';
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500&display=swap');
 /* vietnamese */
 @font-face {
     font-family: 'IBM Plex Sans';
@@ -50,6 +49,7 @@
     font-style: italic;
     src: url(../../assets/fonts/Nunito-Italic-VariableFont_wght.ttf);
 }
+
 :root {
     --primary-color: #faa935;
     --radial-gradient-bg: linear-gradient(45deg, #27be70 0%, #0c713d 100%);
@@ -68,7 +68,7 @@
     --search-border-radius: 92px;
     --search-height: 40px;
     --search-space-height: 9px;
-    --subtitle-font-name: 'Island Moments', cursive;
+    --subtitle-font-name: 'Dancing Script', cursive;
 }
 
 * {
@@ -123,7 +123,7 @@ a[href] {
     width: 100% !important;
 }
 section {
-    padding: 50px 0;
+    padding: 40px 0;
 }
 .mt-1 {
     margin-top: 1rem;
@@ -152,6 +152,10 @@ section {
 .d-flex {
     display: flex;
 }
+.align-end {
+    display: flex;
+    align-items: end;
+}
 .align-center {
     display: flex;
     align-items: center;
@@ -163,6 +167,10 @@ section {
 .content-between {
     display: flex;
     justify-content: space-between;
+}
+.content-end {
+    display: flex;
+    justify-content: end;
 }
 .mr-16 {
     margin-right: 16px;
@@ -179,8 +187,13 @@ section {
 }
 
 // Custom tippy tool tip
-.ant-form-item {
-    margin-bottom: 12px;
+
+.ant-btn-primary {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+.ant-col {
+    font-family: 'Nunito', sans-serif;
 }
 body {
     .tippy-box {

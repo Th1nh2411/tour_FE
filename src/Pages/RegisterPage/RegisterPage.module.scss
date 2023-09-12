@@ -1,48 +1,45 @@
 .wrapper {
-    width: 900px;
+    width: 1000px;
     max-width: 100%;
-    padding: 120px var(--default-layout-horizontal-spacer);
+    padding: 65px var(--default-layout-horizontal-spacer);
     margin: auto;
     // box-shadow: 0 48px 100px 0 rgba(17, 12, 46, 0.15);
+    position: relative;
 }
 .bg-img {
     width: 100%;
+    height: 100%;
     object-fit: contain;
+    background-color: #468b97;
+    padding: 40px;
 }
+
 .form {
-    background-color: var(--primary-color);
-    padding: 80px 60px;
+    padding: 40px 60px;
     width: 100%;
     height: 100%;
-    position: relative;
 }
 .form-title {
-    color: #fff;
-    font-size: 4rem;
+    color: var(--primary-color);
+    font-size: 3rem;
     text-align: center;
+    margin: 20px 0;
+}
+.form-logo {
+    height: 24px;
 }
 .login-btn {
     width: 100%;
     background-color: #333;
     color: #fff;
+    margin-top: 10px;
 }
 .option-title {
-    color: #fff;
+    margin-top: -15px;
+    color: #333;
     font-weight: 500;
     text-align: center;
-    span {
-        color: #333;
+    span a {
+        color: var(--primary-color);
     }
-}
-.form-icon {
-    position: absolute;
-    top: -45px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #fff;
-    color: var(--primary-color);
-    padding: 20px;
-    font-size: 5rem;
-    border-radius: 50%;
-    line-height: 0;
 }

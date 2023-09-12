@@ -1,12 +1,9 @@
 import { notification } from 'antd';
 import * as httpRequest from '../utils/httpRequest';
 
-export const register = async (body) => {
-    // const config = {
-    //     headers: { access_token: token },
-    // };
+export const editProfile = async (body) => {
     try {
-        const res = await httpRequest.post(`auth/register`, body);
+        const res = await httpRequest.put(`user/profile`, body);
         return res;
     } catch (error) {
         console.log(error);
@@ -18,13 +15,9 @@ export const register = async (body) => {
         });
     }
 };
-export const login = async (body) => {
-    // const config = {
-    //     headers: { access_token: token },
-    // };
-
+export const changePassword = async (body) => {
     try {
-        const res = await httpRequest.post(`auth/login`, body);
+        const res = await httpRequest.put(`user/changepassword`, body);
         return res;
     } catch (error) {
         console.log(error);

@@ -8,7 +8,7 @@ export const getAllTours = async (page) => {
     };
 
     try {
-        const res = await httpRequest.get(`api/v1/tours`, config);
+        const res = await httpRequest.get(`tour`, config);
         return res;
     } catch (error) {
         console.log(error);
@@ -18,7 +18,7 @@ export const getAllTours = async (page) => {
 export const addTour = async (data) => {
     const config = {};
     try {
-        const res = await httpRequest.post(`api/v1/tours`, data, config);
+        const res = await httpRequest.post(`tour`, data, config);
         return res;
     } catch (error) {
         console.log(error);
@@ -28,7 +28,7 @@ export const addTour = async (data) => {
 export const editTour = async (data, id) => {
     const config = {};
     try {
-        const res = await httpRequest.put(`api/v1/tours/${id}`, data, config);
+        const res = await httpRequest.put(`tour/${id}`, data, config);
         return res;
     } catch (error) {
         console.log(error);
@@ -39,20 +39,20 @@ export const getFeaturedTours = async (token) => {
     const config = {};
 
     try {
-        const res = await httpRequest.get(`api/v1/tours/search/getFeaturedTour`, config);
+        const res = await httpRequest.get(`tour/search/getFeaturedTour`, config);
         return res;
     } catch (error) {
         console.log(error);
         return error.response && error.response.data;
     }
 };
-export const getSearchTours = async (city = '', distance = 0, maxGroupSize) => {
+export const getSearchTours = async (params) => {
     const config = {
-        params: { city, distance, maxGroupSize },
+        params,
     };
 
     try {
-        const res = await httpRequest.get(`api/v1/tours/search/getTourBySearch`, config);
+        const res = await httpRequest.get(`tour/search/getTourBySearch`, config);
         return res;
     } catch (error) {
         console.log(error);

@@ -5,7 +5,7 @@ import { actions } from '.';
 import images from '../assets/images';
 import { notification } from 'antd';
 import Cookies from 'js-cookie';
-
+import * as bookingService from '../services/bookingService';
 function Provider({ children }) {
     const [api, contextHolder] = notification.useNotification();
     const showToast = (message = '', description = '', type = 'success') => {
@@ -15,14 +15,23 @@ function Provider({ children }) {
             placement: 'bottomRight',
         });
     };
+    const getUnpaidBooking = async () => {
+        const results = await bookingService.getUnpaidBooking();
+        if (results) {
+            dispatch(actions.setUnpaidBooking(results.data));
+        }
+    };
 
     const initState = {
         userInfo: JSON.parse(Cookies.get('userInfo') || null),
         showToast,
-        loading: false,
+        unpaidBooking: null,
+        getUnpaidBooking,
     };
     const [state, dispatch] = useReducer(reducer, initState);
-
+    useEffect(() => {
+        getUnpaidBooking();
+    }, []);
     return (
         <UserContext.Provider value={[state, dispatch]}>
             {contextHolder}

@@ -7,8 +7,9 @@ import config from '../../../config';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { StoreContext, actions } from '../../../store';
 import { Button, Dropdown, Input, Space, Tooltip } from 'antd';
-import { MdOutlineClose, MdOutlineMenu } from 'react-icons/md';
+import { MdArrowDropDown, MdOutlineClose, MdOutlineMenu, MdTour } from 'react-icons/md';
 import { IoLogOut, IoPerson } from 'react-icons/io5';
+import * as categoryService from '../../../services/categoryService';
 import Cookies from 'js-cookie';
 const cx = classNames.bind(styles);
 
@@ -16,6 +17,7 @@ function Header() {
     const [state, dispatch] = useContext(StoreContext);
     const navigate = useNavigate();
     const [showMenuMb, setShowMenuMb] = useState(false);
+    const [tourCategories, setTourCategories] = useState([]);
     const userInfo = state.userInfo;
     const overlayRef = useRef();
     const handleDocumentClick = (event) => {
@@ -40,9 +42,35 @@ function Header() {
         dispatch(actions.setUserInfo(null));
         Cookies.remove('accessToken');
         Cookies.remove('userInfo');
+        navigate(config.routes.home);
     };
+    const getCategories = async () => {
+        const results = await categoryService.getAllCategory();
+        if (results) {
+            setTourCategories(
+                results.data.map((item, index) => {
+                    return {
+                        key: index,
+                        label: (
+                            <Link
+                                style={{ fontSize: '1.8rem', fontWeight: 500, lineHeight: 2 }}
+                                to={'/tour/category/' + item._id}
+                                state={{ category: item }}
+                            >
+                                {item.categoryName}
+                            </Link>
+                        ),
+                        icon: <MdTour style={{ fontSize: '2.2rem' }} />,
+                    };
+                }),
+            );
+        }
+    };
+    useEffect(() => {
+        getCategories();
+    }, []);
 
-    const dropdownItems = [
+    const optionItems = [
         {
             key: '1',
             label: (
@@ -69,7 +97,7 @@ function Header() {
                     <div className={cx('logo-wrapper')}>
                         <Link to={config.routes.home}>
                             <img
-                                src="https://www.learnworlds.com/app/themes/learnworlds/dist/images/logo.svg"
+                                src="https://res.cloudinary.com/dgsumh8ih/image/upload/v1693657591/logoFull.png"
                                 className={cx('logo')}
                                 alt="logo"
                             />
@@ -84,34 +112,38 @@ function Header() {
                                 className={(nav) => cx('header-nav_item', { active: nav.isActive })}
                                 to={config.routes.home}
                             >
-                                Home
+                                Trang chủ
                             </NavLink>
                             <NavLink
                                 className={(nav) => cx('header-nav_item', { active: nav.isActive })}
                                 to={config.routes.aboutUs}
                             >
-                                About
+                                Về chúng tôi
                             </NavLink>
 
                             <NavLink
                                 className={(nav) => cx('header-nav_item', { active: nav.isActive })}
                                 to={config.routes.tour}
                             >
-                                Tours
+                                <Dropdown placement="bottom" menu={{ items: tourCategories }}>
+                                    <span className={cx('align-center')}>
+                                        Du lịch <MdArrowDropDown />
+                                    </span>
+                                </Dropdown>
                             </NavLink>
                         </nav>
                     </div>
                     {userInfo ? (
                         <div className={cx('align-center')} size={'large'}>
                             <h3>{userInfo.username}</h3>
-                            <Dropdown menu={{ items: dropdownItems }}>
-                                <Image src={images.shoppingCart} className={cx('cart-img')} />
+                            <Dropdown menu={{ items: optionItems }}>
+                                <Image src={state.userInfo && state.userInfo.photo} className={cx('user-img')} />
                             </Dropdown>
                         </div>
                     ) : (
                         <div className={cx('header-actions')}>
                             <Link to={config.routes.login} className={cx('custom-btn')}>
-                                Login
+                                Đăng nhập
                             </Link>
                             <Button
                                 onClick={() => navigate(config.routes.register)}
@@ -119,7 +151,7 @@ function Header() {
                                 type="ghost"
                                 className={cx('custom-btn', 'active')}
                             >
-                                Register
+                                Đăng ký
                             </Button>
                         </div>
                     )}

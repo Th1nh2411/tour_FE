@@ -1,2 +1,158 @@
 .wrapper {
+    width: var(--default-layout-width);
+    padding: 40px var(--default-layout-horizontal-spacer);
+    max-width: 100%;
+    margin: auto;
+}
+.card {
+    padding: 20px;
+    box-shadow: 1px 2px 10px 0px rgba(56, 65, 74, 0.2);
+    background-color: #fff;
+    border-radius: 0.5rem;
+    width: 100%;
+    height: 65vh;
+    overflow-y: auto;
+    h2 {
+        font-weight: 600;
+        font-size: 2.2rem;
+    }
+}
+.title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    .title-icon {
+        margin-right: 8px;
+    }
+}
+.body {
+    margin: 20px auto 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.invoice-list {
+    margin-top: 5px;
+}
+.avatar {
+    border-radius: 50%;
+    height: 180px;
+    width: 180px;
+    object-fit: cover;
+}
+.profile-wrapper {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+.profile-info {
+    font-weight: 400;
+    color: #999;
+    span {
+        color: #333;
+        font-weight: 500;
+        margin-left: 10px;
+    }
+}
+.invoice-wrapper {
+    // border-radius: 10px;
+    padding: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.invoice-wrapper + .invoice-wrapper {
+    border-top: 1px solid #33333317;
+}
+.left-side {
+    display: flex;
+    align-items: center;
+}
+.invoice-img {
+    width: 60px;
+    object-fit: contain;
+    margin-right: 15px;
+}
+.invoice-body {
+}
+.invoice-title {
+    font-weight: 700;
+    font-size: 1.8rem;
+    span {
+        color: #555;
+        font-size: 1.4rem;
+    }
+}
+.invoice-info {
+    font-size: 1.4rem;
+    color: #999;
+    span {
+        color: var(--primary-color);
+    }
+}
+.invoice-actions {
+    font-size: 1.4rem;
+    font-weight: 700;
+    padding: 20px;
+    &:hover {
+        cursor: pointer;
+        color: var(--primary-color);
+    }
+}
+// Profile Form
+.edit-form-wrapper {
+    padding: 20px 30px;
+}
+.form-title {
+    font-size: 2.6rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.shop-update-btn {
+    width: 100%;
+    border-radius: 6px;
+    height: 40px;
+    margin-top: 15px;
+}
+
+.form {
+}
+.item-price-wrapper {
+    display: flex;
+    justify-content: space-between;
+    .price-input {
+        width: 48%;
+    }
+}
+
+.form-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: end;
+    .confirm-btn {
+        margin-left: 10px;
+    }
+}
+
+// History
+
+.wrapper ::-webkit-scrollbar {
+    border-radius: 0;
+    width: 4px;
+}
+.wrapper ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+.wrapper ::-webkit-scrollbar-track {
+    border-radius: 0;
+    background-color: rgba(82, 82, 82, 0.08);
 }

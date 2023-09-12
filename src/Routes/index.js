@@ -11,6 +11,7 @@ export const publicRoutes = [
     { path: config.routes.home, component: Home },
     { path: config.routes.aboutUs, component: AboutUsPage },
     { path: config.routes.tour, component: TourPage },
+    { path: config.routes.tourCategory, component: TourPage },
     { path: config.routes.tourDetail, component: TourDetail },
     { path: config.routes.profile, component: ProfilePage },
     { path: config.routes.login, component: LoginPage },

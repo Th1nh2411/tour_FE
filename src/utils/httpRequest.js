@@ -1,7 +1,7 @@
 import axios from 'axios';
 const httpRequest = axios.create({
-    withCredentials: true,
     baseURL: 'https://holidate-be.vercel.app/',
+    withCredentials: true,
     headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
     credentials: 'include',
 });
