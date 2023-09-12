@@ -29,20 +29,29 @@ function RegisterPage() {
     return (
         <>
             <div className={cx('wrapper')}>
-                <Row style={{ boxShadow: 'rgba(17, 12, 46, 0.15) -1px 5px 20px 0px', position: 'relative' }}>
-                    <div className={cx('form-icon')}>
-                        <FaUser />
-                    </div>
-                    <div xs={0} className={cx('sep')}></div>
+                <Row
+                    style={{
+                        boxShadow: 'rgba(17, 12, 46, 0.15) -1px 5px 20px 0px',
+                        position: 'relative',
+                        borderRadius: 10,
+                    }}
+                >
                     <Col xs={0} md={11}>
                         <Image
                             className={cx('bg-img')}
-                            src="https://doan-eta.vercel.app/static/media/login.0ef8aace597cf40e2588.png"
+                            src="https://res.cloudinary.com/dgsumh8ih/image/upload/v1694512385/auth.png"
                         />
                     </Col>
                     <Col xs={24} md={13}>
                         <div className={cx('form')}>
-                            <h1 className={cx('form-title')}>Đăng ký</h1>
+                            <div style={{ textAlign: 'end' }}>
+                                <Image
+                                    src="https://res.cloudinary.com/dgsumh8ih/image/upload/v1693657591/logoFull.png"
+                                    alt="logo"
+                                    className={cx('form-logo')}
+                                />
+                            </div>
+                            <h1 className={cx('form-title')}>Tạo tài khoản</h1>
                             <Form
                                 labelCol={{
                                     span: 8,

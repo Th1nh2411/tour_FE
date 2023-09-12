@@ -34,19 +34,28 @@ function LoginPage() {
     };
     return (
         <div className={cx('wrapper')}>
-            <Row style={{ boxShadow: 'rgba(17, 12, 46, 0.15) -1px 5px 20px 0px', position: 'relative' }}>
-                <div className={cx('form-icon')}>
-                    <FaUser />
-                </div>
-                <div xs={0} className={cx('sep')}></div>
+            <Row
+                style={{
+                    boxShadow: 'rgba(17, 12, 46, 0.15) -1px 5px 20px 0px',
+                    position: 'relative',
+                    borderRadius: 10,
+                }}
+            >
                 <Col xs={0} md={11} style={{ textAlign: 'center' }}>
                     <Image
                         className={cx('bg-img')}
-                        src="https://doan-eta.vercel.app/static/media/login.0ef8aace597cf40e2588.png"
+                        src="https://res.cloudinary.com/dgsumh8ih/image/upload/v1694512385/auth.png"
                     />
                 </Col>
                 <Col xs={24} md={13}>
                     <div className={cx('form')}>
+                        <div style={{ textAlign: 'end' }}>
+                            <Image
+                                src="https://res.cloudinary.com/dgsumh8ih/image/upload/v1693657591/logoFull.png"
+                                alt="logo"
+                                className={cx('form-logo')}
+                            />
+                        </div>
                         <h1 className={cx('form-title')}>Đăng nhập</h1>
                         <Form
                             form={form}
@@ -86,7 +95,7 @@ function LoginPage() {
                             </Button>
                         </Form>
                         <h3 className={cx('option-title')}>
-                            Chưa có tài khoản?{' '}
+                            Thành viên mới?{' '}
                             <span>
                                 <Link to={config.routes.register}>Đăng ký</Link>
                             </span>
