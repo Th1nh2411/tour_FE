@@ -10,12 +10,14 @@ import { BiSearch } from 'react-icons/bi';
 import Slide from '../../components/Slide';
 import * as tourService from '../../services/tourService';
 import * as reviewService from '../../services/reviewService';
+import * as guideService from '../../services/guideService';
 import HOME_DATA from './data';
 import TourItem from '../../components/TourItem/TourItem';
 import { Link, useNavigate } from 'react-router-dom';
 import config from '../../config';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import TextArea from 'antd/es/input/TextArea';
+import GuideItem from './GuideItem';
 const cx = classNames.bind(styles);
 
 function Home() {
@@ -23,6 +25,7 @@ function Home() {
     const navigate = useNavigate();
     const [featuredTours, setFeaturedTours] = useState([]);
     const [top8Reviews, setTop8Reviews] = useState([]);
+    const [allGuide, setAllGuide] = useState([]);
     const getFeaturedTour = async () => {
         setLoading(true);
         const results = await tourService.getFeaturedTours();
@@ -31,18 +34,22 @@ function Home() {
         }
         setLoading(false);
     };
-
     const getTop8Reviews = async () => {
-        setLoading(true);
         const results = await reviewService.getTop8Review();
         if (results) {
             setTop8Reviews(results.data);
         }
-        setLoading(false);
+    };
+    const getAllGuide = async () => {
+        const results = await guideService.getAllGuide();
+        if (results) {
+            setAllGuide(results.data);
+        }
     };
     useEffect(() => {
         getFeaturedTour();
         getTop8Reviews();
+        getAllGuide();
     }, []);
     return (
         <div className={cx('wrapper')}>
@@ -211,17 +218,8 @@ function Home() {
                 </h3>
                 <h2 className={cx('mt-1')}>Những hướng dẫn viên tận tâm và đầy kinh nghiệm từ đội ngũ của chúng tôi</h2>
                 <Slide className={cx('mt-2')} navigation={false} numItemPerSlide={3} autoPlay>
-                    {HOME_DATA.reviews.map((item, index) => (
-                        <div key={index} className={cx('reviews-item')}>
-                            <p>{item.desc}</p>
-                            <div className={cx('reviews-customer')}>
-                                <Image src={item.image} className={cx('customer-img')} />
-                                <div>
-                                    <h3 className={cx('customer-name')}>{item.name}</h3>
-                                    <p className={cx('customer-role')}>{item.role}</p>
-                                </div>
-                            </div>
-                        </div>
+                    {allGuide.map((item, index) => (
+                        <GuideItem key={index} data={item} />
                     ))}
                 </Slide>
             </section>
@@ -231,14 +229,14 @@ function Home() {
                 </h3>
                 <h2 className={cx('mt-1')}>Những gì khách hàng đánh giá</h2>
                 <Slide className={cx('mt-2')} navigation={false} numItemPerSlide={3} autoPlay>
-                    {HOME_DATA.reviews.map((item, index) => (
-                        <div key={index} className={cx('reviews-item')}>
-                            <p>{item.desc}</p>
-                            <div className={cx('reviews-customer')}>
-                                <Image src={item.image} className={cx('customer-img')} />
+                    {top8Reviews.map((item, index) => (
+                        <div key={index} className={cx('review-item')}>
+                            <p className={cx('review-comment')}>{item.comment}</p>
+                            <div className={cx('review-customer')}>
+                                <Image src={item.tourInfo.photo} className={cx('review-img')} />
                                 <div>
-                                    <h3 className={cx('customer-name')}>{item.name}</h3>
-                                    <p className={cx('customer-role')}>{item.role}</p>
+                                    <h3 className={cx('customer-name')}>{item.userInfo.fullName}</h3>
+                                    <p className={cx('review-tourName')}>{item.tourInfo.tourName}</p>
                                 </div>
                             </div>
                         </div>
@@ -246,8 +244,8 @@ function Home() {
                 </Slide>
             </section>
             <section>
-                <Row align={'middle'}>
-                    <Col xs={24} md={10}>
+                <Row gutter={[15, 15]} align={'middle'}>
+                    <Col xs={24} md={12}>
                         <h3 className={cx('section-slogan')}>
                             <span className={cx('slogan-text')}>Góp ý</span>
                         </h3>
@@ -266,7 +264,7 @@ function Home() {
                             className={cx('w-100', 'mt-2')}
                         />
                     </Col>
-                    <Col xs={24} md={12} offset={2}>
+                    <Col xs={0} md={12}>
                         <Image
                             src="https://res.cloudinary.com/dgsumh8ih/image/upload/v1694494492/8934044_4022795_gakypn.jpg"
                             className={cx('w-100')}
