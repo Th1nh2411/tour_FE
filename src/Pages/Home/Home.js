@@ -9,6 +9,7 @@ import { HiOutlineLocationMarker, HiOutlineMap, HiOutlineUsers } from 'react-ico
 import { BiSearch } from 'react-icons/bi';
 import Slide from '../../components/Slide';
 import * as tourService from '../../services/tourService';
+import * as reviewService from '../../services/reviewService';
 import HOME_DATA from './data';
 import TourItem from '../../components/TourItem/TourItem';
 import { Link, useNavigate } from 'react-router-dom';
@@ -21,14 +22,27 @@ function Home() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const [featuredTours, setFeaturedTours] = useState([]);
+    const [top8Reviews, setTop8Reviews] = useState([]);
     const getFeaturedTour = async () => {
         setLoading(true);
         const results = await tourService.getFeaturedTours();
-        setFeaturedTours(results ? results.data : []);
+        if (results) {
+            setFeaturedTours(results.data);
+        }
+        setLoading(false);
+    };
+
+    const getTop8Reviews = async () => {
+        setLoading(true);
+        const results = await reviewService.getTop8Review();
+        if (results) {
+            setTop8Reviews(results.data);
+        }
         setLoading(false);
     };
     useEffect(() => {
         getFeaturedTour();
+        getTop8Reviews();
     }, []);
     return (
         <div className={cx('wrapper')}>
@@ -40,7 +54,7 @@ function Home() {
                             <span className={cx('slogan-text')}>Những điều cần biết</span>
                             <Image
                                 className={cx('slogan-icon')}
-                                src="https://doan-eta.vercel.app/static/media/world.12b28835610f2449f5e9.png"
+                                src="https://res.cloudinary.com/dgsumh8ih/image/upload/v1694075871/travel.png"
                             />
                         </h3>
                         <h1 className={cx('section-title')}>
@@ -57,20 +71,22 @@ function Home() {
                     </Col>
                     <Col xs={0} lg={4}>
                         <Image
-                            src="https://doan-eta.vercel.app/static/media/hero-img01.cdfa5451ce66d17ee1f8.jpg"
+                            src="https://res.cloudinary.com/dgsumh8ih/image/upload/v1694488512/tour-img1.jpg"
                             className={cx('banner-img')}
                         />
                     </Col>
                     <Col xs={24} lg={4}>
                         <video
+                            autoPlay
                             controls
-                            src="https://doan-eta.vercel.app/static/media/hero-video.9e800d0ad3a61e8c12f6.mp4"
+                            loop
+                            src="https://res.cloudinary.com/dgsumh8ih/video/upload/v1694491259/tour-video.mp4"
                             className={cx('banner-img', 'mt-2')}
                         />
                     </Col>
                     <Col xs={0} lg={4}>
                         <Image
-                            src="https://doan-eta.vercel.app/static/media/hero-img02.c5c2185a4223b66365fb.jpg"
+                            src="https://res.cloudinary.com/dgsumh8ih/image/upload/v1694488512/tour-img2.jpg"
                             className={cx('banner-img', 'mt-4')}
                         />
                     </Col>
@@ -181,55 +197,12 @@ function Home() {
                     <span className={cx('slogan-text')}>Bộ sưu tập</span>
                 </h3>
                 <h2 className={cx('mt-1')}>Tham quan bộ sưu tập từ những chuyến đi của chúng tôi</h2>
-                <Row gutter={[16, 16]} className={cx('mt-3')}>
-                    <Col md={6}>
-                        <div className={cx('gallery-img-group')}>
-                            <Image
-                                className={cx('gallery-img')}
-                                src="https://doan-eta.vercel.app/static/media/gallery-01.3c21b9a6df0243f772c5.jpg"
-                            />
-                            <Image
-                                className={cx('gallery-img')}
-                                src="https://doan-eta.vercel.app/static/media/gallery-05.b327cf60ba18a59db408.jpg"
-                            />
-                        </div>
-                    </Col>
-                    <Col md={6}>
-                        <div className={cx('gallery-img-group')}>
-                            <Image
-                                className={cx('gallery-img')}
-                                src="https://doan-eta.vercel.app/static/media/gallery-02.c9ae06755eebce595a38.jpg"
-                            />
-                            <Image
-                                className={cx('gallery-img')}
-                                src="https://doan-eta.vercel.app/static/media/gallery-06.66c107edd159054ae8cf.jpg"
-                            />
-                        </div>
-                    </Col>
-                    <Col md={6}>
-                        <div className={cx('gallery-img-group')}>
-                            <Image
-                                className={cx('gallery-img')}
-                                src="https://doan-eta.vercel.app/static/media/gallery-03.9acd7c84d293f45ac15e.jpg"
-                            />
-                            <Image
-                                className={cx('gallery-img')}
-                                src="https://doan-eta.vercel.app/static/media/gallery-07.45ab035583b65864c53a.jpg"
-                            />
-                        </div>
-                    </Col>
-                    <Col md={6}>
-                        <div className={cx('gallery-img-group')}>
-                            <Image
-                                className={cx('gallery-img')}
-                                src="https://doan-eta.vercel.app/static/media/gallery-04.4c0ac04026db9075b42b.jpg"
-                            />
-                            <Image
-                                className={cx('gallery-img')}
-                                src="https://doan-eta.vercel.app/static/media/gallery-02.c9ae06755eebce595a38.jpg"
-                            />
-                        </div>
-                    </Col>
+                <Row gutter={[16, 8]} className={cx('mt-3')}>
+                    {HOME_DATA.gallery.map((item, index) => (
+                        <Col key={index} xs={24} md={12} lg={6}>
+                            <Image className={cx('gallery-img')} src={item} />
+                        </Col>
+                    ))}
                 </Row>
             </section>
             <section>
@@ -273,7 +246,7 @@ function Home() {
                 </Slide>
             </section>
             <section>
-                <Row>
+                <Row align={'middle'}>
                     <Col xs={24} md={10}>
                         <h3 className={cx('section-slogan')}>
                             <span className={cx('slogan-text')}>Góp ý</span>
@@ -295,7 +268,7 @@ function Home() {
                     </Col>
                     <Col xs={24} md={12} offset={2}>
                         <Image
-                            src="https://doan-eta.vercel.app/static/media/male-tourist.f000d0ad1ca492b2bcfb.png"
+                            src="https://res.cloudinary.com/dgsumh8ih/image/upload/v1694494492/8934044_4022795_gakypn.jpg"
                             className={cx('w-100')}
                         />
                     </Col>

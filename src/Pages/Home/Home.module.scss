@@ -25,6 +25,7 @@
         color: white;
     }
     .slogan-icon {
+        margin-left: 5px;
         height: 38px;
         object-fit: contain;
     }
@@ -140,18 +141,17 @@
     font-size: 1.6rem;
     margin-top: 10px;
 }
-.gallery-img-group {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    .gallery-img {
-        width: 100%;
-        border-radius: 10px;
-        object-fit: cover;
-        transition: 0.3s;
-        &:hover {
-            transform: scale(1.1);
-        }
+
+.gallery-img {
+    width: 100%;
+    height: 340px;
+    border-radius: 10px;
+    object-fit: cover;
+    transition: 0.3s;
+    position: relative;
+    &:hover {
+        transform: scale(1.1);
+        z-index: 100;
     }
 }
 .reviews-item {
@@ -170,4 +170,9 @@
 .customer-name {
 }
 .customer-role {
+}
+@media (max-width: 992px) {
+    .gallery-img {
+        height: 100%;
+    }
 }

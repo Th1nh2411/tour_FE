@@ -30,3 +30,12 @@ export const getAllReview = async (tourId, page, rating) => {
         return error.response && error.response.data;
     }
 };
+export const getTop8Review = async () => {
+    try {
+        const res = await httpRequest.get(`review`);
+        return res;
+    } catch (error) {
+        console.log(error);
+        return error.response && error.response.data;
+    }
+};
