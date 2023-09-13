@@ -12,7 +12,6 @@ export const getAllTours = async (page) => {
         return res;
     } catch (error) {
         console.log(error);
-        return error.response && error.response.data;
     }
 };
 export const addTour = async (data) => {
@@ -22,7 +21,6 @@ export const addTour = async (data) => {
         return res;
     } catch (error) {
         console.log(error);
-        return error.response && error.response.data;
     }
 };
 export const editTour = async (data, id) => {
@@ -32,7 +30,6 @@ export const editTour = async (data, id) => {
         return res;
     } catch (error) {
         console.log(error);
-        return error.response && error.response.data;
     }
 };
 export const getFeaturedTours = async (token) => {
@@ -43,7 +40,6 @@ export const getFeaturedTours = async (token) => {
         return res;
     } catch (error) {
         console.log(error);
-        return error.response && error.response.data;
     }
 };
 export const getSearchTours = async (params) => {
@@ -56,6 +52,5 @@ export const getSearchTours = async (params) => {
         return res;
     } catch (error) {
         console.log(error);
-        return error.response && error.response.data;
     }
 };
