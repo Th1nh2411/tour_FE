@@ -10,12 +10,6 @@ export const getAllCategory = async (body) => {
         return res;
     } catch (error) {
         console.log(error);
-        notification.open({
-            message: 'Thất bại',
-            description: error.response && error.response.data.message,
-            placement: 'bottomRight',
-            type: 'error',
-        });
     }
 };
 export const getDetailCategory = async (id) => {
@@ -27,12 +21,6 @@ export const getDetailCategory = async (id) => {
         return res;
     } catch (error) {
         console.log(error);
-        notification.open({
-            message: 'Thất bại',
-            description: error.response && error.response.data.message,
-            placement: 'bottomRight',
-            type: 'error',
-        });
     }
 };
 // Admin
