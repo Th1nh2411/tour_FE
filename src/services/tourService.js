@@ -14,6 +14,15 @@ export const getAllTours = async (page) => {
         console.log(error);
     }
 };
+export const getDetailTour = async (id) => {
+    const config = {};
+    try {
+        const res = await httpRequest.get(`tour/${id}`, config);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
 export const addTour = async (data) => {
     const config = {};
     try {
@@ -32,6 +41,7 @@ export const editTour = async (data, id) => {
         console.log(error);
     }
 };
+
 export const getFeaturedTours = async (token) => {
     const config = {};
 

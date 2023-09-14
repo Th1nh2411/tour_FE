@@ -57,7 +57,7 @@ function TourItem({ className, data, onEdit }) {
                         </div>
                     </div>
                     <Button
-                        onClick={() => navigate(`/tour/${data._id}`, { state: data })}
+                        onClick={() => navigate(`/tour/${data._id}`, { state: data._id })}
                         size="large"
                         type="ghost"
                         className={cx('btn')}

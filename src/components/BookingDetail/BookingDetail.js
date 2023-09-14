@@ -14,6 +14,7 @@ const cx = classNames.bind(styles);
 function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
     const [state, dispatch] = useContext(StoreContext);
     const [loading, setLoading] = useState({});
+    const navigate = useNavigate();
 
     const payment = async (flag) => {
         setLoading({ ...loading, payment1: flag === 1, payment2: flag === 2 });
@@ -166,6 +167,16 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
             open={bookingDetail}
             className={cx('wrapper', className)}
             footer={actions}
+            extra={
+                <Button
+                    type="primary"
+                    onClick={() =>
+                        navigate(`/tour/${bookingDetail.tourInfo._id}`, { state: bookingDetail.tourInfo._id })
+                    }
+                >
+                    Đặt lại
+                </Button>
+            }
         >
             <Descriptions
                 size="small"
