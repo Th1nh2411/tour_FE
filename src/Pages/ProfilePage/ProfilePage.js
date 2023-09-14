@@ -1,8 +1,8 @@
 import styles from './ProfilePage.module.scss';
 import classNames from 'classnames/bind';
-import { BsFillClipboard2Fill, BsFillPhoneFill, BsPersonCircle, BsTicket } from 'react-icons/bs';
+import { BsCameraFill, BsFillClipboard2Fill, BsFillPhoneFill, BsPersonCircle, BsTicket } from 'react-icons/bs';
 import { Alert, Badge, Col, Row, Skeleton, Space, notification } from 'antd';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import * as bookingService from '../../services/bookingService';
 import { StoreContext, actions } from '../../store';
 import { priceFormat } from '../../utils/format';
@@ -15,6 +15,7 @@ import BookingDetail from '../../components/BookingDetail/BookingDetail';
 import ProfileForm from './ProfileForm';
 import ChangePwForm from './ChangePwForm';
 import { useSearchParams } from 'react-router-dom';
+import CropperImage from '../../components/CropperImage';
 const cx = classNames.bind(styles);
 
 function ProfilePage() {
@@ -27,6 +28,11 @@ function ProfilePage() {
     const [searchParams, setSearchParams] = useSearchParams();
     const paymentStatus = searchParams.get('vnp_TransactionStatus');
     const query = Object.fromEntries(searchParams.entries());
+
+    const uploadRef = useRef(null);
+    const [avatarSrc, setAvatarSrc] = useState(null);
+    const [showModalAvatar, setShowModalAvatar] = useState(false);
+
     const confirmPaymentInvoice = async () => {
         const results = await bookingService.vnpayReturn(query);
         if (results) {
@@ -52,9 +58,18 @@ function ProfilePage() {
     useEffect(() => {
         getAllBooking();
     }, []);
-
+    const handleImgChange = (e) => {
+        setAvatarSrc(URL.createObjectURL(e.target.files[0]));
+        e.target.value = '';
+        setShowModalAvatar(true);
+    };
+    const handleInputClick = (e) => {
+        e.preventDefault();
+        uploadRef.current.click();
+    };
     return (
         <>
+            <CropperImage modalOpen={showModalAvatar} src={avatarSrc} onModalClose={() => setShowModalAvatar(false)} />
             <BookingDetail
                 bookingDetail={detailBooking}
                 onClose={(edited) => {
@@ -74,7 +89,17 @@ function ProfilePage() {
                                 <BsPersonCircle className={cx('title-icon')} /> Thông tin cá nhân
                             </div>
                             <div className={cx('body')}>
-                                <Image src={state.userInfo && state.userInfo.photo} className={cx('avatar')} />
+                                <div className={cx('avatar-wrapper')}>
+                                    <BsCameraFill onClick={handleInputClick} className={cx('camera-icon')} />
+                                    <Image src={state.userInfo && state.userInfo.photo} className={cx('avatar')} />
+                                    <input
+                                        hidden
+                                        type="file"
+                                        accept="image/*"
+                                        ref={uploadRef}
+                                        onChange={handleImgChange}
+                                    />
+                                </div>
                                 <div className={cx('profile-wrapper')}>
                                     <Space>
                                         <Button onClick={() => setShowEditProfile(true)} icon={<MdEdit />}>
