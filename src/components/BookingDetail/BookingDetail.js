@@ -126,7 +126,7 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
             ),
         },
     ];
-    const actions = (
+    const actions = bookingDetail && bookingDetail.status !== -1 && (
         <Space className={cx('content-end')}>
             <Popconfirm
                 title="Delete the task"
@@ -139,10 +139,21 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
                 <Button danger>Huỷ đơn</Button>
             </Popconfirm>
 
-            <Button loading={loading.payment1} onClick={() => payment(1)} type="primary" ghost>
+            <Button
+                disabled={bookingDetail.status >= 1}
+                loading={loading.payment1}
+                onClick={() => payment(1)}
+                type="primary"
+                ghost
+            >
                 Thanh toán cọc (20%)
             </Button>
-            <Button loading={loading.payment2} onClick={() => payment(2)} type="primary">
+            <Button
+                disabled={bookingDetail.status === 2}
+                loading={loading.payment2}
+                onClick={() => payment(2)}
+                type="primary"
+            >
                 Thanh toán toàn bộ
             </Button>
         </Space>

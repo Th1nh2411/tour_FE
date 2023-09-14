@@ -96,7 +96,9 @@
 }
 .invoice-img {
     width: 60px;
-    object-fit: contain;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
     margin-right: 15px;
 }
 .invoice-body {

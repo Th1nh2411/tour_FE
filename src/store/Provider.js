@@ -16,10 +16,13 @@ function Provider({ children }) {
         });
     };
     const getUnpaidBooking = async () => {
-        const results = await bookingService.getUnpaidBooking();
-        if (results) {
-            dispatch(actions.setUnpaidBooking(results.data));
-        }
+        setTimeout(async () => {
+            const results = await bookingService.getUnpaidBooking();
+            if (results) {
+                dispatch(actions.setUnpaidBooking(results.data));
+                showToast('Thông báo', 'Bạn có chuyến đi chưa hoàn tất thanh toán!', 'info');
+            }
+        }, [2000]);
     };
 
     const initState = {

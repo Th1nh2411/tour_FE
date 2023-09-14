@@ -23,14 +23,12 @@ function LoginPage() {
         if (results) {
             dispatch(actions.setUserInfo(results.data));
             Cookies.set('userInfo', JSON.stringify(results.data));
-            notification.open({
-                message: 'Success',
-                description: 'Đăng nhập thành công!',
-                placement: 'bottomRight',
-                type: 'success',
-            });
+            const checkPayment = await state.getUnpaidBooking();
 
+            state.showToast('Thành công', 'Đăng nhập thành công!');
             navigate(config.routes.home);
+        } else {
+            dispatch(actions.setUnpaidBooking(null));
         }
     };
     return (

@@ -187,7 +187,10 @@ section {
 }
 
 // Custom tippy tool tip
-
+.ant-badge-dot {
+    height: 12px;
+    width: 12px;
+}
 .ant-btn-primary {
     background-color: var(--primary-color);
     color: #fff;
@@ -195,56 +198,11 @@ section {
 .ant-col {
     font-family: 'Nunito', sans-serif;
 }
-body {
-    .tippy-box {
-        text-align: center;
-        padding: 10px;
-        border-radius: 8px;
-        line-height: 2rem;
-        background-color: rgb(241, 241, 241);
-        font-weight: 700;
-        color: rgb(52, 52, 52);
-        max-width: 50px;
-        // box-shadow: 0px 0px 0px 10px #000;
-    }
-    .tippy-arrow {
-        top: -8px;
-        border-left: 8px solid transparent;
-        border-right: 8px solid transparent;
 
-        border-bottom: 8px solid rgb(241, 241, 241);
-    }
-}
 .add-item {
     animation: shakeUp 0.3s forwards ease-in-out;
 }
 // Input type
-
-// Keyframes
-@keyframes shakeUp {
-    0% {
-        opacity: 0;
-        transform: translateY(100%);
-    }
-    50% {
-        transform: translateY(-50%);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-@keyframes slideToast {
-    from {
-        opacity: 0;
-        transform: translateX(calc(100% + 32px));
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
 
 @keyframes fadeOut {
     to {
