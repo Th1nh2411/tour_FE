@@ -17,8 +17,8 @@ const ProfileForm = ({ showForm, onClose = () => {} }) => {
         setLoading(true);
         const results = await profileService.editProfile(values);
         setLoading(false);
-        if (results && results.success) {
-            state.showToast('Success', results.message);
+        if (results) {
+            state.showToast('Thành công', results.message);
             dispatch(actions.setUserInfo({ ...userInfo, ...values }));
             onClose(true);
         }

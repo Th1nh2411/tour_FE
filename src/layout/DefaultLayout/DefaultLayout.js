@@ -10,7 +10,6 @@ import { StoreContext } from '../../store';
 const cx = classNames.bind(styles);
 function DefaultLayout({ children }) {
     const [state, dispatch] = useContext(StoreContext);
-    console.log(state);
     return (
         <>
             <FloatButton.BackTop />
