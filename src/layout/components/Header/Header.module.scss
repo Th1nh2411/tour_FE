@@ -70,15 +70,13 @@
         opacity: 0.9;
     }
 }
+
 .user-img {
     border-radius: 50%;
     height: 40px;
     width: 40px;
     margin-left: 20px;
     object-fit: cover;
-}
-.user-img {
-    margin-left: 20px;
     &:hover {
         opacity: 0.9;
         cursor: pointer;
