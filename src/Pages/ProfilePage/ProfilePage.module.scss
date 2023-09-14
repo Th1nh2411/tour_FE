@@ -44,11 +44,11 @@
 .camera-icon {
     position: absolute;
     bottom: 10px;
-    right: 10px;
+    right: 15px;
     border-radius: 50%;
     padding: 8px;
     font-size: 4rem;
-    background-color: #999;
+    background-color: #8e8e8e;
     color: #333;
     transition: all 0.1s ease-in-out;
     &:hover {
@@ -74,7 +74,7 @@
     font-weight: 400;
     color: #d0d0d0;
     span {
-        color: #000;
+        color: #fff;
         font-weight: 500;
         margin-left: 10px;
     }

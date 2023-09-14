@@ -84,7 +84,7 @@ function ProfilePage() {
             <div className={cx('wrapper')}>
                 <Row gutter={[40, 40]}>
                     <Col xs={24} lg={12}>
-                        <div style={{ backgroundColor: '#7e9fae' }} className={cx('card')}>
+                        <div style={{ backgroundColor: '#718e9b' }} className={cx('card')}>
                             <div className={cx('title')}>
                                 <BsPersonCircle className={cx('title-icon')} /> Thông tin cá nhân
                             </div>

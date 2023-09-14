@@ -42,9 +42,11 @@ function TourDetail({}) {
     const [reviews, setReviews] = useState([]);
     const [numReviews, setNumReviews] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [bookLoading, setBookLoading] = useState(false);
     const [currentPageReview, setCurrentPageReview] = useState(1);
 
     const payment = async () => {
+        setBookLoading(true);
         const results = await bookingService.createBooking({
             tourInfo: data._id,
             guestSize,
@@ -52,6 +54,7 @@ function TourDetail({}) {
         if (results) {
             const results2 = await bookingService.vnpayPayment({ id_order: results.data._id, flag });
             if (results2) window.location.replace(results2.data);
+            setBookLoading(false);
         }
     };
 
@@ -226,7 +229,7 @@ function TourDetail({}) {
                                         <InputNumber
                                             disabled={!state.userInfo || !state.userInfo.isActive}
                                             max={data.availableSeats}
-                                            min="0"
+                                            min="1"
                                             onChange={(value) => setGuestSizeValue(value)}
                                             value={guestSize}
                                             size="large"
@@ -259,6 +262,7 @@ function TourDetail({}) {
                                 />
                             )}
                             <Button
+                                loading={bookLoading}
                                 onClick={payment}
                                 size="large"
                                 type="primary"
