@@ -167,6 +167,11 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
             open={bookingDetail}
             className={cx('wrapper', className)}
             footer={actions}
+            style={{
+                position: 'relative',
+                zIndex: 100,
+                background: `url(${bookingDetail && bookingDetail.tourInfo.photo})`,
+            }}
             extra={
                 <Button
                     type="primary"
