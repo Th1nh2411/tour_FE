@@ -19,6 +19,7 @@ import {
     Skeleton,
     Space,
     Image as PreviewImage,
+    Modal,
 } from 'antd';
 import { HiLocationMarker } from 'react-icons/hi';
 import { useLocation, useNavigate } from 'react-router';
@@ -31,14 +32,13 @@ import { MdTour } from 'react-icons/md';
 import { TbPlaneDeparture, TbTicket } from 'react-icons/tb';
 import * as reviewService from '../../services/reviewService';
 import * as tourService from '../../services/tourService';
+import RefundPolicy from '../../components/RefundPolicy';
 const cx = classNames.bind(styles);
 
 function TourDetail({}) {
     const [state, dispatch] = useContext(StoreContext);
     const tourId = useLocation().state;
     const [tourData, setTourData] = useState({});
-
-    const navigate = useNavigate();
     const [guestSize, setGuestSizeValue] = useState(1);
     const [flag, setFlagValue] = useState(2);
 
@@ -116,8 +116,21 @@ function TourDetail({}) {
             children: tourData && tourData.guide && tourData.guide.languages,
         },
     ];
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     return (
         <div className={cx('wrapper')}>
+            <Modal
+                title="Chính sách và lưu ý"
+                open={isModalOpen}
+                okButtonProps={{ loading: bookLoading }}
+                onOk={payment}
+                okText="Tôi đồng ý và đặt vé"
+                cancelText="Quay lại"
+                onCancel={() => setIsModalOpen(false)}
+            >
+                <RefundPolicy />
+            </Modal>
             <section>
                 <Row gutter={[24, 24]}>
                     <Col lg={14}>
@@ -202,7 +215,7 @@ function TourDetail({}) {
                         </Skeleton>
                     </Col>
                     <Col xs={24} lg={10}>
-                        {tourData && (
+                        <Skeleton loading={loading}>
                             <div className={cx('booking-wrapper', 'card')}>
                                 <div className={cx('content-between', 'booking-header')}>
                                     <div className={cx('booking-price')}>
@@ -277,8 +290,7 @@ function TourDetail({}) {
                                     />
                                 )}
                                 <Button
-                                    loading={bookLoading}
-                                    onClick={payment}
+                                    onClick={() => setIsModalOpen(true)}
                                     size="large"
                                     type="primary"
                                     disabled={!state.userInfo || !state.userInfo.isActive}
@@ -286,7 +298,7 @@ function TourDetail({}) {
                                     Đặt vé
                                 </Button>
                             </div>
-                        )}
+                        </Skeleton>
                     </Col>
                 </Row>
             </section>
