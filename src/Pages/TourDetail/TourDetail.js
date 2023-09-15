@@ -116,18 +116,18 @@ function TourDetail({}) {
             children: tourData && tourData.guide && tourData.guide.languages,
         },
     ];
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [showPolicy, setShowPolicy] = useState(false);
 
     return (
         <div className={cx('wrapper')}>
             <Modal
                 title="Chính sách và lưu ý"
-                open={isModalOpen}
+                open={showPolicy}
                 okButtonProps={{ loading: bookLoading }}
                 onOk={payment}
                 okText="Tôi đồng ý và đặt vé"
                 cancelText="Quay lại"
-                onCancel={() => setIsModalOpen(false)}
+                onCancel={() => setShowPolicy(false)}
             >
                 <RefundPolicy />
             </Modal>
@@ -290,7 +290,7 @@ function TourDetail({}) {
                                     />
                                 )}
                                 <Button
-                                    onClick={() => setIsModalOpen(true)}
+                                    onClick={() => setShowPolicy(true)}
                                     size="large"
                                     type="primary"
                                     disabled={!state.userInfo || !state.userInfo.isActive}

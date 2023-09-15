@@ -36,3 +36,21 @@ export const login = async (body) => {
         });
     }
 };
+export const forgotPw = async (body) => {
+    // const config = {
+    //     headers: { access_token: token },
+    // };
+
+    try {
+        const res = await httpRequest.post(`user/forgotpassword`, body);
+        return res;
+    } catch (error) {
+        console.log(error);
+        notification.open({
+            message: 'Thất bại',
+            description: error.response && error.response.data.message,
+            placement: 'bottomRight',
+            type: 'error',
+        });
+    }
+};

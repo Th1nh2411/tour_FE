@@ -3,8 +3,7 @@ import classNames from 'classnames/bind';
 import Image from '../../components/Image';
 import images from '../../assets/images';
 import { useContext, useEffect, useState } from 'react';
-import { Button, Col, Form, Input, Row, Space, notification } from 'antd';
-import { FaUser } from 'react-icons/fa';
+import { Button, Col, Form, Input, Modal, Row, Space, notification } from 'antd';
 import * as authService from '../../services/authService';
 import { useNavigate } from 'react-router';
 import config from '../../config';
@@ -18,6 +17,8 @@ function LoginPage() {
     const [state, dispatch] = useContext(StoreContext);
     const navigate = useNavigate();
     const [form] = useForm();
+
+    const [showForgot, setShowForgot] = useState(false);
     const login = async (values) => {
         const results = await authService.login(values);
         if (results) {
@@ -31,8 +32,32 @@ function LoginPage() {
             dispatch(actions.setUnpaidBooking(null));
         }
     };
+    const sendOTP = async (values) => {
+        const results = await authService.forgotPw(values);
+        if (results) {
+            dispatch(actions.setUserInfo(results.data));
+            Cookies.set('userInfo', JSON.stringify(results.data));
+            const checkPayment = await state.getUnpaidBooking();
+
+            state.showToast('Thành công', 'Đăng nhập thành công!');
+            navigate(config.routes.home);
+        }
+    };
     return (
         <div className={cx('wrapper')}>
+            <Modal
+                width={'auto'}
+                centered
+                title={<h2 style={{ textAlign: 'center' }}>Quên mật khẩu</h2>}
+                open={showForgot}
+                onCancel={() => setShowForgot(false)}
+            >
+                <Form>
+                    <Form.Item name="username" label="Nhập Username">
+                        <Input />
+                    </Form.Item>
+                </Form>
+            </Modal>
             <Row
                 style={{
                     boxShadow: 'rgba(17, 12, 46, 0.15) -1px 5px 20px 0px',
@@ -92,8 +117,11 @@ function LoginPage() {
                             <Button type="ghost" size="large" className={cx('login-btn')} htmlType="submit">
                                 Đăng nhập
                             </Button>
+                            <h3 onClick={() => setShowForgot(true)} className={cx('option-title')}>
+                                <span>Quên mật khẩu?</span>
+                            </h3>
                         </Form>
-                        <h3 className={cx('option-title')}>
+                        <h3 className={cx('option-title', 'mt-2')}>
                             Thành viên mới?{' '}
                             <span>
                                 <Link to={config.routes.register}>Đăng ký</Link>

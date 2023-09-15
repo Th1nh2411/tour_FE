@@ -34,10 +34,10 @@ const ProfileForm = ({ showForm, onClose = () => {} }) => {
             <Form
                 onFinish={editProfile}
                 initialValues={{
-                    fullName: userInfo.fullName,
-                    phoneNumber: userInfo.phoneNumber,
-                    email: userInfo.email,
-                    address: userInfo.address,
+                    fullName: userInfo && userInfo.fullName,
+                    phoneNumber: userInfo && userInfo.phoneNumber,
+                    email: userInfo && userInfo.email,
+                    address: userInfo && userInfo.address,
                 }}
                 layout="vertical"
                 className={cx('mt-2')}

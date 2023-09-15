@@ -31,17 +31,7 @@ const ChangePwForm = ({ showForm, onClose = () => {} }) => {
             open={showForm}
             footer={null}
         >
-            <Form
-                onFinish={editProfile}
-                initialValues={{
-                    fullName: userInfo.fullName,
-                    phoneNumber: userInfo.phoneNumber,
-                    email: userInfo.email,
-                    address: userInfo.address,
-                }}
-                layout="vertical"
-                className={cx('mt-2')}
-            >
+            <Form onFinish={editProfile} layout="vertical" className={cx('mt-2')}>
                 <Form.Item
                     rules={[
                         {
