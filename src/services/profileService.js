@@ -9,7 +9,7 @@ export const editProfile = async (body) => {
         console.log(error);
         notification.open({
             message: 'Thất bại',
-            description: error.response.data.message,
+            description: error.response && error.response.data.message,
             placement: 'bottomRight',
             type: 'error',
         });
@@ -23,7 +23,7 @@ export const changePassword = async (body) => {
         console.log(error);
         notification.open({
             message: 'Thất bại',
-            description: error.response.data.message,
+            description: error.response && error.response.data.message,
             placement: 'bottomRight',
             type: 'error',
         });

@@ -4,16 +4,18 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import styles from './BookingDetail.module.scss';
 import { redirect, useNavigate } from 'react-router';
 import { StoreContext } from '../../store';
-import { Badge, Button, Descriptions, Divider, Drawer, Popconfirm, Space } from 'antd';
+import { Alert, Badge, Button, Descriptions, Divider, Drawer, Popconfirm, Space } from 'antd';
 import * as bookingService from '../../services/bookingService';
 import dayjs from 'dayjs';
 import { priceFormat } from '../../utils/format';
+import RefundPolicy from '../RefundPolicy/RefundPolicy';
 
 const cx = classNames.bind(styles);
 
 function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
     const [state, dispatch] = useContext(StoreContext);
     const [loading, setLoading] = useState({});
+    const navigate = useNavigate();
 
     const payment = async (flag) => {
         setLoading({ ...loading, payment1: flag === 1, payment2: flag === 2 });
@@ -126,10 +128,10 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
             ),
         },
     ];
-    const actions = (
+    const actions = bookingDetail && bookingDetail.status !== -1 && (
         <Space className={cx('content-end')}>
             <Popconfirm
-                title="Delete the task"
+                title="Huỷ chuyến"
                 description="Bạn chắc chắn huỷ chuyến này?"
                 onConfirm={cancelBooking}
                 okButtonProps={{ loading: loading.cancel }}
@@ -139,10 +141,21 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
                 <Button danger>Huỷ đơn</Button>
             </Popconfirm>
 
-            <Button loading={loading.payment1} onClick={() => payment(1)} type="primary" ghost>
+            <Button
+                disabled={bookingDetail.status >= 1}
+                loading={loading.payment1}
+                onClick={() => payment(1)}
+                type="primary"
+                ghost
+            >
                 Thanh toán cọc (20%)
             </Button>
-            <Button loading={loading.payment2} onClick={() => payment(2)} type="primary">
+            <Button
+                disabled={bookingDetail.status === 2}
+                loading={loading.payment2}
+                onClick={() => payment(2)}
+                type="primary"
+            >
                 Thanh toán toàn bộ
             </Button>
         </Space>
@@ -155,27 +168,38 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
             open={bookingDetail}
             className={cx('wrapper', className)}
             footer={actions}
+            style={{
+                position: 'relative',
+                zIndex: 100,
+                background: `url(${bookingDetail && bookingDetail.tourInfo.photo}) center / cover no-repeat`,
+            }}
+            extra={
+                <Button
+                    type="primary"
+                    onClick={() =>
+                        navigate(`/tour/${bookingDetail.tourInfo._id}`, { state: bookingDetail.tourInfo._id })
+                    }
+                >
+                    Đặt lại
+                </Button>
+            }
         >
+            <h3 style={{ fontSize: 18 }}>Thông tin khách hàng</h3>
             <Descriptions
                 size="small"
                 column={2}
                 items={userInfo}
-                title={<p style={{ fontSize: 18 }}>Thông tin khách hàng</p>}
+                // title={}
             />
-            <Divider />
-            <Descriptions
-                size="small"
-                column={2}
-                items={tourInfo}
-                title={<p style={{ fontSize: 18 }}>Thông tin chuyến đi</p>}
-            />
-            <Divider />
-            <Descriptions
-                size="small"
-                column={2}
-                items={bookingInfo}
-                title={<p style={{ fontSize: 18 }}>Thông tin đặt chuyến</p>}
-            />
+            <Divider style={{ margin: '15px 0' }} />
+            <h3 style={{ fontSize: 18 }}>Thông tin chuyến đi</h3>
+            <Descriptions size="small" column={2} items={tourInfo} />
+            <Divider style={{ margin: '15px 0' }} />
+            <h3 style={{ fontSize: 18 }}>Thông tin đặt vé</h3>
+            <Descriptions size="small" column={2} items={bookingInfo} />
+            <Divider style={{ margin: '15px 0' }} />
+            <h3 style={{ fontSize: 18 }}>Chính sách huỷ vé</h3>
+            <RefundPolicy />
         </Drawer>
     );
 }

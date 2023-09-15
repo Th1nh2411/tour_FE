@@ -19,6 +19,7 @@ import {
     Skeleton,
     Space,
     Image as PreviewImage,
+    Modal,
 } from 'antd';
 import { HiLocationMarker } from 'react-icons/hi';
 import { useLocation, useNavigate } from 'react-router';
@@ -30,40 +31,51 @@ import { priceFormat } from '../../utils/format';
 import { MdTour } from 'react-icons/md';
 import { TbPlaneDeparture, TbTicket } from 'react-icons/tb';
 import * as reviewService from '../../services/reviewService';
+import * as tourService from '../../services/tourService';
+import RefundPolicy from '../../components/RefundPolicy';
 const cx = classNames.bind(styles);
 
 function TourDetail({}) {
     const [state, dispatch] = useContext(StoreContext);
-    const data = useLocation().state;
-    const navigate = useNavigate();
+    const tourId = useLocation().state;
+    const [tourData, setTourData] = useState({});
     const [guestSize, setGuestSizeValue] = useState(1);
     const [flag, setFlagValue] = useState(2);
 
     const [reviews, setReviews] = useState([]);
     const [numReviews, setNumReviews] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [bookLoading, setBookLoading] = useState(false);
     const [currentPageReview, setCurrentPageReview] = useState(1);
 
     const payment = async () => {
+        setBookLoading(true);
         const results = await bookingService.createBooking({
-            tourInfo: data._id,
+            tourInfo: tourData._id,
             guestSize,
         });
         if (results) {
             const results2 = await bookingService.vnpayPayment({ id_order: results.data._id, flag });
             if (results2) window.location.replace(results2.data);
         }
+        setBookLoading(false);
     };
 
-    const getTourReview = async () => {
+    const getTourData = async () => {
         setLoading(true);
-        const results = await reviewService.getAllReview(data._id, currentPageReview - 1);
-        setNumReviews(results.count || 0);
-        setReviews(results.data || []);
+        const results = await tourService.getDetailTour(tourId);
+        const results2 = await reviewService.getAllReview(tourId, currentPageReview - 1);
+        if (results) {
+            setTourData(results.data);
+        }
+        if (results2) {
+            setNumReviews(results2.count);
+            setReviews(results2.data);
+        }
         setLoading(false);
     };
     useEffect(() => {
-        getTourReview();
+        getTourData();
     }, [currentPageReview]);
     const infoItems = [
         {
@@ -86,75 +98,89 @@ function TourDetail({}) {
         {
             key: '1',
             label: 'Tên đầy đủ',
-            children: data.guide.guideName,
+            children: tourData && tourData.guide && tourData.guide.guideName,
         },
         {
             key: '2',
             label: 'Số điện thoại',
-            children: data.guide.phoneNumber,
+            children: tourData && tourData.guide && tourData.guide.phoneNumber,
         },
         {
             key: '3',
             label: 'Tài khoản gmail',
-            children: data.guide.email,
+            children: tourData && tourData.guide && tourData.guide.email,
         },
         {
             key: '4',
             label: 'Ngôn ngữ',
-            children: data.guide.languages,
+            children: tourData && tourData.guide && tourData.guide.languages,
         },
     ];
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     return (
         <div className={cx('wrapper')}>
+            <Modal
+                title="Chính sách và lưu ý"
+                open={isModalOpen}
+                okButtonProps={{ loading: bookLoading }}
+                onOk={payment}
+                okText="Tôi đồng ý và đặt vé"
+                cancelText="Quay lại"
+                onCancel={() => setIsModalOpen(false)}
+            >
+                <RefundPolicy />
+            </Modal>
             <section>
                 <Row gutter={[24, 24]}>
                     <Col lg={14}>
-                        <Image src={data.photo} className={cx('img')} />
-                        <Space direction="vertical" size={'small'} className={cx('card')}>
-                            <h2>{data.tourName}</h2>
-                            <div style={{ color: '#555' }} className={cx('align-center')}>
-                                <div className={cx('align-center')}>
-                                    <BsFillStarFill className={cx('icon')} />
-                                    {data.averageRating || 0}
+                        <Skeleton loading={loading}>
+                            <Image src={tourData.photo} className={cx('img')} />
+                            <Space direction="vertical" size={'small'} className={cx('card')}>
+                                <h2>{tourData.tourName}</h2>
+                                <div style={{ color: '#555' }} className={cx('align-center')}>
+                                    <div className={cx('align-center')}>
+                                        <BsFillStarFill className={cx('icon')} />
+                                        {tourData.averageRating || 0}
+                                    </div>
+                                    <div className={cx('align-center', 'ml-3')}>
+                                        <HiLocationMarker className={cx('icon')} />
+                                        {tourData.address}
+                                    </div>
+                                    <div className={cx('align-center', 'ml-3')}>
+                                        <MdTour className={cx('icon')} />
+                                        {tourData.category && tourData.category.categoryName}
+                                    </div>
                                 </div>
-                                <div className={cx('align-center', 'ml-3')}>
-                                    <HiLocationMarker className={cx('icon')} />
-                                    {data.address}
+                                <div style={{ color: '#555' }} className={cx('align-center')}>
+                                    <div className={cx('align-center')}>
+                                        <TbPlaneDeparture className={cx('icon')} />
+                                        {dayjs(tourData.startDate).format('DD/MM/YYYY')}
+                                    </div>{' '}
+                                    <div className={cx('align-center', 'ml-3')}>
+                                        <AiOutlineFieldTime className={cx('icon')} />
+                                        {tourData.duration} ngày
+                                    </div>
+                                    <div className={cx('align-center', 'ml-3')}>
+                                        <TbTicket className={cx('icon')} />
+                                        Còn lại: {tourData.availableSeats} /{tourData.maxSeats} vé
+                                    </div>
                                 </div>
-                                <div className={cx('align-center', 'ml-3')}>
-                                    <MdTour className={cx('icon')} />
-                                    {data.category.categoryName}
-                                </div>
-                            </div>
-                            <div style={{ color: '#555' }} className={cx('align-center')}>
-                                <div className={cx('align-center')}>
-                                    <TbPlaneDeparture className={cx('icon')} />
-                                    {dayjs(data.startDate).format('DD/MM/YYYY')}
-                                </div>{' '}
-                                <div className={cx('align-center', 'ml-3')}>
-                                    <AiOutlineFieldTime className={cx('icon')} />
-                                    {data.duration} ngày
-                                </div>
-                                <div className={cx('align-center', 'ml-3')}>
-                                    <TbTicket className={cx('icon')} />
-                                    Còn lại: {data.availableSeats} /{data.maxSeats} vé
-                                </div>
-                            </div>
-                            <h2 className={cx('mt-1')}>Mô tả</h2>
-                            <p style={{ color: '#555' }}>{data.description}</p>
-                            <h2 className={cx('mt-1')}>Hành trình</h2>
-                            {data.itineraries.map((item, index) => (
-                                <p key={index} style={{ color: '#555' }}>
-                                    {item}
-                                </p>
-                            ))}
-                            <h2 className={cx('mt-1')}>Hướng dẫn viên</h2>
+                                <h2 className={cx('mt-1')}>Mô tả</h2>
+                                <p style={{ color: '#555' }}>{tourData.description}</p>
+                                <h2 className={cx('mt-1')}>Hành trình</h2>
+                                {tourData.itineraries &&
+                                    tourData.itineraries.map((item, index) => (
+                                        <p key={index} style={{ color: '#555' }}>
+                                            {item}
+                                        </p>
+                                    ))}
+                                <h2 className={cx('mt-1')}>Hướng dẫn viên</h2>
 
-                            <Descriptions column={{ xs: 1, sm: 2, md: 2, lg: 1, xl: 2 }} items={guideItems} />
-                        </Space>
-                        <Space direction="vertical" size={'small'} className={cx('card', 'mt-2')}>
-                            <h2>Đánh giá chuyến đi ({numReviews} đánh giá)</h2>
-                            <Skeleton loading={loading}>
+                                <Descriptions column={{ xs: 1, sm: 2, md: 2, lg: 1, xl: 2 }} items={guideItems} />
+                            </Space>
+                            <Space direction="vertical" size={'small'} className={cx('card', 'mt-2')}>
+                                <h2>Đánh giá chuyến đi ({numReviews} đánh giá)</h2>
                                 {reviews &&
                                     reviews.map((item, index) => (
                                         <Space className={cx('review-item')} key={index} align="start">
@@ -177,96 +203,102 @@ function TourDetail({}) {
                                             </div>
                                         </Space>
                                     ))}
-                            </Skeleton>
-                            <Pagination
-                                onChange={(page) => setCurrentPageReview(page)}
-                                style={{ textAlign: 'center' }}
-                                className={cx('mt-1')}
-                                current={currentPageReview}
-                                total={numReviews}
-                                pageSize={5}
-                            />
-                        </Space>
+                                <Pagination
+                                    onChange={(page) => setCurrentPageReview(page)}
+                                    style={{ textAlign: 'center' }}
+                                    className={cx('mt-1')}
+                                    current={currentPageReview}
+                                    total={numReviews}
+                                    pageSize={5}
+                                />
+                            </Space>
+                        </Skeleton>
                     </Col>
                     <Col xs={24} lg={10}>
-                        <div className={cx('booking-wrapper', 'card')}>
-                            <div className={cx('content-between', 'booking-header')}>
-                                <div className={cx('booking-price')}>
-                                    <span>{priceFormat(data.price)}đ</span> /1 vé
+                        <Skeleton loading={loading}>
+                            <div className={cx('booking-wrapper', 'card')}>
+                                <div className={cx('content-between', 'booking-header')}>
+                                    <div className={cx('booking-price')}>
+                                        <span>{priceFormat(tourData.price)}đ</span> /1 vé
+                                    </div>
+                                    <div className={cx('align-center')}>
+                                        <BsFillStarFill className={cx('icon')} />({tourData.averageRating || 0})
+                                    </div>
                                 </div>
-                                <div className={cx('align-center')}>
-                                    <BsFillStarFill className={cx('icon')} />({data.averageRating || 0})
-                                </div>
-                            </div>
-                            <div className={cx('booking-form')}>
-                                <h2>Thông tin đặt vé</h2>
-                                <Descriptions size="small" column={1} items={infoItems} />
-                                <Row gutter={12}>
-                                    <Col span={16}>
-                                        <Select
-                                            disabled={!state.userInfo || !state.userInfo.isActive}
-                                            size="large"
-                                            className={cx('w-100')}
-                                            placeholder="Chọn kiểu thanh toán"
-                                            value={flag}
-                                            onChange={(value) => setFlagValue(value)}
-                                            options={[
-                                                {
-                                                    value: 1,
-                                                    label: 'Thanh toán cọc (20%)',
-                                                },
-                                                {
-                                                    value: 2,
-                                                    label: 'Thanh toán toàn bộ',
-                                                },
-                                            ]}
-                                        />
-                                    </Col>
-                                    <Col span={8}>
-                                        <InputNumber
-                                            disabled={!state.userInfo || !state.userInfo.isActive}
-                                            max={data.availableSeats}
-                                            min="0"
-                                            onChange={(value) => setGuestSizeValue(value)}
-                                            value={guestSize}
-                                            size="large"
-                                            placeholder="Guest"
-                                            className={cx('w-100')}
-                                        />
-                                    </Col>
-                                </Row>
-                                <div className={cx('align-center', 'content-between')}>
-                                    <p className={cx('price-calculate')}>
-                                        {priceFormat(data.price)}đ x {guestSize || 0} vé
-                                    </p>
-                                    <p className={cx('price-calculated')}>{priceFormat(data.price * guestSize)}đ</p>
-                                </div>
+                                <div className={cx('booking-form')}>
+                                    <h2>Thông tin đặt vé</h2>
+                                    <Descriptions size="small" column={1} items={infoItems} />
+                                    <Row gutter={12}>
+                                        <Col span={16}>
+                                            <Select
+                                                disabled={!state.userInfo || !state.userInfo.isActive}
+                                                size="large"
+                                                className={cx('w-100')}
+                                                placeholder="Chọn kiểu thanh toán"
+                                                value={flag}
+                                                onChange={(value) => setFlagValue(value)}
+                                                options={[
+                                                    {
+                                                        value: 1,
+                                                        label: 'Thanh toán cọc (20%)',
+                                                    },
+                                                    {
+                                                        value: 2,
+                                                        label: 'Thanh toán toàn bộ',
+                                                    },
+                                                ]}
+                                            />
+                                        </Col>
+                                        <Col span={8}>
+                                            <InputNumber
+                                                disabled={!state.userInfo || !state.userInfo.isActive}
+                                                max={tourData.availableSeats}
+                                                min="1"
+                                                onChange={(value) => setGuestSizeValue(value)}
+                                                value={guestSize}
+                                                size="large"
+                                                placeholder="Guest"
+                                                className={cx('w-100')}
+                                            />
+                                        </Col>
+                                    </Row>
+                                    <div className={cx('align-center', 'content-between')}>
+                                        <p className={cx('price-calculate')}>
+                                            {priceFormat(tourData.price)}đ x {guestSize || 0} vé
+                                        </p>
+                                        <p className={cx('price-calculated')}>
+                                            {priceFormat(tourData.price * guestSize)}đ
+                                        </p>
+                                    </div>
 
-                                <div className={cx('align-center', 'content-between')}>
-                                    <p className={cx('total-title')}>Total</p>
-                                    <p className={cx('total-calculated')}>{priceFormat(data.price * guestSize)}đ</p>
+                                    <div className={cx('align-center', 'content-between')}>
+                                        <p className={cx('total-title')}>Total</p>
+                                        <p className={cx('total-calculated')}>
+                                            {priceFormat(tourData.price * guestSize)}đ
+                                        </p>
+                                    </div>
                                 </div>
+                                {(!state.userInfo || !state.userInfo.isActive) && (
+                                    <Alert
+                                        type="error"
+                                        message={
+                                            !state.userInfo
+                                                ? 'Vui lòng đăng nhập để đặt vé'
+                                                : 'Tài khoản chưa được kích hoạt'
+                                        }
+                                        banner
+                                    />
+                                )}
+                                <Button
+                                    onClick={() => setIsModalOpen(true)}
+                                    size="large"
+                                    type="primary"
+                                    disabled={!state.userInfo || !state.userInfo.isActive}
+                                >
+                                    Đặt vé
+                                </Button>
                             </div>
-                            {(!state.userInfo || !state.userInfo.isActive) && (
-                                <Alert
-                                    type="error"
-                                    message={
-                                        !state.userInfo
-                                            ? 'Vui lòng đăng nhập để đặt vé'
-                                            : 'Tài khoản chưa được kích hoạt'
-                                    }
-                                    banner
-                                />
-                            )}
-                            <Button
-                                onClick={payment}
-                                size="large"
-                                type="primary"
-                                disabled={!state.userInfo || !state.userInfo.isActive}
-                            >
-                                Đặt vé
-                            </Button>
-                        </div>
+                        </Skeleton>
                     </Col>
                 </Row>
             </section>

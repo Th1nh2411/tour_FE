@@ -1,0 +1,129 @@
+.refund-policy {
+    position: relative;
+    margin: 20px 0;
+    display: flex;
+
+    .start-refund {
+        font-size: 2.2rem;
+        position: absolute;
+        top: 50%;
+        left: 0px;
+        line-height: 0;
+        transform: translateY(-50%);
+        padding: 2px;
+        border-radius: 50%;
+        color: #52c41a;
+        border: 2px solid #52c41a;
+        background-color: #fff;
+        z-index: 10;
+    }
+    .end-refund {
+        font-size: 2.2rem;
+        position: absolute;
+        top: 50%;
+        right: 0px;
+        line-height: 0;
+        transform: translateY(-50%);
+        padding: 2px;
+        border-radius: 50%;
+        color: red;
+        border: 2px solid red;
+        background-color: #fff;
+    }
+}
+.success-refund {
+    position: relative;
+    width: 40%;
+    &::before {
+        content: '';
+        position: absolute;
+        background-color: #52c41a;
+        height: 2px;
+        width: 100%;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+    }
+    &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translate(50%, -50%);
+        border: 2px solid var(--primary-color);
+        background-color: #fff;
+        border-radius: 50%;
+        height: 8px;
+        width: 8px;
+        z-index: 10;
+    }
+    .refund-value {
+        color: #52c41a;
+    }
+}
+.warning-refund {
+    position: relative;
+    width: 30%;
+
+    &::before {
+        content: '';
+        position: absolute;
+        background-color: var(--primary-color);
+        height: 2px;
+        width: 100%;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+    }
+
+    .refund-value {
+        color: var(--primary-color);
+    }
+}
+.danger-refund {
+    position: relative;
+    width: 30%;
+
+    &::before {
+        content: '';
+        position: absolute;
+        background-color: red;
+        height: 2px;
+        width: 100%;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+    }
+    &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translate(-50%, -50%);
+        border: 2px solid var(--primary-color);
+        background-color: #fff;
+        border-radius: 50%;
+        height: 8px;
+        width: 8px;
+        z-index: 10;
+    }
+    .refund-value {
+        color: red;
+    }
+}
+.refund-timeline {
+    font-size: 1.2rem;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    transform: translateX(50%);
+}
+.refund-value {
+    text-align: center;
+    padding-top: 40px;
+}
+@media (max-width: 767px) {
+    .refund-policy {
+        margin: 60px 0;
+    }
+}

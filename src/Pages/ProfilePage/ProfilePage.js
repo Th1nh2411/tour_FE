@@ -84,7 +84,7 @@ function ProfilePage() {
             <div className={cx('wrapper')}>
                 <Row gutter={[40, 40]}>
                     <Col xs={24} lg={12}>
-                        <div className={cx('card')}>
+                        <div style={{ backgroundColor: '#718e9b' }} className={cx('card')}>
                             <div className={cx('title')}>
                                 <BsPersonCircle className={cx('title-icon')} /> Thông tin cá nhân
                             </div>
@@ -140,10 +140,7 @@ function ProfilePage() {
                                         listBooking.map((item, index) => (
                                             <div key={index} className={cx('invoice-wrapper')}>
                                                 <div className={cx('left-side')}>
-                                                    <Image
-                                                        src="https://res.cloudinary.com/dgsumh8ih/image/upload/v1694075871/travel.png"
-                                                        className={cx('invoice-img')}
-                                                    />
+                                                    <Image src={item.tourInfo.photo} className={cx('invoice-img')} />
                                                     <div className={cx('invoice-body')}>
                                                         <div className={cx('invoice-title')}>
                                                             {item.tourInfo.tourName}

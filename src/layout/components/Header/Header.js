@@ -6,7 +6,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import config from '../../../config';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { StoreContext, actions } from '../../../store';
-import { Button, Dropdown, Input, Space, Tooltip } from 'antd';
+import { Badge, Button, Dropdown, Input, Space, Tooltip } from 'antd';
 import { MdArrowDropDown, MdOutlineClose, MdOutlineMenu, MdTour } from 'react-icons/md';
 import { IoLogOut, IoPerson } from 'react-icons/io5';
 import * as categoryService from '../../../services/categoryService';
@@ -74,9 +74,11 @@ function Header() {
         {
             key: '1',
             label: (
-                <Link style={{ fontSize: '1.6rem' }} to={config.routes.profile}>
-                    Your Profile
-                </Link>
+                <Badge dot={state.unpaidBooking}>
+                    <Link style={{ fontSize: '1.6rem' }} to={config.routes.profile}>
+                        Trang cá nhân
+                    </Link>
+                </Badge>
             ),
             icon: <IoPerson style={{ fontSize: '1.8rem' }} />,
         },
@@ -84,7 +86,7 @@ function Header() {
             key: '2',
             label: (
                 <div style={{ fontSize: '1.6rem' }} onClick={handleLogOut}>
-                    Log Out
+                    Đăng xuất
                 </div>
             ),
             icon: <IoLogOut style={{ fontSize: '1.8rem' }} />,
@@ -137,7 +139,9 @@ function Header() {
                         <div className={cx('align-center')} size={'large'}>
                             <h3>{userInfo.username}</h3>
                             <Dropdown menu={{ items: optionItems }}>
-                                <Image src={state.userInfo && state.userInfo.photo} className={cx('user-img')} />
+                                <Badge dot={state.unpaidBooking} offset={[-5, 5]}>
+                                    <Image src={state.userInfo && state.userInfo.photo} className={cx('user-img')} />
+                                </Badge>
                             </Dropdown>
                         </div>
                     ) : (
