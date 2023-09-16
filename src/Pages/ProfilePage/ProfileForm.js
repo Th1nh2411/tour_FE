@@ -19,7 +19,10 @@ const ProfileForm = ({ showForm, onClose = () => {} }) => {
         setLoading(false);
         if (results) {
             state.showToast('Thành công', results.message);
-            dispatch(actions.setUserInfo({ ...userInfo, ...values }));
+            if (userInfo.email !== values.email) {
+                dispatch(actions.setUserInfo({ ...userInfo, ...values, isActive: false }));
+            } else dispatch(actions.setUserInfo({ ...userInfo, ...values }));
+
             onClose(true);
         }
     };

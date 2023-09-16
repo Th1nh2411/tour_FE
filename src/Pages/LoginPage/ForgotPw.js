@@ -17,18 +17,33 @@ function ForgotPw({ open, onCloseModal = () => {} }) {
     const [state, dispatch] = useContext(StoreContext);
     const navigate = useNavigate();
     const [form] = useForm();
+    const [username, setUsername] = useState('');
+    const [verifyID, setVerifyID] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [repeatPassword, setRepeatPassword] = useState('');
+    const [step, setStep] = useState(1);
 
-    const [showForgot, setShowForgot] = useState(false);
-
-    const sendOTP = async (values) => {
-        const results = await authService.forgotPw(values);
+    const sendOTP = async () => {
+        const results = await authService.sendOTPForgotPw({ username });
         if (results) {
-            dispatch(actions.setUserInfo(results.data));
-            Cookies.set('userInfo', JSON.stringify(results.data));
-            const checkPayment = await state.getUnpaidBooking();
-
-            state.showToast('Thành công', 'Đăng nhập thành công!');
-            navigate(config.routes.home);
+            console.log(results);
+            state.showToast('Thành công', results.message);
+            setStep(2);
+        }
+    };
+    const confirmOTP = async () => {
+        const results = await authService.confirmOTPForgotPw({ username, verifyID });
+        if (results) {
+            console.log(results);
+            state.showToast('Thành công', results.message);
+            setStep(3);
+        }
+    };
+    const changePw = async () => {
+        const results = await authService.changeForgotPw({ username, newPassword, repeatPassword });
+        if (results) {
+            console.log(results);
+            state.showToast('Thành công', results.message);
         }
     };
     return (
@@ -37,13 +52,37 @@ function ForgotPw({ open, onCloseModal = () => {} }) {
             centered
             title={<h2 style={{ textAlign: 'center' }}>Quên mật khẩu</h2>}
             open={open}
-            onCancel={onCloseModal}
+            onCancel={() => {
+                setStep(1);
+                setUsername('');
+                onCloseModal();
+            }}
+            okText={step === 1 ? 'Gửi mã xác nhận' : step === 2 ? 'Xác nhận' : 'Đổi mật khẩu'}
+            cancelText="Huỷ bỏ"
+            onOk={step === 1 ? sendOTP : step === 2 ? confirmOTP : changePw}
         >
-            <Form>
-                <Form.Item name="username" label="Nhập Username">
-                    <Input />
-                </Form.Item>
-            </Form>
+            {step === 1 ? (
+                <Form size="large">
+                    <Form.Item name="username" label="Nhập Username">
+                        <Input value={username} onChange={(e) => setUsername(e.target.value)} />
+                    </Form.Item>
+                </Form>
+            ) : step === 2 ? (
+                <Form size="large">
+                    <Form.Item name="verifyID" label="Nhập mã xác minh">
+                        <Input value={verifyID} onChange={(e) => setVerifyID(e.target.value)} />
+                    </Form.Item>
+                </Form>
+            ) : (
+                <Form size="large">
+                    <Form.Item name="newPassword" label="Nhập mật khẩu mới">
+                        <Input value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+                    </Form.Item>
+                    <Form.Item name="repeatPassword" label="Nhập xác nhận mật khẩu">
+                        <Input value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} />
+                    </Form.Item>
+                </Form>
+            )}
         </Modal>
     );
 }

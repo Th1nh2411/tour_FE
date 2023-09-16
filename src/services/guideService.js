@@ -33,12 +33,6 @@ export const createGuide = async (body) => {
         return res;
     } catch (error) {
         console.log(error);
-        notification.open({
-            message: 'Thất bại',
-            description: error.response && error.response.data.message,
-            placement: 'bottomRight',
-            type: 'error',
-        });
     }
 };
 export const updateGuide = async (id, body) => {
@@ -50,11 +44,5 @@ export const updateGuide = async (id, body) => {
         return res;
     } catch (error) {
         console.log(error);
-        notification.open({
-            message: 'Thất bại',
-            description: error.response && error.response.data.message,
-            placement: 'bottomRight',
-            type: 'error',
-        });
     }
 };

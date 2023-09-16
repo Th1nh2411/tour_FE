@@ -1,4 +1,4 @@
-import { Modal } from 'antd';
+import { Modal, notification } from 'antd';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router';
@@ -22,7 +22,7 @@ export const get = async (path, config = {}) => {
                     window.location.href = window.location.protocol + '//' + window.location.host;
                 },
             });
-        } else return error.response.data;
+        }
     }
 };
 export const post = async (path, body = {}, config = {}) => {
@@ -39,7 +39,14 @@ export const post = async (path, body = {}, config = {}) => {
                     window.location.href = window.location.protocol + '//' + window.location.host;
                 },
             });
-        } else return error.response.data;
+        } else {
+            notification.open({
+                message: 'Thất bại',
+                description: error.response && error.response.data.message,
+                placement: 'bottomRight',
+                type: 'error',
+            });
+        }
     }
 };
 export const del = async (path, config = {}) => {
@@ -56,7 +63,14 @@ export const del = async (path, config = {}) => {
                     window.location.href = window.location.protocol + '//' + window.location.host;
                 },
             });
-        } else return error.response.data;
+        } else {
+            notification.open({
+                message: 'Thất bại',
+                description: error.response && error.response.data.message,
+                placement: 'bottomRight',
+                type: 'error',
+            });
+        }
     }
 };
 export const put = async (path, body = {}, config = {}) => {
@@ -73,7 +87,14 @@ export const put = async (path, body = {}, config = {}) => {
                     window.location.href = window.location.protocol + '//' + window.location.host;
                 },
             });
-        } else return error.response.data;
+        } else {
+            notification.open({
+                message: 'Thất bại',
+                description: error.response && error.response.data.message,
+                placement: 'bottomRight',
+                type: 'error',
+            });
+        }
     }
 };
 export const patch = async (path, body = {}, config = {}) => {
@@ -90,7 +111,14 @@ export const patch = async (path, body = {}, config = {}) => {
                     window.location.href = window.location.protocol + '//' + window.location.host;
                 },
             });
-        } else return error.response.data;
+        } else {
+            notification.open({
+                message: 'Thất bại',
+                description: error.response && error.response.data.message,
+                placement: 'bottomRight',
+                type: 'error',
+            });
+        }
     }
 };
 // export default httpRequest;

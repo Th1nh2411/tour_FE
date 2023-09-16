@@ -1,15 +1,17 @@
 import styles from './ProfilePage.module.scss';
 import classNames from 'classnames/bind';
 import { BsCameraFill, BsFillClipboard2Fill, BsFillPhoneFill, BsPersonCircle, BsTicket } from 'react-icons/bs';
-import { Alert, Badge, Col, Row, Skeleton, Space, notification } from 'antd';
+import { Alert, Badge, Col, Popconfirm, Row, Skeleton, Space, notification } from 'antd';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import * as bookingService from '../../services/bookingService';
+import * as authService from '../../services/authService';
 import { StoreContext, actions } from '../../store';
 import { priceFormat } from '../../utils/format';
 import { TbMoodSadSquint } from 'react-icons/tb';
 import Image from '../../components/Image';
 import dayjs from 'dayjs';
 import { MdEdit, MdLock } from 'react-icons/md';
+import { RiMailForbidFill } from 'react-icons/ri';
 import { Button } from 'antd';
 import BookingDetail from '../../components/BookingDetail/BookingDetail';
 import ProfileForm from './ProfileForm';
@@ -40,6 +42,7 @@ function ProfilePage() {
         }
         getAllBooking();
     };
+
     useEffect(() => {
         if (paymentStatus === '00') {
             confirmPaymentInvoice();
@@ -66,6 +69,13 @@ function ProfilePage() {
     const handleInputClick = (e) => {
         e.preventDefault();
         uploadRef.current.click();
+    };
+
+    const sendMailActive = async () => {
+        const results = await authService.sendMailActive();
+        if (results) {
+            state.showToast('Thành công', results.message);
+        }
     };
     return (
         <>
@@ -125,6 +135,24 @@ function ProfilePage() {
                                     <h3 className={cx('profile-info')}>
                                         Địa chỉ: <span>{state.userInfo && state.userInfo.address}</span>
                                     </h3>
+                                    <Alert
+                                        showIcon
+                                        icon={<RiMailForbidFill />}
+                                        message={
+                                            <p>
+                                                Tài khoản email của bạn chưa được{' '}
+                                                <Popconfirm
+                                                    title="Gửi mail kích hoạt tài khoản"
+                                                    onConfirm={sendMailActive}
+                                                    okText="Gửi mail"
+                                                    cancelText="Quay lại"
+                                                >
+                                                    <span className={cx('active-btn')}>kích hoạt</span>
+                                                </Popconfirm>
+                                            </p>
+                                        }
+                                        type="error"
+                                    />
                                 </div>
                             </div>
                         </div>
