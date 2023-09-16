@@ -12,7 +12,7 @@ const ProfileForm = ({ showForm, onClose = () => {} }) => {
     const [state, dispatch] = useContext(StoreContext);
     const userInfo = state.userInfo;
     const [loading, setLoading] = useState(false);
-
+    const [form] = Form.useForm();
     const editProfile = async (values) => {
         setLoading(true);
         const results = await profileService.editProfile(values);
@@ -26,12 +26,16 @@ const ProfileForm = ({ showForm, onClose = () => {} }) => {
 
     return (
         <Modal
-            onCancel={onClose}
+            onCancel={() => {
+                form.resetFields();
+                onClose();
+            }}
             title={<h2 className={cx('text-center')}>Sửa thông tin cá nhân</h2>}
             open={showForm}
             footer={null}
         >
             <Form
+                form={form}
                 onFinish={editProfile}
                 initialValues={{
                     fullName: userInfo && userInfo.fullName,
@@ -58,7 +62,21 @@ const ProfileForm = ({ showForm, onClose = () => {} }) => {
                     rules={[
                         {
                             required: true,
-                            message: 'Số điện thoại không được để trống!',
+                            type: 'email',
+                            message: 'Vui lòng nhập tài khoản gmail hợp lệ!',
+                        },
+                    ]}
+                    name="email"
+                    label="Tài khoản email"
+                >
+                    <Input size="large" placeholder="Số điện thoại" />
+                </Form.Item>
+                <Form.Item
+                    rules={[
+                        {
+                            required: true,
+                            pattern: /^\d{10}$/,
+                            message: 'Vui lòng nhập số điện thoại hợp lệ!',
                         },
                     ]}
                     name="phoneNumber"
@@ -71,7 +89,13 @@ const ProfileForm = ({ showForm, onClose = () => {} }) => {
                     <Input size="large" placeholder="Địa chỉ" />
                 </Form.Item>
                 <Space className={cx('content-end')}>
-                    <Button onClick={onClose} size="large">
+                    <Button
+                        onClick={() => {
+                            form.resetFields();
+                            onClose();
+                        }}
+                        size="large"
+                    >
                         Huỷ bỏ
                     </Button>
                     <Button loading={loading} size="large" type="primary" htmlType="submit">

@@ -138,7 +138,7 @@ function Header() {
                     </div>
                     {userInfo ? (
                         <div className={cx('align-center')} size={'large'}>
-                            <h3>{userInfo.username}</h3>
+                            <h3>{userInfo.fullName.split(' ').pop()}</h3>
                             <Dropdown menu={{ items: optionItems }}>
                                 <Badge dot={state.unpaidBooking} offset={[-5, 5]}>
                                     <Image src={state.userInfo && state.userInfo.photo} className={cx('user-img')} />

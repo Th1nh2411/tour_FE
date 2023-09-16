@@ -11,6 +11,7 @@ import { StoreContext, actions } from '../../store';
 import Cookies from 'js-cookie';
 import { Link } from 'react-router-dom';
 import { useForm } from 'antd/es/form/Form';
+import ForgotPw from './ForgotPw';
 const cx = classNames.bind(styles);
 
 function LoginPage() {
@@ -32,32 +33,9 @@ function LoginPage() {
             dispatch(actions.setUnpaidBooking(null));
         }
     };
-    const sendOTP = async (values) => {
-        const results = await authService.forgotPw(values);
-        if (results) {
-            dispatch(actions.setUserInfo(results.data));
-            Cookies.set('userInfo', JSON.stringify(results.data));
-            const checkPayment = await state.getUnpaidBooking();
-
-            state.showToast('Thành công', 'Đăng nhập thành công!');
-            navigate(config.routes.home);
-        }
-    };
     return (
         <div className={cx('wrapper')}>
-            <Modal
-                width={'auto'}
-                centered
-                title={<h2 style={{ textAlign: 'center' }}>Quên mật khẩu</h2>}
-                open={showForgot}
-                onCancel={() => setShowForgot(false)}
-            >
-                <Form>
-                    <Form.Item name="username" label="Nhập Username">
-                        <Input />
-                    </Form.Item>
-                </Form>
-            </Modal>
+            <ForgotPw open={showForgot} onCloseModal={() => setShowForgot(false)} />
             <Row
                 style={{
                     boxShadow: 'rgba(17, 12, 46, 0.15) -1px 5px 20px 0px',
