@@ -18,7 +18,7 @@ function Provider({ children }) {
         });
     };
     const [searchParams, setSearchParams] = useSearchParams();
-    const id_user = searchParams.get('id_user');
+    const userID = searchParams.get('id_user');
     const activeID = searchParams.get('activeID');
 
     const getUnpaidBooking = async () => {
@@ -41,7 +41,7 @@ function Provider({ children }) {
     console.log(state.userInfo);
     const activeAccount = async () => {
         setTimeout(async () => {
-            const results = await authService.activeAccount({ id_user, activeID });
+            const results = await authService.activeAccount({ userID, activeID });
             if (results) {
                 dispatch(actions.setUserInfo({ ...state.userInfo, isActive: true }));
                 showToast('Thông báo', 'Tài khoản của bạn đã được kích hoạt!', 'success');
@@ -52,7 +52,7 @@ function Provider({ children }) {
         if (state.userInfo) {
             getUnpaidBooking();
         }
-        if (id_user && activeID) {
+        if (userID && activeID) {
             activeAccount();
         }
     }, []);

@@ -6,6 +6,7 @@ import * as profileService from '../../services/profileService';
 import { Button, Checkbox, Col, Form, Input, InputNumber, Modal, Row, Space, Upload, message } from 'antd';
 import { BsUpload } from 'react-icons/bs';
 import { StoreContext, actions } from '../../store';
+import Cookies from 'js-cookie';
 const cx = classNames.bind(styles);
 
 const ProfileForm = ({ showForm, onClose = () => {} }) => {
@@ -13,15 +14,30 @@ const ProfileForm = ({ showForm, onClose = () => {} }) => {
     const userInfo = state.userInfo;
     const [loading, setLoading] = useState(false);
     const [form] = Form.useForm();
+
+    const initFormValue = {
+        fullName: userInfo && userInfo.fullName,
+        phoneNumber: userInfo && userInfo.phoneNumber,
+        email: userInfo && userInfo.email,
+        address: userInfo && userInfo.address,
+    };
     const editProfile = async (values) => {
         setLoading(true);
-        const results = await profileService.editProfile(values);
+        const results = await profileService.editProfile({
+            ...values,
+            email: values.email !== userInfo.email ? values.email : undefined,
+            phoneNumber: values.phoneNumber !== userInfo.phoneNumber ? values.phoneNumber : undefined,
+        });
         setLoading(false);
         if (results) {
             state.showToast('Thành công', results.message);
             if (userInfo.email !== values.email) {
                 dispatch(actions.setUserInfo({ ...userInfo, ...values, isActive: false }));
-            } else dispatch(actions.setUserInfo({ ...userInfo, ...values }));
+                Cookies.set('userInfo', JSON.stringify({ ...userInfo, ...values, isActive: false }));
+            } else {
+                dispatch(actions.setUserInfo({ ...userInfo, ...values }));
+                Cookies.set('userInfo', JSON.stringify({ ...userInfo, ...values }));
+            }
 
             onClose(true);
         }
@@ -40,12 +56,7 @@ const ProfileForm = ({ showForm, onClose = () => {} }) => {
             <Form
                 form={form}
                 onFinish={editProfile}
-                initialValues={{
-                    fullName: userInfo && userInfo.fullName,
-                    phoneNumber: userInfo && userInfo.phoneNumber,
-                    email: userInfo && userInfo.email,
-                    address: userInfo && userInfo.address,
-                }}
+                initialValues={initFormValue}
                 layout="vertical"
                 className={cx('mt-2')}
             >

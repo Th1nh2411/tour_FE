@@ -23,9 +23,9 @@ const cx = classNames.bind(styles);
 function Home() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const [featuredTours, setFeaturedTours] = useState([]);
-    const [top8Reviews, setTop8Reviews] = useState([]);
-    const [allGuide, setAllGuide] = useState([]);
+    const [featuredTours, setFeaturedTours] = useState();
+    const [top8Reviews, setTop8Reviews] = useState();
+    const [allGuide, setAllGuide] = useState();
     const getFeaturedTour = async () => {
         setLoading(true);
         const results = await tourService.getFeaturedTours();
@@ -233,8 +233,11 @@ function Home() {
                                 <p className={cx('review-comment')}>{item.comment}</p>
                                 <div className={cx('review-customer')}>
                                     <Image src={item.tourInfo.photo} className={cx('review-img')} />
+
                                     <div>
-                                        <h3 className={cx('customer-name')}>{item.userInfo.fullName}</h3>
+                                        {item.userInfo && (
+                                            <h3 className={cx('customer-name')}>{item.userInfo.fullName}</h3>
+                                        )}
                                         <p className={cx('review-tourName')}>{item.tourInfo.tourName}</p>
                                     </div>
                                 </div>

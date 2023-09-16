@@ -53,6 +53,10 @@ const ChangePwForm = ({ showForm, onClose = () => {} }) => {
                             required: true,
                             message: 'Vui lòng nhập mật khẩu mới!',
                         },
+                        {
+                            min: 9,
+                            message: 'Mật khẩu phải dài hơn 9 ký tự!',
+                        },
                     ]}
                     name="newPassword"
                     label="Mật khẩu mới"

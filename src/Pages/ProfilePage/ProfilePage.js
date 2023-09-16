@@ -127,32 +127,34 @@ function ProfilePage() {
                                         Tên người dùng: <span>{state.userInfo && state.userInfo.fullName}</span>
                                     </h3>
                                     <h3 className={cx('profile-info')}>
-                                        Số điện thoại: <span>{state.userInfo && state.userInfo.phoneNumber}</span>
+                                        Tài khoản gmail: <span>{state.userInfo && state.userInfo.email}</span>
                                     </h3>
                                     <h3 className={cx('profile-info')}>
-                                        Tài khoản gmail: <span>{state.userInfo && state.userInfo.email}</span>
+                                        Số điện thoại: <span>{state.userInfo && state.userInfo.phoneNumber}</span>
                                     </h3>
                                     <h3 className={cx('profile-info')}>
                                         Địa chỉ: <span>{state.userInfo && state.userInfo.address}</span>
                                     </h3>
-                                    <Alert
-                                        showIcon
-                                        icon={<RiMailForbidFill />}
-                                        message={
-                                            <p>
-                                                Tài khoản email của bạn chưa được{' '}
-                                                <Popconfirm
-                                                    title="Gửi mail kích hoạt tài khoản"
-                                                    onConfirm={sendMailActive}
-                                                    okText="Gửi mail"
-                                                    cancelText="Quay lại"
-                                                >
-                                                    <span className={cx('active-btn')}>kích hoạt</span>
-                                                </Popconfirm>
-                                            </p>
-                                        }
-                                        type="error"
-                                    />
+                                    {state.userInfo && !state.userInfo.isActive && (
+                                        <Alert
+                                            showIcon
+                                            icon={<RiMailForbidFill />}
+                                            message={
+                                                <p>
+                                                    Tài khoản email của bạn chưa được{' '}
+                                                    <Popconfirm
+                                                        title="Gửi mail kích hoạt tài khoản"
+                                                        onConfirm={sendMailActive}
+                                                        okText="Gửi mail"
+                                                        cancelText="Quay lại"
+                                                    >
+                                                        <span className={cx('active-btn')}>kích hoạt</span>
+                                                    </Popconfirm>
+                                                </p>
+                                            }
+                                            type="error"
+                                        />
+                                    )}
                                 </div>
                             </div>
                         </div>
