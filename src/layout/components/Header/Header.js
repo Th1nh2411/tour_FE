@@ -40,6 +40,7 @@ function Header() {
     };
     const handleLogOut = () => {
         dispatch(actions.setUserInfo(null));
+        dispatch(actions.setUnpaidBooking(null));
         Cookies.remove('accessToken');
         Cookies.remove('userInfo');
         navigate(config.routes.home);

@@ -33,7 +33,9 @@ function Provider({ children }) {
     };
     const [state, dispatch] = useReducer(reducer, initState);
     useEffect(() => {
-        getUnpaidBooking();
+        if (state.userInfo) {
+            getUnpaidBooking();
+        }
     }, []);
     return (
         <UserContext.Provider value={[state, dispatch]}>
