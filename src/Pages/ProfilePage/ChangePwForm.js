@@ -4,7 +4,6 @@ import classNames from 'classnames/bind';
 import { useContext, useEffect, useRef, useState } from 'react';
 import * as profileService from '../../services/profileService';
 import { Button, Checkbox, Col, Form, Input, InputNumber, Modal, Row, Space, Upload, message } from 'antd';
-import { BsUpload } from 'react-icons/bs';
 import { StoreContext, actions } from '../../store';
 const cx = classNames.bind(styles);
 
@@ -12,6 +11,7 @@ const ChangePwForm = ({ showForm, onClose = () => {} }) => {
     const [state, dispatch] = useContext(StoreContext);
     const userInfo = state.userInfo;
     const [loading, setLoading] = useState(false);
+    const [form] = Form.useForm();
 
     const editProfile = async (values) => {
         setLoading(true);
@@ -26,22 +26,15 @@ const ChangePwForm = ({ showForm, onClose = () => {} }) => {
 
     return (
         <Modal
-            onCancel={onClose}
+            onCancel={() => {
+                form.resetFields();
+                onClose();
+            }}
             title={<h2 className={cx('text-center')}>Đổi mật khẩu</h2>}
             open={showForm}
             footer={null}
         >
-            <Form
-                onFinish={editProfile}
-                initialValues={{
-                    fullName: userInfo.fullName,
-                    phoneNumber: userInfo.phoneNumber,
-                    email: userInfo.email,
-                    address: userInfo.address,
-                }}
-                layout="vertical"
-                className={cx('mt-2')}
-            >
+            <Form form={form} onFinish={editProfile} layout="vertical" className={cx('mt-2')}>
                 <Form.Item
                     rules={[
                         {
@@ -59,6 +52,10 @@ const ChangePwForm = ({ showForm, onClose = () => {} }) => {
                         {
                             required: true,
                             message: 'Vui lòng nhập mật khẩu mới!',
+                        },
+                        {
+                            min: 9,
+                            message: 'Mật khẩu phải dài hơn 9 ký tự!',
                         },
                     ]}
                     name="newPassword"
@@ -88,7 +85,13 @@ const ChangePwForm = ({ showForm, onClose = () => {} }) => {
                     <Input type="password" size="large" placeholder="Xác nhận mật khẩu" />
                 </Form.Item>
                 <Space className={cx('content-end')}>
-                    <Button onClick={onClose} size="large">
+                    <Button
+                        onClick={() => {
+                            form.resetFields();
+                            onClose();
+                        }}
+                        size="large"
+                    >
                         Huỷ bỏ
                     </Button>
                     <Button loading={loading} size="large" type="primary" htmlType="submit">

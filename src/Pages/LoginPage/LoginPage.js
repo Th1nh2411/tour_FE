@@ -3,8 +3,7 @@ import classNames from 'classnames/bind';
 import Image from '../../components/Image';
 import images from '../../assets/images';
 import { useContext, useEffect, useState } from 'react';
-import { Button, Col, Form, Input, Row, Space, notification } from 'antd';
-import { FaUser } from 'react-icons/fa';
+import { Button, Col, Form, Input, Modal, Row, Space, notification } from 'antd';
 import * as authService from '../../services/authService';
 import { useNavigate } from 'react-router';
 import config from '../../config';
@@ -12,12 +11,19 @@ import { StoreContext, actions } from '../../store';
 import Cookies from 'js-cookie';
 import { Link } from 'react-router-dom';
 import { useForm } from 'antd/es/form/Form';
+import ForgotPw from './ForgotPw';
 const cx = classNames.bind(styles);
 
 function LoginPage() {
     const [state, dispatch] = useContext(StoreContext);
     const navigate = useNavigate();
     const [form] = useForm();
+    useEffect(() => {
+        if (state.userInfo) {
+            navigate(config.routes.home);
+        }
+    }, []);
+    const [showForgot, setShowForgot] = useState(false);
     const login = async (values) => {
         const results = await authService.login(values);
         if (results) {
@@ -33,6 +39,7 @@ function LoginPage() {
     };
     return (
         <div className={cx('wrapper')}>
+            <ForgotPw open={showForgot} onCloseModal={() => setShowForgot(false)} />
             <Row
                 style={{
                     boxShadow: 'rgba(17, 12, 46, 0.15) -1px 5px 20px 0px',
@@ -92,8 +99,11 @@ function LoginPage() {
                             <Button type="ghost" size="large" className={cx('login-btn')} htmlType="submit">
                                 Đăng nhập
                             </Button>
+                            <h3 onClick={() => setShowForgot(true)} className={cx('option-title')}>
+                                <span>Quên mật khẩu?</span>
+                            </h3>
                         </Form>
-                        <h3 className={cx('option-title')}>
+                        <h3 className={cx('option-title', 'mt-2')}>
                             Thành viên mới?{' '}
                             <span>
                                 <Link to={config.routes.register}>Đăng ký</Link>

@@ -40,6 +40,7 @@ function Header() {
     };
     const handleLogOut = () => {
         dispatch(actions.setUserInfo(null));
+        dispatch(actions.setUnpaidBooking(null));
         Cookies.remove('accessToken');
         Cookies.remove('userInfo');
         navigate(config.routes.home);
@@ -75,20 +76,14 @@ function Header() {
             key: '1',
             label: (
                 <Badge dot={state.unpaidBooking}>
-                    <Link style={{ fontSize: '1.6rem' }} to={config.routes.profile}>
-                        Trang cá nhân
-                    </Link>
+                    <p style={{ fontSize: '1.6rem' }}>Trang cá nhân</p>
                 </Badge>
             ),
             icon: <IoPerson style={{ fontSize: '1.8rem' }} />,
         },
         {
             key: '2',
-            label: (
-                <div style={{ fontSize: '1.6rem' }} onClick={handleLogOut}>
-                    Đăng xuất
-                </div>
-            ),
+            label: <p style={{ fontSize: '1.6rem' }}>Đăng xuất</p>,
             icon: <IoLogOut style={{ fontSize: '1.8rem' }} />,
         },
     ];
@@ -137,8 +132,16 @@ function Header() {
                     </div>
                     {userInfo ? (
                         <div className={cx('align-center')} size={'large'}>
-                            <h3>{userInfo.username}</h3>
-                            <Dropdown menu={{ items: optionItems }}>
+                            <h3>{userInfo.fullName.split(' ').pop()}</h3>
+                            <Dropdown
+                                menu={{
+                                    items: optionItems,
+                                    onClick: ({ key }) => {
+                                        if (key == 1) navigate(config.routes.profile);
+                                        if (key == 2) handleLogOut();
+                                    },
+                                }}
+                            >
                                 <Badge dot={state.unpaidBooking} offset={[-5, 5]}>
                                     <Image src={state.userInfo && state.userInfo.photo} className={cx('user-img')} />
                                 </Badge>

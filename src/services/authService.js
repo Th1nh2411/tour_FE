@@ -10,12 +10,6 @@ export const register = async (body) => {
         return res;
     } catch (error) {
         console.log(error);
-        notification.open({
-            message: 'Thất bại',
-            description: error.response && error.response.data.message,
-            placement: 'bottomRight',
-            type: 'error',
-        });
     }
 };
 export const login = async (body) => {
@@ -28,11 +22,60 @@ export const login = async (body) => {
         return res;
     } catch (error) {
         console.log(error);
-        notification.open({
-            message: 'Thất bại',
-            description: error.response && error.response.data.message,
-            placement: 'bottomRight',
-            type: 'error',
-        });
+    }
+};
+export const sendOTPForgotPw = async (body) => {
+    // const config = {
+    //     headers: { access_token: token },
+    // };
+    try {
+        const res = await httpRequest.post(`user/forgotpassword`, body);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const confirmOTPForgotPw = async (body) => {
+    // const config = {
+    //     headers: { access_token: token },
+    // };
+    try {
+        const res = await httpRequest.post(`user/forgotpassword/verify`, body);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const changeForgotPw = async (body) => {
+    // const config = {
+    //     headers: { access_token: token },
+    // };
+    try {
+        const res = await httpRequest.post(`user/forgotpassword/success`, body);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const sendMailActive = async () => {
+    // const config = {
+    //     headers: { access_token: token },
+    // };
+    try {
+        const res = await httpRequest.get(`user/activebutton`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const activeAccount = async (body) => {
+    // const config = {
+    //     headers: { access_token: token },
+    // };
+    try {
+        const res = await httpRequest.post(`user/active`, body);
+        return res;
+    } catch (error) {
+        console.log(error);
     }
 };

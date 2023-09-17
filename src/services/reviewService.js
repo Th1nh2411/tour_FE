@@ -36,3 +36,11 @@ export const getTop8Review = async () => {
         console.log(error);
     }
 };
+export const sendFeedBack = async (body) => {
+    try {
+        const res = await httpRequest.post(`feedback`, body);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};

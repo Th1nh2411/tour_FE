@@ -1,4 +1,3 @@
-import { notification } from 'antd';
 import * as httpRequest from '../utils/httpRequest';
 
 export const createBooking = async (body) => {
@@ -7,12 +6,6 @@ export const createBooking = async (body) => {
         return res;
     } catch (error) {
         console.log(error);
-        notification.open({
-            message: 'Thất bại',
-            description: error.response && error.response.data.message,
-            placement: 'bottomRight',
-            type: 'error',
-        });
     }
 };
 export const cancelBooking = async (id) => {
@@ -21,12 +14,6 @@ export const cancelBooking = async (id) => {
         return res;
     } catch (error) {
         console.log(error);
-        notification.open({
-            message: 'Thất bại',
-            description: error.response && error.response.data.message,
-            placement: 'bottomRight',
-            type: 'error',
-        });
     }
 };
 export const getBooking = async (id) => {
@@ -57,26 +44,12 @@ export const vnpayPayment = async (body) => {
     try {
         const res = await httpRequest.post(`vnpay/create_payment_url`, body);
         return res;
-    } catch (error) {
-        notification.open({
-            message: 'Thất bại',
-            description: error.response && error.response.data.message,
-            placement: 'bottomRight',
-            type: 'error',
-        });
-    }
+    } catch (error) {}
 };
 export const vnpayReturn = async (params) => {
     const config = { params };
     try {
         const res = await httpRequest.get(`vnpay/vnpay_return`, config);
         return res;
-    } catch (error) {
-        notification.open({
-            message: 'Thất bại',
-            description: error.response && error.response.data.message,
-            placement: 'bottomRight',
-            type: 'error',
-        });
-    }
+    } catch (error) {}
 };

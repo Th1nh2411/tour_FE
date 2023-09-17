@@ -1,15 +1,17 @@
 import styles from './ProfilePage.module.scss';
 import classNames from 'classnames/bind';
 import { BsCameraFill, BsFillClipboard2Fill, BsFillPhoneFill, BsPersonCircle, BsTicket } from 'react-icons/bs';
-import { Alert, Badge, Col, Row, Skeleton, Space, notification } from 'antd';
+import { Alert, Badge, Col, Popconfirm, Row, Skeleton, Space, notification } from 'antd';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import * as bookingService from '../../services/bookingService';
+import * as authService from '../../services/authService';
 import { StoreContext, actions } from '../../store';
 import { priceFormat } from '../../utils/format';
 import { TbMoodSadSquint } from 'react-icons/tb';
 import Image from '../../components/Image';
 import dayjs from 'dayjs';
 import { MdEdit, MdLock } from 'react-icons/md';
+import { RiMailForbidFill } from 'react-icons/ri';
 import { Button } from 'antd';
 import BookingDetail from '../../components/BookingDetail/BookingDetail';
 import ProfileForm from './ProfileForm';
@@ -40,6 +42,7 @@ function ProfilePage() {
         }
         getAllBooking();
     };
+
     useEffect(() => {
         if (paymentStatus === '00') {
             confirmPaymentInvoice();
@@ -66,6 +69,13 @@ function ProfilePage() {
     const handleInputClick = (e) => {
         e.preventDefault();
         uploadRef.current.click();
+    };
+
+    const sendMailActive = async () => {
+        const results = await authService.sendMailActive();
+        if (results) {
+            state.showToast('Thành công', results.message);
+        }
     };
     return (
         <>
@@ -113,18 +123,23 @@ function ProfilePage() {
                                             Đổi mật khẩu
                                         </Button>
                                     </Space>
-                                    <h3 className={cx('profile-info')}>
-                                        Tên người dùng: <span>{state.userInfo && state.userInfo.fullName}</span>
-                                    </h3>
-                                    <h3 className={cx('profile-info')}>
-                                        Số điện thoại: <span>{state.userInfo && state.userInfo.phoneNumber}</span>
-                                    </h3>
-                                    <h3 className={cx('profile-info')}>
-                                        Tài khoản gmail: <span>{state.userInfo && state.userInfo.email}</span>
-                                    </h3>
-                                    <h3 className={cx('profile-info')}>
-                                        Địa chỉ: <span>{state.userInfo && state.userInfo.address}</span>
-                                    </h3>
+                                    {state.userInfo && (
+                                        <>
+                                            <h3 className={cx('profile-info')}>
+                                                Tên người dùng: <span>{state.userInfo.fullName}</span>
+                                            </h3>
+                                            <h3 className={cx('profile-info')}>
+                                                Tài khoản gmail: <span>{state.userInfo.email}</span>
+                                            </h3>
+                                            <h3 className={cx('profile-info')}>
+                                                Số điện thoại:
+                                                <span>{state.userInfo.phoneNumber}</span>
+                                            </h3>
+                                            <h3 className={cx('profile-info')}>
+                                                Địa chỉ: <span>{state.userInfo.address || 'Chưa có thông tin'}</span>
+                                            </h3>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </div>

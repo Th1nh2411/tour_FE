@@ -7,12 +7,6 @@ export const editProfile = async (body) => {
         return res;
     } catch (error) {
         console.log(error);
-        notification.open({
-            message: 'Thất bại',
-            description: error.response && error.response.data.message,
-            placement: 'bottomRight',
-            type: 'error',
-        });
     }
 };
 export const changePassword = async (body) => {
@@ -21,11 +15,5 @@ export const changePassword = async (body) => {
         return res;
     } catch (error) {
         console.log(error);
-        notification.open({
-            message: 'Thất bại',
-            description: error.response && error.response.data.message,
-            placement: 'bottomRight',
-            type: 'error',
-        });
     }
 };
