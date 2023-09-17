@@ -2,7 +2,7 @@ import styles from './Home.module.scss';
 import classNames from 'classnames/bind';
 import Image from '../../components/Image';
 import images from '../../assets/images';
-import { Button, Col, Input, InputNumber, Row, Skeleton, Spin } from 'antd';
+import { Button, Col, Form, Input, InputNumber, Row, Skeleton, Spin } from 'antd';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { StoreContext, actions } from '../../store';
 import { HiOutlineLocationMarker, HiOutlineMap, HiOutlineUsers } from 'react-icons/hi';
@@ -22,10 +22,20 @@ const cx = classNames.bind(styles);
 
 function Home() {
     const [loading, setLoading] = useState(false);
+    const [state, dispatch] = useContext(StoreContext);
     const navigate = useNavigate();
     const [featuredTours, setFeaturedTours] = useState();
     const [top8Reviews, setTop8Reviews] = useState();
     const [allGuide, setAllGuide] = useState();
+    const [feedbackForm] = Form.useForm();
+    const handleSendFeedback = async (values) => {
+        setLoading(true);
+        const results = await reviewService.sendFeedBack(values);
+        if (results) {
+            state.showToast('Thành công', results.message);
+        }
+        setLoading(false);
+    };
     const getFeaturedTour = async () => {
         setLoading(true);
         const results = await tourService.getFeaturedTours();
@@ -254,13 +264,23 @@ function Home() {
                         <h2 className={cx('mt-1')}>
                             Góp ý của quý khách có thể giúp chúng tôi có thể phục vụ tốt hơn trong tương lai.
                         </h2>
-                        <div className={cx('mt-2', 'd-flex')}>
-                            <TextArea placeholder="Bạn nghĩ gì về chúng tôi" size="large" />
+                        <Form form={feedbackForm} onFinish={handleSendFeedback}>
+                            <div className={cx('mt-2', 'd-flex')}>
+                                <Form.Item style={{ flex: 1 }} name="message">
+                                    <TextArea placeholder="Bạn nghĩ gì về chúng tôi" size="large" />
+                                </Form.Item>
 
-                            <Button type="primary" size="large" className={cx('ml-2')}>
-                                Gửi góp ý
-                            </Button>
-                        </div>
+                                <Button
+                                    loading={loading}
+                                    type="primary"
+                                    size="large"
+                                    className={cx('ml-2')}
+                                    htmlType="submit"
+                                >
+                                    Gửi góp ý
+                                </Button>
+                            </div>
+                        </Form>
                         <Image
                             src="https://www.allianz-partners.com/en_global/products/travel/_jcr_content/root/parsys/wrapper_copy/wrapper/image.img.82.3360.jpeg/1656941434579/travel-1800x600px.jpeg"
                             className={cx('w-100', 'mt-2')}
