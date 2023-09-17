@@ -18,8 +18,9 @@ function Provider({ children }) {
         });
     };
     const [searchParams, setSearchParams] = useSearchParams();
-    const userID = searchParams.get('id_user');
+    const id_user = searchParams.get('id_user');
     const activeID = searchParams.get('activeID');
+    const email = searchParams.get('email');
 
     const getUnpaidBooking = async () => {
         setTimeout(async () => {
@@ -41,10 +42,13 @@ function Provider({ children }) {
     console.log(state.userInfo);
     const activeAccount = async () => {
         setTimeout(async () => {
-            const results = await authService.activeAccount({ userID, activeID });
+            const results = await authService.activeAccount({ id_user, activeID, email });
             if (results) {
-                dispatch(actions.setUserInfo({ ...state.userInfo, isActive: true }));
-                showToast('Thông báo', 'Tài khoản của bạn đã được kích hoạt!', 'success');
+                if (state.userInfo) {
+                    dispatch(actions.setUserInfo({ ...state.userInfo, email }));
+                    Cookies.set('userInfo', JSON.stringify({ ...state.userInfo, email }));
+                }
+                showToast('Thông báo', results.message, 'success');
             }
         }, [2000]);
     };
@@ -52,7 +56,7 @@ function Provider({ children }) {
         if (state.userInfo) {
             getUnpaidBooking();
         }
-        if (userID && activeID) {
+        if (email && activeID) {
             activeAccount();
         }
     }, []);

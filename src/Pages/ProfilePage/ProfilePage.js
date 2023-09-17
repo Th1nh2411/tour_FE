@@ -123,37 +123,22 @@ function ProfilePage() {
                                             Đổi mật khẩu
                                         </Button>
                                     </Space>
-                                    <h3 className={cx('profile-info')}>
-                                        Tên người dùng: <span>{state.userInfo && state.userInfo.fullName}</span>
-                                    </h3>
-                                    <h3 className={cx('profile-info')}>
-                                        Tài khoản gmail: <span>{state.userInfo && state.userInfo.email}</span>
-                                    </h3>
-                                    <h3 className={cx('profile-info')}>
-                                        Số điện thoại: <span>{state.userInfo && state.userInfo.phoneNumber}</span>
-                                    </h3>
-                                    <h3 className={cx('profile-info')}>
-                                        Địa chỉ: <span>{state.userInfo && state.userInfo.address}</span>
-                                    </h3>
-                                    {state.userInfo && !state.userInfo.isActive && (
-                                        <Alert
-                                            showIcon
-                                            icon={<RiMailForbidFill />}
-                                            message={
-                                                <p>
-                                                    Tài khoản email của bạn chưa được{' '}
-                                                    <Popconfirm
-                                                        title="Gửi mail kích hoạt tài khoản"
-                                                        onConfirm={sendMailActive}
-                                                        okText="Gửi mail"
-                                                        cancelText="Quay lại"
-                                                    >
-                                                        <span className={cx('active-btn')}>kích hoạt</span>
-                                                    </Popconfirm>
-                                                </p>
-                                            }
-                                            type="error"
-                                        />
+                                    {state.userInfo && (
+                                        <>
+                                            <h3 className={cx('profile-info')}>
+                                                Tên người dùng: <span>{state.userInfo.fullName}</span>
+                                            </h3>
+                                            <h3 className={cx('profile-info')}>
+                                                Tài khoản gmail: <span>{state.userInfo.email}</span>
+                                            </h3>
+                                            <h3 className={cx('profile-info')}>
+                                                Số điện thoại:
+                                                <span>{state.userInfo.phoneNumber}</span>
+                                            </h3>
+                                            <h3 className={cx('profile-info')}>
+                                                Địa chỉ: <span>{state.userInfo.address || 'Chưa có thông tin'}</span>
+                                            </h3>
+                                        </>
                                     )}
                                 </div>
                             </div>

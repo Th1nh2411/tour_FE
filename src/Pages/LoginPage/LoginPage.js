@@ -18,7 +18,11 @@ function LoginPage() {
     const [state, dispatch] = useContext(StoreContext);
     const navigate = useNavigate();
     const [form] = useForm();
-
+    useEffect(() => {
+        if (state.userInfo) {
+            navigate(config.routes.home);
+        }
+    }, []);
     const [showForgot, setShowForgot] = useState(false);
     const login = async (values) => {
         const results = await authService.login(values);

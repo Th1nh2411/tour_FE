@@ -31,14 +31,13 @@ const ProfileForm = ({ showForm, onClose = () => {} }) => {
         setLoading(false);
         if (results) {
             state.showToast('Thành công', results.message);
-            if (userInfo.email !== values.email) {
-                dispatch(actions.setUserInfo({ ...userInfo, ...values, isActive: false }));
-                Cookies.set('userInfo', JSON.stringify({ ...userInfo, ...values, isActive: false }));
-            } else {
-                dispatch(actions.setUserInfo({ ...userInfo, ...values }));
-                Cookies.set('userInfo', JSON.stringify({ ...userInfo, ...values }));
-            }
-
+            dispatch(
+                actions.setUserInfo({
+                    ...userInfo,
+                    ...values,
+                    email: userInfo.email,
+                }),
+            );
             onClose(true);
         }
     };

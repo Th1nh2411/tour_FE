@@ -231,7 +231,7 @@ function TourDetail({}) {
                                     <Row gutter={12}>
                                         <Col span={16}>
                                             <Select
-                                                disabled={!state.userInfo || !state.userInfo.isActive}
+                                                disabled={!state.userInfo}
                                                 size="large"
                                                 className={cx('w-100')}
                                                 placeholder="Chọn kiểu thanh toán"
@@ -251,7 +251,7 @@ function TourDetail({}) {
                                         </Col>
                                         <Col span={8}>
                                             <InputNumber
-                                                disabled={!state.userInfo || !state.userInfo.isActive}
+                                                disabled={!state.userInfo}
                                                 max={tourData.availableSeats}
                                                 min="1"
                                                 onChange={(value) => setGuestSizeValue(value)}
@@ -278,22 +278,14 @@ function TourDetail({}) {
                                         </p>
                                     </div>
                                 </div>
-                                {(!state.userInfo || !state.userInfo.isActive) && (
-                                    <Alert
-                                        type="error"
-                                        message={
-                                            !state.userInfo
-                                                ? 'Vui lòng đăng nhập để đặt vé'
-                                                : 'Tài khoản chưa được kích hoạt'
-                                        }
-                                        banner
-                                    />
+                                {!state.userInfo && (
+                                    <Alert type="error" message={'Vui lòng đăng nhập để đặt vé'} banner />
                                 )}
                                 <Button
                                     onClick={() => setShowPolicy(true)}
                                     size="large"
                                     type="primary"
-                                    disabled={!state.userInfo || !state.userInfo.isActive}
+                                    disabled={!state.userInfo}
                                 >
                                     Đặt vé
                                 </Button>

@@ -2,26 +2,29 @@ import styles from './RegisterPage.module.scss';
 import classNames from 'classnames/bind';
 import Image from '../../components/Image';
 import images from '../../assets/images';
-import { useContext, useEffect, useState } from 'react';
-import { Button, Col, Form, Input, Row, Space, notification } from 'antd';
+import { Button, Col, Form, Input, Row } from 'antd';
 import { FaUser } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import config from '../../config';
 import * as authService from '../../services/authService';
+import { useContext, useEffect } from 'react';
+import { StoreContext } from '../../store';
 
 const cx = classNames.bind(styles);
 
 function RegisterPage() {
+    const [state, dispatch] = useContext(StoreContext);
     const navigate = useNavigate();
+    useEffect(() => {
+        if (state.userInfo) {
+            navigate(config.routes.home);
+        }
+    }, []);
     const register = async (values) => {
         const results = await authService.register(values);
         if (results) {
-            notification.open({
-                message: 'Success',
-                description: results.message,
-                placement: 'bottomRight',
-                type: 'success',
-            });
+            state.showToast('Thành công', results.message);
+
             navigate(config.routes.login);
         }
     };
