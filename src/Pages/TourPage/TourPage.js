@@ -29,22 +29,18 @@ function TourPage() {
     const [tourDetail, setTourDetail] = useState(null);
 
     const [resetQuery, setResetQuery] = useState(false);
+    const [searchQuery, setSearchQuery] = useState(searchQueryFromHome || {});
 
-    const getSearchTours = async (query = {}, reset) => {
+    const getSearchTours = async (query = {}) => {
         setLoading(true);
-        let results;
-        if (reset) {
-            results = await tourService.getSearchTours({ category: category && category._id });
-        } else {
-            results = await tourService.getSearchTours({
-                keyword: query.keyword,
-                availableSeats: query.availableSeats,
-                category: category && category._id,
-                page: currentPageTours - 1,
-                minDuration: query.duration ? 4 : 1,
-                maxDuration: query.duration ? 365 : 3,
-            });
-        }
+        const results = await tourService.getSearchTours({
+            keyword: query.keyword,
+            availableSeats: query.availableSeats,
+            category: category && category._id,
+            page: currentPageTours - 1,
+            minDuration: query.duration === 0 ? 1 : query.duration === 1 ? 4 : undefined,
+            maxDuration: query.duration === 0 ? 3 : query.duration === 1 ? 365 : undefined,
+        });
 
         setLoading(false);
         if ((query.keyword || query.availableSeats > 1) && currentPageTours === 1) {
@@ -55,29 +51,30 @@ function TourPage() {
     };
 
     useEffect(() => {
-        if (!searchQueryFromHome) {
-            setResetQuery(true);
-
-            setCurrentPageTours(1);
-            getSearchTours({}, true);
-        }
+        // if (category) {
+        setResetQuery(true);
+        setCurrentPageTours(1);
+        setSearchQuery({});
+        // getSearchTours();
+        // }
     }, [category]);
     useEffect(() => {
-        getSearchTours(searchQueryFromHome);
-    }, [currentPageTours]);
+        getSearchTours(searchQuery);
+    }, [currentPageTours, searchQuery]);
     return (
         <>
-            <TourForm
-                data={tourDetail}
-                showTourForm={showTourForm}
-                onClose={(edited) => {
-                    if (edited === true) {
-                        getSearchTours();
-                    }
-                    setShowTourForm(false);
-                    setTourDetail(null);
-                }}
-            />
+            {showTourForm && (
+                <TourForm
+                    data={tourDetail}
+                    onClose={(edited) => {
+                        if (edited === true) {
+                            getSearchTours();
+                        }
+                        setShowTourForm(false);
+                        setTourDetail(null);
+                    }}
+                />
+            )}
             <div>
                 <section className={cx('banner-section')}>
                     <div className={cx('banner-content')}>
@@ -89,9 +86,10 @@ function TourPage() {
                 </section>
                 <section className={cx('tour-section')}>
                     <SearchBar
-                        defaultValue={searchQueryFromHome}
+                        defaultValue={searchQuery}
                         onSearch={(query) => {
-                            getSearchTours(query);
+                            setSearchQuery(query);
+                            setCurrentPageTours(1);
                         }}
                         resetQuery={resetQuery}
                         doneReset={() => setResetQuery(false)}
@@ -107,10 +105,9 @@ function TourPage() {
                             <h4>Số lượng chuyến: {numTours}</h4>
                             <h4
                                 onClick={() => {
+                                    setSearchQuery({});
                                     setResetQuery(true);
-
                                     setCurrentPageTours(1);
-                                    getSearchTours({}, true);
                                 }}
                                 className={cx('undo-filter')}
                             >
