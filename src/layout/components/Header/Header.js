@@ -128,10 +128,30 @@ function Header() {
                                     </span>
                                 </Dropdown>
                             </NavLink>
+                            {userInfo && (
+                                <>
+                                    <NavLink
+                                        className={(nav) => cx('header-nav_item', 'mb-nav', { active: nav.isActive })}
+                                        to={config.routes.profile}
+                                    >
+                                        Trang cá nhân
+                                    </NavLink>
+                                    <div
+                                        onClick={() => {
+                                            navigate(config.routes.home);
+                                            handleLogOut();
+                                        }}
+                                        className={cx('header-nav_item')}
+                                        to={config.routes.home}
+                                    >
+                                        Đăng xuất
+                                    </div>
+                                </>
+                            )}
                         </nav>
                     </div>
                     {userInfo ? (
-                        <div className={cx('align-center')} size={'large'}>
+                        <div className={cx('header-actions')} size={'large'}>
                             <h3>{userInfo.fullName.split(' ').pop()}</h3>
                             <Dropdown
                                 menu={{
