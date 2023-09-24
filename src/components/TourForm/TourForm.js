@@ -1,28 +1,31 @@
 import PropTypes from 'prop-types';
 import styles from './TourForm.module.scss';
 import classNames from 'classnames/bind';
-import { AiFillCheckCircle, AiFillCloseCircle, AiFillExclamationCircle, AiFillInfoCircle } from 'react-icons/ai';
-import { useContext, useEffect, useRef, useState } from 'react';
+
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import * as tourService from '../../services/tourService';
 import * as categoryService from '../../services/categoryService';
 import * as uploadService from '../../services/uploadService';
+import * as guideService from '../../services/guideService';
 import {
     Button,
     Checkbox,
     Col,
     DatePicker,
+    Divider,
     Form,
     Input,
     InputNumber,
     Modal,
     Row,
+    Select,
     Skeleton,
     Space,
     Switch,
     Upload,
     message,
 } from 'antd';
-import { BsUpload } from 'react-icons/bs';
+import { BsDashCircle, BsPlusCircle, BsUpload } from 'react-icons/bs';
 import { StoreContext } from '../../store';
 import TextArea from 'antd/es/input/TextArea';
 import dayjs from 'dayjs';
@@ -35,6 +38,7 @@ const TourForm = ({ data, onClose = () => {} }) => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const [allCategories, setAllCategories] = useState(false);
+    const [allGuides, setAllGuides] = useState(false);
 
     const getCategories = async () => {
         const results = await categoryService.getAllCategory();
@@ -43,43 +47,57 @@ const TourForm = ({ data, onClose = () => {} }) => {
             setAllCategories(results.data);
         }
     };
+    const getGuides = async () => {
+        const results = await guideService.getAllGuide();
+
+        if (results) {
+            setAllGuides(results.data);
+        }
+    };
     useEffect(() => {
         getCategories();
+        getGuides();
     }, []);
     const addTour = async (values) => {
         setLoading(true);
-        const res = await uploadService.uploadFile(values.photo);
+        let res;
+        if (values.photo) {
+            res = await uploadService.uploadFile(values.photo.fileList[0].originFileObj);
+        }
         const results = await tourService.addTour({
             ...values,
-            photo: res.url,
+            startDate: values.date[0],
+            endDate: values.date[1],
+            availableSeats: values.maxSeats,
+            duration: values.date[1].diff(values.date[0], 'day'),
+            photo: res && res.url,
         });
         setLoading(false);
-        if (results.success) {
+        if (results) {
             state.showToast('Success', results.message);
+            onClose(true);
         }
-        onClose(true);
     };
     const editTour = async (values) => {
         setLoading(true);
-        const res = await uploadService.uploadFile(values.photo);
-        const results = await tourService.editTour({
-            ...values,
-            photo: res.url,
-        });
-        setLoading(false);
-        if (results.success) {
-            state.showToast('Success', results.message);
+        let res;
+        if (values.photo) {
+            res = await uploadService.uploadFile(values.photo.fileList[0].originFileObj);
         }
-        onClose(true);
+        const results = await tourService.editTour(
+            {
+                ...values,
+                photo: res && res.url,
+                tourName: values.tourName !== data.tourName ? values.tourName : undefined,
+            },
+            data._id,
+        );
+        setLoading(false);
+        if (results) {
+            state.showToast('Success', results.message);
+            onClose(true);
+        }
     };
-    // const handleChangeUpload = (info) => {
-    //     const { file, fileList } = info;
-    //     if (fileList[0]) {
-    //         setPhoto(fileList[0].originFileObj);
-    //     } else {
-    //         setPhoto(null);
-    //     }
-    // };
 
     const initFormValue = {
         tourName: data && data.tourName,
@@ -92,6 +110,9 @@ const TourForm = ({ data, onClose = () => {} }) => {
         duration: data && data.duration,
         maxSeats: data && data.maxSeats,
         date: data ? [dayjs(data.startDate), dayjs(data.endDate)] : [dayjs().add(1, 'day').hour(5).minute(0)],
+        category: data && data.category._id,
+        guide: data && data.guide._id,
+        itineraries: data && data.itineraries,
     };
     const disabledDate = (current) => {
         // Can not select days before today and today
@@ -99,94 +120,270 @@ const TourForm = ({ data, onClose = () => {} }) => {
     };
     const disabledTime = (current) => ({
         disabledHours: () => {
-            console.log(current);
             return current && current.format('DD/MM/YYYY') === dayjs().format('DD/MM/YYYY') ? range(0, 24) : [];
         },
     });
-    console.log(initFormValue);
     return (
         <Modal
-            // width={'auto'}
+            width={'auto'}
+            style={{ margin: '30px 0' }}
             centered
-            title={<h2 className={cx('text-center')}>{data ? 'Edit Tour' : 'Add Tour'}</h2>}
+            title={<h2 className={cx('text-center')}>{data ? 'Chỉnh sửa chuyến đi' : 'Thêm chuyến đi'}</h2>}
             open
-            okText="Confirm Edit"
-            okButtonProps={{
-                loading,
-            }}
-            onOk={data ? editTour : addTour}
             onCancel={() => {
                 form.setFieldsValue(['']);
                 onClose();
             }}
+            footer={false}
         >
-            <Form initialValues={initFormValue} form={form} layout="vertical" className={cx('mt-1')}>
-                <Form.Item name="tourName" label="Tên chuyến đi" md={12}>
-                    <Input size="large" className={cx('data-input')} placeholder="Nhập tên chuyến đi" />
-                </Form.Item>
-                <Form.Item name="address" label="Địa chỉ chuyến đi" md={12}>
-                    <Input size="large" className={cx('data-input')} placeholder="Nhập địa chỉ" />
-                </Form.Item>
-                <Form.Item name="description" label="Mô tả chuyến đi" md={12}>
-                    <TextArea size="large" className={cx('data-input')} placeholder="Nhập mô tả chuyến đi" />
-                </Form.Item>
+            <Form
+                onFinish={data ? editTour : addTour}
+                initialValues={initFormValue}
+                form={form}
+                layout="vertical"
+                className={cx('mt-1')}
+            >
+                <Row gutter={[24, 0]}>
+                    <Col md={12}>
+                        <Form.Item
+                            rules={[{ required: true, message: 'Vui lòng điền trường này' }]}
+                            name="tourName"
+                            label="Tên chuyến đi"
+                            md={12}
+                        >
+                            <Input size="large" className={cx('data-input')} placeholder="Nhập tên chuyến đi" />
+                        </Form.Item>
+                        <Form.Item
+                            rules={[{ required: true, message: 'Vui lòng điền trường này' }]}
+                            name="address"
+                            label="Địa chỉ chuyến đi"
+                            md={12}
+                        >
+                            <Input size="large" className={cx('data-input')} placeholder="Nhập địa chỉ" />
+                        </Form.Item>
+                        <Form.Item
+                            rules={[{ required: true, message: 'Vui lòng điền trường này' }]}
+                            name="description"
+                            label="Mô tả chuyến đi"
+                            md={12}
+                        >
+                            <TextArea size="large" className={cx('data-input')} placeholder="Nhập mô tả chuyến đi" />
+                        </Form.Item>
 
-                <Space size={'middle'}>
-                    <Form.Item name="maxSeats" label="Số vé">
-                        <InputNumber
-                            min={0}
-                            style={{ width: 60 }}
-                            // className={cx('w-100')}
-                            placeholder="Số vé"
-                            controls={false}
-                        />
-                    </Form.Item>
-                    <Form.Item name="price" label="Giá vé">
-                        <InputNumber
-                            min={0}
-                            // className={cx('w-100')}
-                            placeholder="Giá vé"
-                            controls={false}
-                            addonAfter="VNĐ"
-                            formatter={(value) => value.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-                        />
-                    </Form.Item>
-                    <Form.Item name="discount" label="Khuyến mãi">
-                        <InputNumber
-                            min={0}
-                            style={{ width: 90 }}
-                            placeholder="Khuyến mãi"
-                            controls={false}
-                            addonAfter="%"
-                        />
-                    </Form.Item>
+                        <Row gutter={[16, 0]}>
+                            <Col xs={12} sm={4}>
+                                <Form.Item
+                                    rules={[{ required: true, message: 'Vui lòng điền trường này' }]}
+                                    name="maxSeats"
+                                    label="Số vé"
+                                >
+                                    <InputNumber min={0} className={cx('w-100')} placeholder="Số vé" controls={false} />
+                                </Form.Item>
+                            </Col>
+                            <Col xs={12} sm={10}>
+                                <Form.Item
+                                    rules={[{ required: true, message: 'Vui lòng điền trường này' }]}
+                                    name="price"
+                                    label="Giá vé"
+                                >
+                                    <InputNumber
+                                        min={0}
+                                        className={cx('w-100')}
+                                        placeholder="Giá vé"
+                                        controls={false}
+                                        addonAfter="VNĐ"
+                                        formatter={(value) => value.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                        parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col xs={12} sm={6}>
+                                <Form.Item
+                                    rules={[{ required: true, message: 'Vui lòng điền trường này' }]}
+                                    name="discount"
+                                    label="Khuyến mãi"
+                                >
+                                    <InputNumber
+                                        className={cx('w-100')}
+                                        min={0}
+                                        placeholder="Khuyến mãi"
+                                        controls={false}
+                                        addonAfter="%"
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col xs={12} sm={4}>
+                                <Form.Item valuePropName="checked" name="featured" label="Featured">
+                                    <Switch />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                        <Space size={'middle'}>
+                            <Form.Item
+                                rules={[{ required: true, message: 'Vui lòng chọn trường này' }]}
+                                name="date"
+                                label="Thời gian khởi hành và kết thúc"
+                            >
+                                <RangePicker
+                                    disabledDate={disabledDate}
+                                    disabledTime={disabledTime}
+                                    size="large"
+                                    showTime={{
+                                        format: 'HH:mm',
+                                    }}
+                                    format="DD-MM-YYYY HH:mm"
+                                />
+                            </Form.Item>
+                            <Form.Item valuePropName="checked" name="status" label="Status">
+                                <Switch />
+                            </Form.Item>
+                        </Space>
+                    </Col>
+                    <Col md={12}>
+                        <Row gutter={[16, 0]}>
+                            <Col>
+                                <Form.Item
+                                    rules={[{ required: true, message: 'Vui lòng chọn trường này' }]}
+                                    style={{ flex: 1 }}
+                                    name="category"
+                                    label="Chọn kiểu du lịch"
+                                >
+                                    <Select
+                                        size="large"
+                                        className={cx('w-100')}
+                                        placeholder="Chọn kiểu du lịch"
+                                        options={
+                                            allCategories &&
+                                            allCategories.map((item) => ({
+                                                value: item._id,
+                                                label: item.categoryName,
+                                            }))
+                                        }
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col>
+                                <Form.Item
+                                    rules={[{ required: true, message: 'Vui lòng chọn trường này' }]}
+                                    style={{ flex: 1 }}
+                                    name="guide"
+                                    label="Chọn hướng dẫn viên"
+                                >
+                                    <Select
+                                        size="large"
+                                        className={cx('w-100')}
+                                        placeholder="Chọn hướng dẫn viên"
+                                        options={
+                                            allGuides &&
+                                            allGuides.map((item) => ({
+                                                value: item._id,
+                                                label: (
+                                                    <div>
+                                                        <p style={{ fontSize: 16 }}>{item.guideName}</p>
+                                                        <p style={{ color: '#999' }}>{item.languages}</p>
+                                                    </div>
+                                                ),
+                                            }))
+                                        }
+                                    />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                        <Form.Item label={'Hành trình chuyến đi'}>
+                            <Form.List
+                                name="itineraries"
+                                rules={[
+                                    {
+                                        validator: async (_, itineraries) => {
+                                            if (!itineraries || itineraries.length < 1) {
+                                                return Promise.reject(new Error('Phải có ít nhất 1 trường'));
+                                            }
+                                        },
+                                    },
+                                ]}
+                            >
+                                {(fields, { add, remove }, { errors }) => (
+                                    <>
+                                        {fields.map((field, index) => (
+                                            <Form.Item
+                                                // {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                                                required={false}
+                                                key={field.key}
+                                            >
+                                                <Form.Item
+                                                    {...field}
+                                                    validateTrigger={['onChange', 'onBlur']}
+                                                    rules={[
+                                                        {
+                                                            required: true,
+                                                            whitespace: true,
+                                                            message: 'Vui lòng nhập trường này hoặc xoá nó đi',
+                                                        },
+                                                    ]}
+                                                    noStyle
+                                                >
+                                                    <Input
+                                                        size="large"
+                                                        placeholder="Hành trình"
+                                                        style={{
+                                                            width: '85%',
+                                                        }}
+                                                    />
+                                                </Form.Item>
+                                                {fields.length > 1 ? (
+                                                    <BsDashCircle
+                                                        className={cx('dynamic-delete-button')}
+                                                        onClick={() => remove(field.name)}
+                                                    />
+                                                ) : null}
+                                            </Form.Item>
+                                        ))}
+                                        <Button
+                                            type="dashed"
+                                            onClick={() => add()}
+                                            style={{
+                                                width: '60%',
+                                            }}
+                                            icon={<BsPlusCircle />}
+                                        >
+                                            Thêm hành trình
+                                        </Button>
 
-                    <Form.Item valuePropName="checked" name="featured" label="Featured">
-                        <Switch />
-                    </Form.Item>
+                                        <Form.ErrorList errors={errors} />
+                                    </>
+                                )}
+                            </Form.List>
+                        </Form.Item>
+                        <Form.Item
+                            rules={[{ required: !data, message: 'Vui lòng chọn trường này' }]}
+                            name="photo"
+                            label="Tải ảnh chuyến đi"
+                        >
+                            <Upload
+                                beforeUpload={() => false}
+                                accept="image/*"
+                                maxCount={1}
+                                className={cx('data-input')}
+                            >
+                                <Button icon={<BsUpload />}>Upload image</Button>
+                            </Upload>
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Space className={cx('content-end')}>
+                    <Button
+                        onClick={() => {
+                            form.setFieldsValue(['']);
+                            onClose();
+                        }}
+                        size="large"
+                    >
+                        Huỷ bỏ
+                    </Button>
+                    <Button loading={loading} size="large" type="primary" htmlType="submit">
+                        Xác nhận
+                    </Button>
                 </Space>
-                <Space size={'middle'}>
-                    <Form.Item name="date" label="Thời gian khởi hành và kết thúc">
-                        <RangePicker
-                            disabledDate={disabledDate}
-                            disabledTime={disabledTime}
-                            size="large"
-                            showTime={{
-                                format: 'HH:mm',
-                            }}
-                            format="DD-MM-YYYY HH:mm"
-                        />
-                    </Form.Item>
-                    <Form.Item valuePropName="checked" name="status" label="Status">
-                        <Switch />
-                    </Form.Item>
-                </Space>
-                <Form.Item>
-                    <Upload accept="image/*" maxCount={1} className={cx('data-input')}>
-                        <Button icon={<BsUpload />}>Upload image</Button>
-                    </Upload>
-                </Form.Item>
             </Form>
         </Modal>
     );
