@@ -7,9 +7,11 @@ import { StoreContext, actions } from '../../store';
 import { Button, Col, Form, Row } from 'antd';
 import * as reviewService from '../../services/reviewService';
 import * as guideService from '../../services/guideService';
-import Slide from '../../components/Slide/Slide';
+import Slide from '../../components/Slide';
+import GuideForm from '../../components/GuideForm';
 import GuideItem from './GuideItem';
 import TextArea from 'antd/es/input/TextArea';
+import { BiPlusCircle } from 'react-icons/bi';
 const cx = classNames.bind(styles);
 
 function AboutUsPage() {
@@ -18,6 +20,9 @@ function AboutUsPage() {
     const [top8Reviews, setTop8Reviews] = useState();
     const [allGuide, setAllGuide] = useState();
     const [feedbackForm] = Form.useForm();
+
+    const [showGuideForm, setShowGuideForm] = useState(false);
+    const [guideDetail, setGuideDetail] = useState(null);
     const handleSendFeedback = async (values) => {
         setLoading(true);
         const results = await reviewService.sendFeedBack(values);
@@ -43,85 +48,117 @@ function AboutUsPage() {
         getAllGuide();
     }, []);
     return (
-        <div className={cx('wrapper')}>
-            <section className={cx('banner-section')}>
-                <div className={cx('banner-content')}>
-                    <div className={cx('banner-title')}>Về chúng tôi</div>
-                </div>
-            </section>
-            <section className={cx('section-wrapper')}>
-                <h3 className={cx('section-slogan')}>
-                    <span className={cx('slogan-text')}>Đồng hành</span>
-                </h3>
-                <h2 className={cx('mt-1')}>Những hướng dẫn viên tận tâm và đầy kinh nghiệm từ đội ngũ của chúng tôi</h2>
-                <Slide className={cx('mt-2')} navigation={false} numItemPerSlide={3} autoPlay>
-                    {allGuide && allGuide.map((item, index) => <GuideItem key={index} data={item} />)}
-                </Slide>
-            </section>
-            <section className={cx('section-wrapper')}>
-                <h3 className={cx('section-slogan')}>
-                    <span className={cx('slogan-text')}>Đánh giá</span>
-                </h3>
-                <h2 className={cx('mt-1')}>Những gì khách hàng đánh giá</h2>
-                <Slide className={cx('mt-2')} navigation={false} numItemPerSlide={3} autoPlay>
-                    {top8Reviews &&
-                        top8Reviews.map((item, index) => (
-                            <div key={index} className={cx('review-item')}>
-                                <p className={cx('review-comment')}>{item.comment}</p>
-                                <div className={cx('review-customer')}>
-                                    <Image src={item.tourInfo.photo} className={cx('review-img')} />
+        <>
+            {showGuideForm && (
+                <GuideForm
+                    data={guideDetail}
+                    onClose={(edited) => {
+                        if (edited === true) {
+                            getAllGuide();
+                        }
+                        setShowGuideForm(false);
+                        setGuideDetail(null);
+                    }}
+                />
+            )}
+            <div className={cx('wrapper')}>
+                <section className={cx('banner-section')}>
+                    <div className={cx('banner-content')}>
+                        <div className={cx('banner-title')}>Về chúng tôi</div>
+                    </div>
+                </section>
+                <section className={cx('section-wrapper')}>
+                    <h3 className={cx('section-slogan')}>
+                        <span className={cx('slogan-text')}>Đồng hành</span>
+                    </h3>
+                    <h2 className={cx('mt-1')}>
+                        Những hướng dẫn viên tận tâm và đầy kinh nghiệm từ đội ngũ của chúng tôi
+                    </h2>
+                    {state.userInfo && state.userInfo.role === 'admin' && (
+                        <h4 onClick={() => setShowGuideForm(true)} className={cx('add-btn')}>
+                            <BiPlusCircle className={cx('add-icon')} />
+                            Thêm HDV mới
+                        </h4>
+                    )}
+                    <Slide className={cx('mt-2')} navigation={false} numItemPerSlide={3} autoPlay>
+                        {allGuide &&
+                            allGuide.map((item, index) => (
+                                <GuideItem
+                                    key={index}
+                                    onEdit={() => {
+                                        setGuideDetail(item);
+                                        setShowGuideForm(true);
+                                    }}
+                                    data={item}
+                                />
+                            ))}
+                    </Slide>
+                </section>
+                <section className={cx('section-wrapper')}>
+                    <h3 className={cx('section-slogan')}>
+                        <span className={cx('slogan-text')}>Đánh giá</span>
+                    </h3>
+                    <h2 className={cx('mt-1')}>Những gì khách hàng đánh giá</h2>
+                    <Slide className={cx('mt-2')} navigation={false} numItemPerSlide={3} autoPlay>
+                        {top8Reviews &&
+                            top8Reviews.map((item, index) => (
+                                <div key={index} className={cx('review-item')}>
+                                    <p className={cx('review-comment')}>{item.comment}</p>
+                                    <div className={cx('review-customer')}>
+                                        <Image src={item.tourInfo.photo} className={cx('review-img')} />
 
-                                    <div>
-                                        {item.userInfo && (
-                                            <h3 className={cx('customer-name')}>{item.userInfo.fullName}</h3>
-                                        )}
-                                        <p className={cx('review-tourName')}>{item.tourInfo.tourName}</p>
+                                        <div>
+                                            {item.userInfo && (
+                                                <h3 className={cx('customer-name')}>{item.userInfo.fullName}</h3>
+                                            )}
+                                            <p className={cx('review-tourName')}>{item.tourInfo.tourName}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
-                </Slide>
-            </section>
-            <section className={cx('section-wrapper')}>
-                <Row gutter={[15, 15]} align={'middle'}>
-                    <Col xs={24} md={12}>
-                        <h3 className={cx('section-slogan')}>
-                            <span className={cx('slogan-text')}>Góp ý</span>
-                        </h3>
-                        <h2 className={cx('mt-1')}>
-                            Góp ý của quý khách có thể giúp chúng tôi có thể phục vụ tốt hơn trong tương lai.
-                        </h2>
-                        <Form form={feedbackForm} onFinish={handleSendFeedback}>
-                            <div className={cx('mt-2', 'd-flex')}>
-                                <Form.Item style={{ flex: 1 }} name="message">
-                                    <TextArea placeholder="Bạn nghĩ gì về chúng tôi" size="large" />
-                                </Form.Item>
+                            ))}
+                    </Slide>
+                </section>
+                <section className={cx('section-wrapper')}>
+                    <Row gutter={[15, 15]} align={'middle'}>
+                        <Col xs={24} md={12}>
+                            <h3 className={cx('section-slogan')}>
+                                <span className={cx('slogan-text')}>Góp ý</span>
+                            </h3>
+                            <h2 className={cx('mt-1')}>
+                                Góp ý của quý khách có thể giúp chúng tôi có thể phục vụ tốt hơn trong tương lai.
+                            </h2>
+                            <Form form={feedbackForm} onFinish={handleSendFeedback}>
+                                <div className={cx('mt-2', 'd-flex')}>
+                                    <Form.Item style={{ flex: 1 }} name="message">
+                                        <TextArea placeholder="Bạn nghĩ gì về chúng tôi" size="large" />
+                                    </Form.Item>
 
-                                <Button
-                                    loading={loading}
-                                    type="primary"
-                                    size="large"
-                                    className={cx('ml-2')}
-                                    htmlType="submit"
-                                >
-                                    Gửi góp ý
-                                </Button>
-                            </div>
-                        </Form>
-                        <Image
-                            src="https://www.allianz-partners.com/en_global/products/travel/_jcr_content/root/parsys/wrapper_copy/wrapper/image.img.82.3360.jpeg/1656941434579/travel-1800x600px.jpeg"
-                            className={cx('w-100', 'mt-2')}
-                        />
-                    </Col>
-                    <Col xs={0} md={12}>
-                        <Image
-                            src="https://res.cloudinary.com/dgsumh8ih/image/upload/v1694494492/8934044_4022795_gakypn.jpg"
-                            className={cx('w-100')}
-                        />
-                    </Col>
-                </Row>
-            </section>
-        </div>
+                                    <Button
+                                        loading={loading}
+                                        type="primary"
+                                        size="large"
+                                        className={cx('ml-2')}
+                                        htmlType="submit"
+                                    >
+                                        Gửi góp ý
+                                    </Button>
+                                </div>
+                            </Form>
+                            <Image
+                                src="https://www.allianz-partners.com/en_global/products/travel/_jcr_content/root/parsys/wrapper_copy/wrapper/image.img.82.3360.jpeg/1656941434579/travel-1800x600px.jpeg"
+                                className={cx('w-100', 'mt-2')}
+                            />
+                        </Col>
+                        <Col xs={0} md={12}>
+                            <Image
+                                src="https://res.cloudinary.com/dgsumh8ih/image/upload/v1694494492/8934044_4022795_gakypn.jpg"
+                                className={cx('w-100')}
+                            />
+                        </Col>
+                    </Row>
+                </section>
+            </div>
+        </>
     );
 }
 

@@ -141,7 +141,7 @@ function Header() {
                                             navigate(config.routes.home);
                                             handleLogOut();
                                         }}
-                                        className={cx('header-nav_item')}
+                                        className={cx('header-nav_item', 'mb-nav')}
                                         to={config.routes.home}
                                     >
                                         Đăng xuất

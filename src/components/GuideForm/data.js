@@ -1,0 +1,25 @@
+const GUIDE_FORM_DATA = {
+    languages: [
+        'Tiếng Anh',
+        'Tiếng Tây Ban Nha',
+        'Tiếng Trung Quốc',
+        'Tiếng Ả Rập',
+        'Tiếng Hindi',
+        'Tiếng Pháp',
+        'Tiếng Nga',
+        'Tiếng Bồ Đào Nha',
+        'Tiếng Đức',
+        'Tiếng Nhật',
+        'Tiếng Hàn Quốc',
+        'Tiếng Ý',
+        'Tiếng Hà Lan',
+        'Tiếng Thụy Điển',
+        'Tiếng Đan Mạch',
+        'Tiếng Thái Lan',
+        'Tiếng Việt',
+        'Tiếng Ả Rập',
+        'Tiếng Thổ Nhĩ Kỳ',
+        'Tiếng Hy Lạp',
+    ],
+};
+export default GUIDE_FORM_DATA;

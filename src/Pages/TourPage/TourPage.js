@@ -95,9 +95,9 @@ function TourPage() {
                         doneReset={() => setResetQuery(false)}
                     />
                     {state.userInfo && state.userInfo.role === 'admin' && (
-                        <h4 onClick={() => setShowTourForm(true)} className={cx('add-tour')}>
-                            <BiPlusCircle className={cx('add-btn')} />
-                            Add tour
+                        <h4 onClick={() => setShowTourForm(true)} className={cx('add-btn')}>
+                            <BiPlusCircle className={cx('add-icon')} />
+                            Thêm chuyến mới
                         </h4>
                     )}
                     <Skeleton loading={loading}>

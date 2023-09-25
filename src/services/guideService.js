@@ -2,9 +2,6 @@ import { notification } from 'antd';
 import * as httpRequest from '../utils/httpRequest';
 
 export const getAllGuide = async (body) => {
-    // const config = {
-    //     headers: { access_token: token },
-    // };
     try {
         const res = await httpRequest.get(`guide`);
         return res;
@@ -13,9 +10,6 @@ export const getAllGuide = async (body) => {
     }
 };
 export const getDetailGuide = async (id) => {
-    // const config = {
-    //     headers: { access_token: token },
-    // };
     try {
         const res = await httpRequest.get(`guide/${id}`);
         return res;
@@ -25,9 +19,6 @@ export const getDetailGuide = async (id) => {
 };
 // Admin
 export const createGuide = async (body) => {
-    // const config = {
-    //     headers: { access_token: token },
-    // };
     try {
         const res = await httpRequest.post(`guide`, body);
         return res;
@@ -35,10 +26,7 @@ export const createGuide = async (body) => {
         console.log(error);
     }
 };
-export const updateGuide = async (id, body) => {
-    // const config = {
-    //     headers: { access_token: token },
-    // };
+export const updateGuide = async (body, id) => {
     try {
         const res = await httpRequest.put(`guide/${id}`, body);
         return res;
