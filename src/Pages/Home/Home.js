@@ -5,19 +5,14 @@ import images from '../../assets/images';
 import { Button, Col, Form, Input, InputNumber, Row, Skeleton, Spin } from 'antd';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { StoreContext, actions } from '../../store';
-import { HiOutlineLocationMarker, HiOutlineMap, HiOutlineUsers } from 'react-icons/hi';
 import { BiSearch } from 'react-icons/bi';
 import Slide from '../../components/Slide';
 import * as tourService from '../../services/tourService';
-import * as reviewService from '../../services/reviewService';
-import * as guideService from '../../services/guideService';
 import HOME_DATA from './data';
 import TourItem from '../../components/TourItem/TourItem';
 import { Link, useNavigate } from 'react-router-dom';
 import config from '../../config';
 import SearchBar from '../../components/SearchBar/SearchBar';
-import TextArea from 'antd/es/input/TextArea';
-import GuideItem from './GuideItem';
 const cx = classNames.bind(styles);
 
 function Home() {
@@ -25,17 +20,7 @@ function Home() {
     const [state, dispatch] = useContext(StoreContext);
     const navigate = useNavigate();
     const [featuredTours, setFeaturedTours] = useState();
-    const [top8Reviews, setTop8Reviews] = useState();
-    const [allGuide, setAllGuide] = useState();
-    const [feedbackForm] = Form.useForm();
-    const handleSendFeedback = async (values) => {
-        setLoading(true);
-        const results = await reviewService.sendFeedBack(values);
-        if (results) {
-            state.showToast('Thành công', results.message);
-        }
-        setLoading(false);
-    };
+
     const getFeaturedTour = async () => {
         setLoading(true);
         const results = await tourService.getFeaturedTours();
@@ -44,22 +29,9 @@ function Home() {
         }
         setLoading(false);
     };
-    const getTop8Reviews = async () => {
-        const results = await reviewService.getTop8Review();
-        if (results) {
-            setTop8Reviews(results.data);
-        }
-    };
-    const getAllGuide = async () => {
-        const results = await guideService.getAllGuide();
-        if (results) {
-            setAllGuide(results.data);
-        }
-    };
+
     useEffect(() => {
         getFeaturedTour();
-        getTop8Reviews();
-        getAllGuide();
     }, []);
     return (
         <div className={cx('wrapper')}>
@@ -220,78 +192,6 @@ function Home() {
                             <Image className={cx('gallery-img')} src={item} />
                         </Col>
                     ))}
-                </Row>
-            </section>
-            <section>
-                <h3 className={cx('section-slogan')}>
-                    <span className={cx('slogan-text')}>Đồng hành</span>
-                </h3>
-                <h2 className={cx('mt-1')}>Những hướng dẫn viên tận tâm và đầy kinh nghiệm từ đội ngũ của chúng tôi</h2>
-                <Slide className={cx('mt-2')} navigation={false} numItemPerSlide={3} autoPlay>
-                    {allGuide && allGuide.map((item, index) => <GuideItem key={index} data={item} />)}
-                </Slide>
-            </section>
-            <section>
-                <h3 className={cx('section-slogan')}>
-                    <span className={cx('slogan-text')}>Đánh giá</span>
-                </h3>
-                <h2 className={cx('mt-1')}>Những gì khách hàng đánh giá</h2>
-                <Slide className={cx('mt-2')} navigation={false} numItemPerSlide={3} autoPlay>
-                    {top8Reviews &&
-                        top8Reviews.map((item, index) => (
-                            <div key={index} className={cx('review-item')}>
-                                <p className={cx('review-comment')}>{item.comment}</p>
-                                <div className={cx('review-customer')}>
-                                    <Image src={item.tourInfo.photo} className={cx('review-img')} />
-
-                                    <div>
-                                        {item.userInfo && (
-                                            <h3 className={cx('customer-name')}>{item.userInfo.fullName}</h3>
-                                        )}
-                                        <p className={cx('review-tourName')}>{item.tourInfo.tourName}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                </Slide>
-            </section>
-            <section>
-                <Row gutter={[15, 15]} align={'middle'}>
-                    <Col xs={24} md={12}>
-                        <h3 className={cx('section-slogan')}>
-                            <span className={cx('slogan-text')}>Góp ý</span>
-                        </h3>
-                        <h2 className={cx('mt-1')}>
-                            Góp ý của quý khách có thể giúp chúng tôi có thể phục vụ tốt hơn trong tương lai.
-                        </h2>
-                        <Form form={feedbackForm} onFinish={handleSendFeedback}>
-                            <div className={cx('mt-2', 'd-flex')}>
-                                <Form.Item style={{ flex: 1 }} name="message">
-                                    <TextArea placeholder="Bạn nghĩ gì về chúng tôi" size="large" />
-                                </Form.Item>
-
-                                <Button
-                                    loading={loading}
-                                    type="primary"
-                                    size="large"
-                                    className={cx('ml-2')}
-                                    htmlType="submit"
-                                >
-                                    Gửi góp ý
-                                </Button>
-                            </div>
-                        </Form>
-                        <Image
-                            src="https://www.allianz-partners.com/en_global/products/travel/_jcr_content/root/parsys/wrapper_copy/wrapper/image.img.82.3360.jpeg/1656941434579/travel-1800x600px.jpeg"
-                            className={cx('w-100', 'mt-2')}
-                        />
-                    </Col>
-                    <Col xs={0} md={12}>
-                        <Image
-                            src="https://res.cloudinary.com/dgsumh8ih/image/upload/v1694494492/8934044_4022795_gakypn.jpg"
-                            className={cx('w-100')}
-                        />
-                    </Col>
                 </Row>
             </section>
         </div>

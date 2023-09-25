@@ -1,4 +1,4 @@
-import styles from './Home.module.scss';
+import styles from './AboutUsPage.module.scss';
 import classNames from 'classnames/bind';
 import Image from '../../components/Image';
 import { useState } from 'react';
