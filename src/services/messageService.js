@@ -1,17 +1,17 @@
 import { notification } from 'antd';
 import * as httpRequest from '../utils/httpRequest';
 
-export const getAllMessage = async () => {
+export const getSupportMessage = async () => {
     try {
-        const res = await httpRequest.get(`messenger`);
+        const res = await httpRequest.get(`messenger/support`);
         return res;
     } catch (error) {
         console.log(error);
     }
 };
-export const sendMessage = async (body) => {
+export const sendSupportMessage = async (body) => {
     try {
-        const res = await httpRequest.post(`messenger`, body);
+        const res = await httpRequest.post(`messenger/support`, body);
         return res;
     } catch (error) {
         console.log(error);
