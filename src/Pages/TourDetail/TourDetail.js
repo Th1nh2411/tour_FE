@@ -22,7 +22,7 @@ import {
     Modal,
 } from 'antd';
 import { HiLocationMarker } from 'react-icons/hi';
-import { useLocation, useNavigate } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import { BsFillStarFill, BsPeople } from 'react-icons/bs';
 import { AiOutlineFieldTime } from 'react-icons/ai';
 import * as bookingService from '../../services/bookingService';
@@ -37,7 +37,6 @@ const cx = classNames.bind(styles);
 
 function TourDetail({}) {
     const [state, dispatch] = useContext(StoreContext);
-    const tourId = useLocation().state;
     const [tourData, setTourData] = useState({});
     const [guestSize, setGuestSizeValue] = useState(1);
     const [flag, setFlagValue] = useState(2);
@@ -47,6 +46,7 @@ function TourDetail({}) {
     const [loading, setLoading] = useState(false);
     const [bookLoading, setBookLoading] = useState(false);
     const [currentPageReview, setCurrentPageReview] = useState(1);
+    const { idTour } = useParams();
 
     const payment = async () => {
         setBookLoading(true);
@@ -63,8 +63,8 @@ function TourDetail({}) {
 
     const getTourData = async () => {
         setLoading(true);
-        const results = await tourService.getDetailTour(tourId);
-        const results2 = await reviewService.getAllReview(tourId, currentPageReview - 1);
+        const results = await tourService.getDetailTour(idTour);
+        const results2 = await reviewService.getAllReview(idTour, currentPageReview - 1);
         if (results) {
             setTourData(results.data);
         }

@@ -174,12 +174,7 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
                 background: `url(${bookingDetail && bookingDetail.tourInfo.photo}) center / cover no-repeat`,
             }}
             extra={
-                <Button
-                    type="primary"
-                    onClick={() =>
-                        navigate(`/tour/${bookingDetail.tourInfo._id}`, { state: bookingDetail.tourInfo._id })
-                    }
-                >
+                <Button type="primary" onClick={() => navigate(`/tour/${bookingDetail.tourInfo._id}`)}>
                     Đặt lại
                 </Button>
             }

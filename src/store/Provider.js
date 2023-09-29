@@ -39,7 +39,6 @@ function Provider({ children }) {
         getUnpaidBooking,
     };
     const [state, dispatch] = useReducer(reducer, initState);
-    console.log(state.userInfo);
     const activeAccount = async () => {
         setTimeout(async () => {
             const results = await authService.activeAccount({ id_user, activeID, email });
