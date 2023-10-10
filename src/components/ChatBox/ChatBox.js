@@ -13,25 +13,14 @@ const cx = classNames.bind(styles);
 
 function ChatBox({ className, open, onClose = () => {} }) {
     const [state, dispatch] = useContext(StoreContext);
+    const userInfo = state.userInfo;
     const [loading, setLoading] = useState();
-    const [load, setLoad] = useState(false);
+    const [load, setLoad] = useState(true);
     const [message, setMessage] = useState('');
-    const [conversation, setConversation] = useState([]);
+    const [conversation, setConversation] = useState();
+    const [listUser, setListUser] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
 
-    const getMessage = async () => {
-        setLoading(true);
-        const results = await messageService.getSupportMessage();
-
-        setLoading(false);
-    };
-    useEffect(() => {
-        if (state.userInfo) {
-            getMessage();
-        } else {
-            onClose();
-            state.showToast('Vui lòng đăng nhập', '', 'info');
-        }
-    }, []);
     const onChangeSend = (e) => {
         const value = e.target.value;
         setMessage(value);
@@ -65,18 +54,10 @@ function ChatBox({ className, open, onClose = () => {} }) {
 
     //Hàm này dùng để gửi tin nhắn
     const handlerSend = () => {
-        //Nếu User chưa bấm vào thì không thể gửi được
-
-        //Gọi hàm formaticon đã tạo sẵn để xử lý
-
-        //Khi gửi tin nhắn thì nó sẽ lấy id của cả 2 người
-        //Với cái key category có value là send
-        //Vì là gửi tin nhắn
         const data = {
             message,
         };
 
-        //Sau đó nó emit dữ liệu lên server bằng socket với key send_message và value data
         socket.emit('send_message', data);
 
         //Tiếp theo nó sẽ postdata lên api đưa dữ liệu vào database
@@ -95,19 +76,26 @@ function ChatBox({ className, open, onClose = () => {} }) {
 
         setMessage('');
     };
+    const getListUser = async () => {
+        //Tiếp theo nó sẽ postdata lên api đưa dữ liệu vào database
+        const response = await messageService.getListUser();
 
-    //Đây là hàm lấy dữ liệu từ api dựa vào state load
+        if (response) {
+            setListUser(response.data);
+        }
+        //Sau đó gọi hàm setLoad để useEffect lấy lại dữ liệu sau khi update
+    };
     useEffect(() => {
         if (load) {
-            const fetchData = async () => {
-                const response = await messageService.getSupportMessage();
+            const getMessage = async () => {
+                const response = await messageService.getSupportMessage({ currentPage });
 
                 if (response) {
                     setConversation(response.data);
                 }
             };
 
-            fetchData();
+            getMessage();
         }
 
         setLoad(false);
@@ -116,13 +104,13 @@ function ChatBox({ className, open, onClose = () => {} }) {
     useEffect(() => {
         //Nhận dữ liệu từ server gửi lên thông qua socket với key receive_message
         socket.on('receive_message', (data) => {
-            //Sau đó nó sẽ setLoad gọi lại hàm useEffect lấy lại dữ liệu
             setLoad(true);
         });
+        getListUser();
     }, []);
     return (
         <Drawer
-            // width={700}
+            width={'auto'}
             title={
                 <p className={cx('align-center')} style={{ fontSize: 22, color: 'white' }}>
                     Hỗ trợ khách hàng <FaHeadset style={{ marginLeft: 8 }} />
@@ -139,15 +127,31 @@ function ChatBox({ className, open, onClose = () => {} }) {
             }}
         >
             <Skeleton loading={loading}>
-                <div className={cx('message-wrapper')}>
-                    <FcAssistant className={cx('message-avatar')} />
-                    <div className={cx('message-content')}>Chào bạn, bạn cần giúp đỡ?</div>
-                </div>
-                <div className={cx('message-wrapper', 'active')}>
-                    <div className={cx('message-content')}>Đúng vạy</div>
+                <div className={cx('d-flex')}>
+                    <div className={cx('list-user')}>
+                        {listUser &&
+                            listUser.map((user, index) => (
+                                <div key={index} className={cx('user-item')}>
+                                    {user.fullName}
+                                </div>
+                            ))}
+                    </div>
+                    <div style={{ width: 324 }}>
+                        {conversation &&
+                            conversation.map((item, index) => (
+                                <div
+                                    key={index}
+                                    className={cx('message-wrapper', { active: item.sender === userInfo._id })}
+                                >
+                                    {item.sender !== userInfo._id && <FcAssistant className={cx('message-avatar')} />}
+                                    <div className={cx('message-content')}>{item.message}</div>
+                                </div>
+                            ))}
+                    </div>
                 </div>
                 <div className={cx('message-input')}>
                     <Input
+                        onPressEnter={handlerSend}
                         value={message}
                         onChange={onChangeSend}
                         placeholder="Aa"

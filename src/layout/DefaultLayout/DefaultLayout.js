@@ -24,7 +24,17 @@ function DefaultLayout({ children }) {
             {showChat && <ChatBox open={showChat} onClose={() => setShowChat(false)} />}
             <FloatButton.Group>
                 <FloatButton.BackTop />
-                <FloatButton onClick={() => setShowChat(true)} icon={<FaCommentDots />} type="primary" />
+                <FloatButton
+                    onClick={() => {
+                        if (state.userInfo) {
+                            setShowChat(true);
+                        } else {
+                            state.showToast('Vui lòng đăng nhập', '', 'info');
+                        }
+                    }}
+                    icon={<FaCommentDots />}
+                    type="primary"
+                />
             </FloatButton.Group>
             <div className={cx('wrapper')}>
                 <Header />
