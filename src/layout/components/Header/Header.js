@@ -142,7 +142,6 @@ function Header() {
                                             handleLogOut();
                                         }}
                                         className={cx('header-nav_item', 'mb-nav')}
-                                        to={config.routes.home}
                                     >
                                         Đăng xuất
                                     </div>
