@@ -10,3 +10,9 @@ Logining with user, you can view tour details, book tour, payment, change profil
 username: user1, user2, user3
 
 password: 123456
+
+* Demo user account :
+
+username: admin
+
+password: 123456
