@@ -61,7 +61,7 @@ function Search() {
                 render={(attrs) => (
                     <>
                         <div className={cx('search-result')} tabIndex="-1">
-                            <h4 className={cx('search-title')}>Recipes</h4>
+                            <h4 className={cx('search-title')}>Recipes</Title>
                             {searchResult.map((data) => (
                                 <div>Item</div>
                             ))}

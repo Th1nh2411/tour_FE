@@ -2,16 +2,17 @@ import styles from './Footer.module.scss';
 import classNames from 'classnames/bind';
 import images from '../../../assets/images';
 import Image from '../../../components/Image/Image';
-import { Col, Row } from 'antd';
+import { Col, Layout, Row, Typography } from 'antd';
 import { FaFacebookF, FaLinkedinIn, FaPhoneAlt, FaYoutube } from 'react-icons/fa';
 import { IoLocationSharp, IoMail } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import config from '../../../config';
 const cx = classNames.bind(styles);
+const { Title, Paragraph, Text } = Typography;
 
 function Footer() {
     return (
-        <footer className={cx('wrapper')}>
+        <Layout.Footer className={cx('wrapper')}>
             <div className={cx('inner')}>
                 <Row className={cx('g-3')} gutter={[32, 32]}>
                     <Col xs={24} sm={12} lg={6}>
@@ -21,7 +22,7 @@ function Footer() {
                                 Trải nghiệm và tạo nên nhiều hành trình đáng nhớ cùng Holidate.
                             </div>
                             <div className={cx('follow-wrapper')}>
-                                <h4>Theo dõi chúng tôi :</h4>
+                                <Title level={4}>Theo dõi chúng tôi :</Title>
                                 <div className={cx('list-icons')}>
                                     <FaFacebookF className={cx('social-icon')} />
                                     <FaLinkedinIn className={cx('social-icon')} />
@@ -34,13 +35,13 @@ function Footer() {
                         <div className={cx('info-wrapper')}>
                             <div className={cx('info-title')}>Khám phá</div>
                             <Link to={config.routes.home} className={cx('info-subtitle')}>
-                                Trang chủ
+                                <Title level={5}>Trang chủ</Title>
                             </Link>
                             <Link to={config.routes.aboutUs} className={cx('info-subtitle')}>
-                                Về chúng tôi
+                                <Title level={5}>Về chúng tôi</Title>
                             </Link>
                             <Link to={config.routes.tour} className={cx('info-subtitle')}>
-                                Du lịch
+                                <Title level={5}>Du lịch</Title>
                             </Link>
                         </div>
                     </Col>
@@ -48,13 +49,13 @@ function Footer() {
                         <div className={cx('info-wrapper')}>
                             <div className={cx('info-title')}>Tìm hiểu</div>
                             <Link to={config.routes.aboutUs} className={cx('info-subtitle')}>
-                                Bộ sưu tập
+                                <Title level={5}>Bộ sưu tập</Title>
                             </Link>
                             <Link to={config.routes.login} className={cx('info-subtitle')}>
-                                Đăng nhập
+                                <Title level={5}>Đăng nhập</Title>
                             </Link>
                             <Link to={config.routes.register} className={cx('info-subtitle')}>
-                                Đăng ký
+                                <Title level={5}>Đăng ký</Title>
                             </Link>
                         </div>
                     </Col>
@@ -78,7 +79,7 @@ function Footer() {
                 </Row>
             </div>
             <div className={cx('license-wrapper')}>© Copyright 2023 - Empowered by ducthnh2411</div>
-        </footer>
+        </Layout.Footer>
     );
 }
 

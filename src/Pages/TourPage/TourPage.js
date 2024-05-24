@@ -5,7 +5,7 @@ import images from '../../assets/images';
 import { useContext, useEffect, useState } from 'react';
 import { StoreContext, actions } from '../../store';
 import config from '../../config';
-import { Col, Input, InputNumber, Modal, Pagination, Row, Skeleton } from 'antd';
+import { Col, Input, InputNumber, Modal, Pagination, Row, Skeleton, Typography } from 'antd';
 import { HiOutlineLocationMarker, HiOutlineMap, HiOutlineUsers } from 'react-icons/hi';
 import * as tourService from '../../services/tourService';
 import { BiPlusCircle, BiSearch } from 'react-icons/bi';
@@ -13,6 +13,7 @@ import TourItem from '../../components/TourItem/TourItem';
 import { useLocation } from 'react-router';
 import TourForm from '../../components/TourForm';
 import SearchBar from '../../components/SearchBar/SearchBar';
+const { Title, Paragraph, Text } = Typography;
 const cx = classNames.bind(styles);
 
 function TourPage() {
@@ -29,93 +30,95 @@ function TourPage() {
     const [tourDetail, setTourDetail] = useState(null);
 
     const [resetQuery, setResetQuery] = useState(false);
+    const [searchQuery, setSearchQuery] = useState(searchQueryFromHome || {});
 
-    const getSearchTours = async (query = {}, reset) => {
+    const getSearchTours = async (query = {}) => {
         setLoading(true);
-        let results;
-        if (reset) {
-            results = await tourService.getSearchTours({ category: category && category._id });
-        } else {
-            results = await tourService.getSearchTours({
-                keyword: query.keyword,
-                availableSeats: query.availableSeats,
-                category: category && category._id,
-                page: currentPageTours - 1,
-                minDuration: query.duration ? 4 : 1,
-                maxDuration: query.duration ? 365 : 3,
-            });
-        }
+        const results = await tourService.getSearchTours({
+            keyword: query.keyword,
+            availableSeats: query.availableSeats,
+            category: category && category._id,
+            page: currentPageTours - 1,
+            minDuration: query.duration === 0 ? 1 : query.duration === 1 ? 4 : undefined,
+            maxDuration: query.duration === 0 ? 3 : query.duration === 1 ? 365 : undefined,
+        });
 
-        setLoading(false);
-        if ((query.keyword || query.availableSeats > 1) && currentPageTours === 1) {
-            state.showToast('Thành công', `Tìm thấy ` + results.count + ' chuyến phù hợp');
+        if (results) {
+            setLoading(false);
+            if ((query.keyword || query.availableSeats > 1) && currentPageTours === 1) {
+                state.showToast('Thành công', `Tìm thấy ` + results.count + ' chuyến phù hợp');
+            }
+            setListTours(results.data);
+            setNumTours(results.count);
         }
-        setListTours(results.data);
-        setNumTours(results.count);
     };
 
     useEffect(() => {
-        if (!searchQueryFromHome) {
-            setResetQuery(true);
-
-            setCurrentPageTours(1);
-            getSearchTours({}, true);
-        }
+        // if (category) {
+        setResetQuery(true);
+        setCurrentPageTours(1);
+        setSearchQuery({});
+        // getSearchTours();
+        // }
     }, [category]);
     useEffect(() => {
-        getSearchTours(searchQueryFromHome);
-    }, [currentPageTours]);
+        getSearchTours(searchQuery);
+    }, [currentPageTours, searchQuery]);
     return (
         <>
-            <TourForm
-                data={tourDetail}
-                showTourForm={showTourForm}
-                onClose={(edited) => {
-                    if (edited === true) {
-                        getSearchTours();
-                    }
-                    setShowTourForm(false);
-                    setTourDetail(null);
-                }}
-            />
+            {showTourForm && (
+                <TourForm
+                    data={tourDetail}
+                    onClose={(edited) => {
+                        if (edited === true) {
+                            getSearchTours();
+                        }
+                        setShowTourForm(false);
+                        setTourDetail(null);
+                    }}
+                />
+            )}
             <div>
                 <section className={cx('banner-section')}>
                     <div className={cx('banner-content')}>
                         <div className={cx('banner-title')}>
                             {(category && category.categoryName) || 'Danh sách Tất Cả Tour'}
                         </div>
-                        <h4 className={cx('banner-desc')}>{category && category.description}</h4>
+                        <Title level={4} className={cx('banner-desc')}>
+                            {category && category.description}
+                        </Title>
                     </div>
                 </section>
                 <section className={cx('tour-section')}>
                     <SearchBar
-                        defaultValue={searchQueryFromHome}
+                        defaultValue={searchQuery}
                         onSearch={(query) => {
-                            getSearchTours(query);
+                            setSearchQuery(query);
+                            setCurrentPageTours(1);
                         }}
                         resetQuery={resetQuery}
                         doneReset={() => setResetQuery(false)}
                     />
                     {state.userInfo && state.userInfo.role === 'admin' && (
-                        <h4 onClick={() => setShowTourForm(true)} className={cx('add-tour')}>
-                            <BiPlusCircle className={cx('add-btn')} />
-                            Add tour
-                        </h4>
+                        <Title onClick={() => setShowTourForm(true)} className={cx('add-btn')}>
+                            <BiPlusCircle className={cx('add-icon')} />
+                            Thêm chuyến mới
+                        </Title>
                     )}
                     <Skeleton loading={loading}>
                         <div className={cx('align-end', 'content-between')}>
-                            <h4>Số lượng chuyến: {numTours}</h4>
-                            <h4
+                            <Title level={5}>Số lượng chuyến: {numTours}</Title>
+                            <Title
+                                level={5}
                                 onClick={() => {
+                                    setSearchQuery({});
                                     setResetQuery(true);
-
                                     setCurrentPageTours(1);
-                                    getSearchTours({}, true);
                                 }}
                                 className={cx('undo-filter')}
                             >
                                 Bỏ lọc
-                            </h4>
+                            </Title>
                         </div>
                         <Row style={{ marginTop: 5 }} gutter={[20, 20]}>
                             {listTours ? (
@@ -131,7 +134,7 @@ function TourPage() {
                                     </Col>
                                 ))
                             ) : (
-                                <h3>No tour found</h3>
+                                <Title level={3}>No tour found</Title>
                             )}
                         </Row>
                     </Skeleton>

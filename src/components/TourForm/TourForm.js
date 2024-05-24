@@ -1,200 +1,391 @@
 import PropTypes from 'prop-types';
 import styles from './TourForm.module.scss';
 import classNames from 'classnames/bind';
-import { AiFillCheckCircle, AiFillCloseCircle, AiFillExclamationCircle, AiFillInfoCircle } from 'react-icons/ai';
-import { useContext, useEffect, useRef, useState } from 'react';
+
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import * as tourService from '../../services/tourService';
+import * as categoryService from '../../services/categoryService';
 import * as uploadService from '../../services/uploadService';
-import { Button, Checkbox, Col, Form, Input, InputNumber, Modal, Row, Space, Upload, message } from 'antd';
-import { BsUpload } from 'react-icons/bs';
+import * as guideService from '../../services/guideService';
+import {
+    Button,
+    Checkbox,
+    Col,
+    DatePicker,
+    Divider,
+    Form,
+    Input,
+    InputNumber,
+    Modal,
+    Row,
+    Select,
+    Skeleton,
+    Space,
+    Switch,
+    Typography,
+    Upload,
+    message,
+} from 'antd';
+import { BsDashCircle, BsPlusCircle, BsUpload } from 'react-icons/bs';
 import { StoreContext } from '../../store';
+import TextArea from 'antd/es/input/TextArea';
+import dayjs from 'dayjs';
+import { range } from 'lodash-es';
+const { RangePicker } = DatePicker;
+const { Title, Paragraph, Text } = Typography;
 const cx = classNames.bind(styles);
 
-const TourForm = ({ data, showTourForm, onClose = () => {} }) => {
+const TourForm = ({ data, onClose = () => {} }) => {
     const [state, dispatch] = useContext(StoreContext);
-    const [title, setTitle] = useState(data ? data.title : '');
-    const [address, setAddress] = useState(data ? data.address : '');
-    const [city, setCity] = useState(data ? data.city : '');
-    const [maxGroupSize, setMaxGroupSize] = useState(data ? data.maxGroupSize : '');
-    const [distance, setDistance] = useState(data ? data.distance : '');
-    const [price, setPrice] = useState(data ? data.price : '');
-    const [desc, setDesc] = useState(data ? data.desc : '');
-    const [featured, setFeatured] = useState(data ? data.featured : false);
-    const [photo, setPhoto] = useState(null);
+    const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
-    useEffect(() => {
-        if (data) {
-            setTitle(data.title);
-            setAddress(data.address);
-            setCity(data.city);
-            setMaxGroupSize(data.maxGroupSize);
-            setDistance(data.distance);
-            setPrice(data.price);
-            setDesc(data.desc);
-            setFeatured(data.featured);
-        } else {
-            setTitle('');
-            setAddress('');
-            setCity('');
-            setMaxGroupSize('');
-            setDistance('');
-            setPrice('');
-            setDesc('');
-            setFeatured(false);
+    const [allCategories, setAllCategories] = useState(false);
+    const [allGuides, setAllGuides] = useState(false);
+
+    const getCategories = async () => {
+        const results = await categoryService.getAllCategory();
+
+        if (results) {
+            setAllCategories(results.data);
         }
-        setPhoto(null);
-    }, [data]);
-    const addTour = async () => {
+    };
+    const getGuides = async () => {
+        const results = await guideService.getAllGuide();
+
+        if (results) {
+            setAllGuides(results.data);
+        }
+    };
+    useEffect(() => {
+        getCategories();
+        getGuides();
+    }, []);
+    const addTour = async (values) => {
         setLoading(true);
-        const res = await uploadService.uploadFile(photo);
+        let res;
+        if (values.photo) {
+            res = await uploadService.uploadFile(values.photo.fileList[0].originFileObj);
+        }
         const results = await tourService.addTour({
-            title,
-            address,
-            city,
-            maxGroupSize,
-            distance,
-            price,
-            desc,
-            featured,
-            photo: res.url,
+            ...values,
+            startDate: values.date[0],
+            endDate: values.date[1],
+            availableSeats: values.maxSeats,
+            duration: values.date[1].diff(values.date[0], 'day'),
+            photo: res && res.url,
         });
         setLoading(false);
-        if (results.success) {
+        if (results) {
             state.showToast('Success', results.message);
-        } else {
-            state.showToast('Thất bại', results.message, 'error');
+            onClose(true);
         }
-        onClose(true);
     };
-    const editTour = async () => {
+    const editTour = async (values) => {
         setLoading(true);
-        const res = await uploadService.uploadFile(photo);
+        let res;
+        if (values.photo) {
+            res = await uploadService.uploadFile(values.photo.fileList[0].originFileObj);
+        }
         const results = await tourService.editTour(
             {
-                title,
-                address,
-                city,
-                maxGroupSize,
-                distance,
-                price,
-                desc,
-                featured,
-                photo: res.url,
+                ...values,
+                photo: res && res.url,
+                tourName: values.tourName !== data.tourName ? values.tourName : undefined,
             },
             data._id,
         );
         setLoading(false);
-        if (results.success) {
+        if (results) {
             state.showToast('Success', results.message);
-        } else {
-            state.showToast('Thất bại', results.message, 'error');
-        }
-        onClose(true);
-    };
-    const handleChangeUpload = (info) => {
-        const { file, fileList } = info;
-        if (fileList[0]) {
-            setPhoto(fileList[0].originFileObj);
-        } else {
-            setPhoto(null);
+            onClose(true);
         }
     };
+
+    const initFormValue = {
+        tourName: data && data.tourName,
+        address: data && data.address,
+        description: data && data.description,
+        discount: data && data.discount,
+        price: data && data.price,
+        featured: data && data.featured,
+        status: data && data.status,
+        duration: data && data.duration,
+        maxSeats: data && data.maxSeats,
+        date: data ? [dayjs(data.startDate), dayjs(data.endDate)] : [dayjs().add(1, 'day').hour(5).minute(0)],
+        category: data && data.category._id,
+        guide: data && data.guide._id,
+        itineraries: data && data.itineraries,
+    };
+    const disabledDate = (current) => {
+        // Can not select days before today and today
+        return current && current < dayjs().endOf('day');
+    };
+    const disabledTime = (current) => ({
+        disabledHours: () => {
+            return current && current.format('DD/MM/YYYY') === dayjs().format('DD/MM/YYYY') ? range(0, 24) : [];
+        },
+    });
     return (
         <Modal
-            // width={'auto'}
-            title={<h2 className={cx('text-center')}>{data ? 'Edit Tour' : 'Add Tour'}</h2>}
-            open={showTourForm}
-            okText="Confirm Edit"
-            okButtonProps={{
-                loading,
+            width={'auto'}
+            style={{ margin: '30px 0' }}
+            centered
+            title={<Title className={cx('text-center')}>{data ? 'Chỉnh sửa chuyến đi' : 'Thêm chuyến đi'}</Title>}
+            open
+            onCancel={() => {
+                form.setFieldsValue(['']);
+                onClose();
             }}
-            onOk={data ? editTour : addTour}
-            onCancel={onClose}
+            footer={false}
         >
-            <Form layout="vertical" className={cx('mt-2')}>
-                <Form.Item label="Address" md={12}>
-                    <Input
-                        size="large"
-                        value={address}
-                        className={cx('data-input')}
-                        placeholder="Address"
-                        onChange={(e) => setAddress(e.target.value)}
-                    />
-                </Form.Item>
-                <Form.Item label="City" md={12}>
-                    <Input
-                        size="large"
-                        value={city}
-                        className={cx('data-input')}
-                        placeholder="City"
-                        onChange={(e) => setCity(e.target.value)}
-                    />
-                </Form.Item>
+            <Form
+                onFinish={data ? editTour : addTour}
+                initialValues={initFormValue}
+                form={form}
+                layout="vertical"
+                className={cx('mt-1')}
+            >
+                <Row gutter={[24, 0]}>
+                    <Col md={12}>
+                        <Form.Item
+                            rules={[{ required: true, message: 'Vui lòng điền trường này' }]}
+                            name="tourName"
+                            label="Tên chuyến đi"
+                            md={12}
+                        >
+                            <Input size="large" className={cx('data-input')} placeholder="Nhập tên chuyến đi" />
+                        </Form.Item>
+                        <Form.Item
+                            rules={[{ required: true, message: 'Vui lòng điền trường này' }]}
+                            name="address"
+                            label="Địa chỉ chuyến đi"
+                            md={12}
+                        >
+                            <Input size="large" className={cx('data-input')} placeholder="Nhập địa chỉ" />
+                        </Form.Item>
+                        <Form.Item
+                            rules={[{ required: true, message: 'Vui lòng điền trường này' }]}
+                            name="description"
+                            label="Mô tả chuyến đi"
+                            md={12}
+                        >
+                            <TextArea size="large" className={cx('data-input')} placeholder="Nhập mô tả chuyến đi" />
+                        </Form.Item>
 
-                <Form.Item label="Title" md={12}>
-                    <Input
-                        size="large"
-                        value={title}
-                        className={cx('data-input')}
-                        placeholder="Title"
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
-                </Form.Item>
-                <Form.Item className={cx('data-input')} label="Description" md={12}>
-                    <Input
-                        size="large"
-                        value={desc}
-                        placeholder="Description"
-                        onChange={(e) => setDesc(e.target.value)}
-                    />
-                </Form.Item>
-                <Space align="end">
-                    <Form.Item label="Max People">
-                        <InputNumber
-                            value={maxGroupSize}
-                            // className={cx('w-100')}
-                            placeholder="Max People"
-                            onChange={(value) => setMaxGroupSize(value)}
-                        />
-                    </Form.Item>
-                    <Form.Item label="Distance">
-                        <InputNumber
-                            value={distance}
-                            placeholder="Distance"
-                            onChange={(value) => setDistance(value)}
-                            controls={false}
-                            addonAfter="km"
-                        />
-                    </Form.Item>
-                    <Form.Item label="Price">
-                        <InputNumber
-                            value={price}
-                            prefix="$"
-                            // className={cx('w-100')}
-                            placeholder="Price"
-                            onChange={(value) => setPrice(value)}
-                            controls={false}
-                        />
-                    </Form.Item>
-                    <Form.Item>
-                        <Checkbox checked={featured} onChange={() => setFeatured(!featured)}>
-                            Featured
-                        </Checkbox>
-                    </Form.Item>
-                </Space>
+                        <Row gutter={[16, 0]}>
+                            <Col xs={12} sm={4}>
+                                <Form.Item
+                                    rules={[{ required: true, message: 'Vui lòng điền trường này' }]}
+                                    name="maxSeats"
+                                    label="Số vé"
+                                >
+                                    <InputNumber min={0} className={cx('w-100')} placeholder="Số vé" controls={false} />
+                                </Form.Item>
+                            </Col>
+                            <Col xs={12} sm={10}>
+                                <Form.Item
+                                    rules={[{ required: true, message: 'Vui lòng điền trường này' }]}
+                                    name="price"
+                                    label="Giá vé"
+                                >
+                                    <InputNumber
+                                        min={0}
+                                        className={cx('w-100')}
+                                        placeholder="Giá vé"
+                                        controls={false}
+                                        addonAfter="VNĐ"
+                                        formatter={(value) => value.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                        parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col xs={12} sm={6}>
+                                <Form.Item
+                                    rules={[{ required: true, message: 'Vui lòng điền trường này' }]}
+                                    name="discount"
+                                    label="Khuyến mãi"
+                                >
+                                    <InputNumber
+                                        className={cx('w-100')}
+                                        min={0}
+                                        placeholder="Khuyến mãi"
+                                        controls={false}
+                                        addonAfter="%"
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col xs={12} sm={4}>
+                                <Form.Item valuePropName="checked" name="featured" label="Featured">
+                                    <Switch />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                        <Space size={'middle'}>
+                            <Form.Item
+                                rules={[{ required: true, message: 'Vui lòng chọn trường này' }]}
+                                name="date"
+                                label="Thời gian khởi hành và kết thúc"
+                            >
+                                <RangePicker
+                                    disabledDate={disabledDate}
+                                    disabledTime={disabledTime}
+                                    size="large"
+                                    showTime={{
+                                        format: 'HH:mm',
+                                    }}
+                                    format="DD-MM-YYYY HH:mm"
+                                />
+                            </Form.Item>
+                            <Form.Item valuePropName="checked" name="status" label="Status">
+                                <Switch />
+                            </Form.Item>
+                        </Space>
+                    </Col>
+                    <Col md={12}>
+                        <Row gutter={[16, 0]}>
+                            <Col>
+                                <Form.Item
+                                    rules={[{ required: true, message: 'Vui lòng chọn trường này' }]}
+                                    style={{ flex: 1 }}
+                                    name="category"
+                                    label="Chọn kiểu du lịch"
+                                >
+                                    <Select
+                                        size="large"
+                                        className={cx('w-100')}
+                                        placeholder="Chọn kiểu du lịch"
+                                        options={
+                                            allCategories &&
+                                            allCategories.map((item) => ({
+                                                value: item._id,
+                                                label: item.categoryName,
+                                            }))
+                                        }
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col>
+                                <Form.Item
+                                    rules={[{ required: true, message: 'Vui lòng chọn trường này' }]}
+                                    style={{ flex: 1 }}
+                                    name="guide"
+                                    label="Chọn hướng dẫn viên"
+                                >
+                                    <Select
+                                        size="large"
+                                        className={cx('w-100')}
+                                        placeholder="Chọn hướng dẫn viên"
+                                        options={
+                                            allGuides &&
+                                            allGuides.map((item) => ({
+                                                value: item._id,
+                                                label: (
+                                                    <div>
+                                                        <Text style={{ fontSize: 16 }}>{item.guideName}</Text>
+                                                        <Text style={{ color: '#999' }}>{item.languages}</Text>
+                                                    </div>
+                                                ),
+                                            }))
+                                        }
+                                    />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                        <Form.Item label={'Hành trình chuyến đi'}>
+                            <Form.List
+                                name="itineraries"
+                                rules={[
+                                    {
+                                        validator: async (_, itineraries) => {
+                                            if (!itineraries || itineraries.length < 1) {
+                                                return Promise.reject(new Error('Phải có ít nhất 1 trường'));
+                                            }
+                                        },
+                                    },
+                                ]}
+                            >
+                                {(fields, { add, remove }, { errors }) => (
+                                    <>
+                                        {fields.map((field, index) => (
+                                            <Form.Item
+                                                // {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                                                required={false}
+                                                key={field.key}
+                                            >
+                                                <Form.Item
+                                                    {...field}
+                                                    validateTrigger={['onChange', 'onBlur']}
+                                                    rules={[
+                                                        {
+                                                            required: true,
+                                                            whitespace: true,
+                                                            message: 'Vui lòng nhập trường này hoặc xoá nó đi',
+                                                        },
+                                                    ]}
+                                                    noStyle
+                                                >
+                                                    <Input
+                                                        size="large"
+                                                        placeholder="Hành trình"
+                                                        style={{
+                                                            width: '85%',
+                                                        }}
+                                                    />
+                                                </Form.Item>
+                                                {fields.length > 1 ? (
+                                                    <BsDashCircle
+                                                        className={cx('dynamic-delete-button')}
+                                                        onClick={() => remove(field.name)}
+                                                    />
+                                                ) : null}
+                                            </Form.Item>
+                                        ))}
+                                        <Button
+                                            type="dashed"
+                                            onClick={() => add()}
+                                            style={{
+                                                width: '60%',
+                                            }}
+                                            icon={<BsPlusCircle />}
+                                        >
+                                            Thêm hành trình
+                                        </Button>
 
-                <Form.Item>
-                    <Upload
-                        fileList={photo && [photo]}
-                        beforeUpload={() => false}
-                        accept="image/*"
-                        maxCount={1}
-                        className={cx('data-input')}
-                        onChange={handleChangeUpload}
+                                        <Form.ErrorList errors={errors} />
+                                    </>
+                                )}
+                            </Form.List>
+                        </Form.Item>
+                        <Form.Item
+                            rules={[{ required: !data, message: 'Vui lòng chọn trường này' }]}
+                            name="photo"
+                            label="Tải ảnh chuyến đi"
+                        >
+                            <Upload
+                                beforeUpload={() => false}
+                                accept="image/*"
+                                maxCount={1}
+                                className={cx('data-input')}
+                            >
+                                <Button icon={<BsUpload />}>Upload image</Button>
+                            </Upload>
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Space className={cx('content-end')}>
+                    <Button
+                        onClick={() => {
+                            form.setFieldsValue(['']);
+                            onClose();
+                        }}
+                        size="large"
                     >
-                        <Button icon={<BsUpload />}>Upload image</Button>
-                    </Upload>
-                </Form.Item>
+                        Huỷ bỏ
+                    </Button>
+                    <Button loading={loading} size="large" type="primary" htmlType="submit">
+                        Xác nhận
+                    </Button>
+                </Space>
             </Form>
         </Modal>
     );

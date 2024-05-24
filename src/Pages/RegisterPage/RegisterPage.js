@@ -2,13 +2,14 @@ import styles from './RegisterPage.module.scss';
 import classNames from 'classnames/bind';
 import Image from '../../components/Image';
 import images from '../../assets/images';
-import { Button, Col, Form, Input, Row } from 'antd';
+import { Button, Col, Form, Input, Row, Typography } from 'antd';
 import { FaUser } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import config from '../../config';
 import * as authService from '../../services/authService';
 import { useContext, useEffect } from 'react';
 import { StoreContext } from '../../store';
+const { Title, Paragraph, Text } = Typography;
 
 const cx = classNames.bind(styles);
 
@@ -54,7 +55,9 @@ function RegisterPage() {
                                     className={cx('form-logo')}
                                 />
                             </div>
-                            <h1 className={cx('form-title')}>Tạo tài khoản</h1>
+                            <Title level={1} className={cx('form-title')}>
+                                Tạo tài khoản
+                            </Title>
                             <Form
                                 labelCol={{
                                     span: 8,
@@ -160,12 +163,12 @@ function RegisterPage() {
                                     </Button>
                                 </Form.Item>
                             </Form>
-                            <h3 className={cx('option-title')}>
+                            <Title level={3} className={cx('option-title')}>
                                 Đã có tài khoản?{' '}
-                                <span>
+                                <Text>
                                     <Link to={config.routes.login}>Đăng nhập</Link>
-                                </span>
-                            </h3>
+                                </Text>
+                            </Title>
                         </div>
                     </Col>
                 </Row>

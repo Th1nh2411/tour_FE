@@ -51,7 +51,8 @@
 }
 
 :root {
-    --primary-color: #faa935;
+    --primary-color: #0f6691;
+    --dark-color: #200738;
     --radial-gradient-bg: linear-gradient(45deg, #27be70 0%, #0c713d 100%);
     --radial-gradient-bg-2: linear-gradient(45deg, #0c713d 0%, #27be70 100%);
     --secondary-color: rgb(95, 95, 95);
@@ -114,7 +115,6 @@ input::placeholder {
 
 a[href] {
     text-decoration: none;
-    color: #333;
 }
 .text-center {
     text-align: center;
@@ -195,9 +195,9 @@ section {
     background-color: var(--primary-color);
     color: #fff;
 }
-.ant-col {
-    font-family: 'Nunito', sans-serif;
-}
+// .ant-col {
+//     font-family: 'Nunito', sans-serif;
+// }
 
 .add-item {
     animation: shakeUp 0.3s forwards ease-in-out;

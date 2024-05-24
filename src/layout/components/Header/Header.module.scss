@@ -1,5 +1,4 @@
 .wrapper {
-    background: #fff;
     position: fixed;
     top: 0;
     left: 0;
@@ -143,15 +142,24 @@
 .cart-title {
     display: none;
 }
-@media (max-width: 992px) {
+.mb-nav {
+    display: none;
+}
+@media (max-width: 1092px) {
     .logo-wrapper {
         display: none;
     }
 }
 @media (max-width: 810px) {
+    .mb-nav {
+        display: block;
+    }
+    .header-actions {
+        width: 100%;
+        justify-content: center;
+    }
     .wrapper {
         display: none;
-        background-color: #fff;
         width: 400px;
         height: 100%;
         right: 0;

@@ -3,9 +3,10 @@ import styles from './ProfilePage.module.scss';
 import classNames from 'classnames/bind';
 import { useContext, useEffect, useRef, useState } from 'react';
 import * as profileService from '../../services/profileService';
-import { Button, Checkbox, Col, Form, Input, InputNumber, Modal, Row, Space, Upload, message } from 'antd';
+import { Button, Checkbox, Col, Form, Input, InputNumber, Modal, Row, Space, Typography, Upload, message } from 'antd';
 import { StoreContext, actions } from '../../store';
 const cx = classNames.bind(styles);
+const { Title, Paragraph, Text } = Typography;
 
 const ChangePwForm = ({ showForm, onClose = () => {} }) => {
     const [state, dispatch] = useContext(StoreContext);
@@ -30,7 +31,7 @@ const ChangePwForm = ({ showForm, onClose = () => {} }) => {
                 form.resetFields();
                 onClose();
             }}
-            title={<h2 className={cx('text-center')}>Đổi mật khẩu</h2>}
+            title={<Title className={cx('text-center')}>Đổi mật khẩu</Title>}
             open={showForm}
             footer={null}
         >

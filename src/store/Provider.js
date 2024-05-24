@@ -34,12 +34,12 @@ function Provider({ children }) {
 
     const initState = {
         userInfo: JSON.parse(Cookies.get('userInfo') || null),
+        theme: 'dark',
         showToast,
         unpaidBooking: null,
         getUnpaidBooking,
     };
     const [state, dispatch] = useReducer(reducer, initState);
-    console.log(state.userInfo);
     const activeAccount = async () => {
         setTimeout(async () => {
             const results = await authService.activeAccount({ id_user, activeID, email });

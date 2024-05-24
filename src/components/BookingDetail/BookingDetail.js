@@ -4,11 +4,12 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import styles from './BookingDetail.module.scss';
 import { redirect, useNavigate } from 'react-router';
 import { StoreContext } from '../../store';
-import { Alert, Badge, Button, Descriptions, Divider, Drawer, Popconfirm, Space } from 'antd';
+import { Alert, Badge, Button, Descriptions, Divider, Drawer, Popconfirm, Space, Typography } from 'antd';
 import * as bookingService from '../../services/bookingService';
 import dayjs from 'dayjs';
 import { priceFormat } from '../../utils/format';
 import RefundPolicy from '../RefundPolicy/RefundPolicy';
+const { Title, Paragraph, Text } = Typography;
 
 const cx = classNames.bind(styles);
 
@@ -74,7 +75,7 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
             children: bookingDetail && (
                 <div>
                     {bookingDetail.tourInfo.itineraries.map((item, index) => (
-                        <p key={index}>{item}</p>
+                        <Text key={index}>{item}</Text>
                     ))}
                 </div>
             ),
@@ -163,7 +164,7 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
     return (
         <Drawer
             width={700}
-            title={<p style={{ fontSize: 22 }}>Chi tiết chuyến đi</p>}
+            title={<Text style={{ fontSize: 22 }}>Chi tiết chuyến đi</Text>}
             onClose={onClose}
             open={bookingDetail}
             className={cx('wrapper', className)}
@@ -174,17 +175,14 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
                 background: `url(${bookingDetail && bookingDetail.tourInfo.photo}) center / cover no-repeat`,
             }}
             extra={
-                <Button
-                    type="primary"
-                    onClick={() =>
-                        navigate(`/tour/${bookingDetail.tourInfo._id}`, { state: bookingDetail.tourInfo._id })
-                    }
-                >
+                <Button type="primary" onClick={() => navigate(`/tour/${bookingDetail.tourInfo._id}`)}>
                     Đặt lại
                 </Button>
             }
         >
-            <h3 style={{ fontSize: 18 }}>Thông tin khách hàng</h3>
+            <Title level={3} style={{ fontSize: 18 }}>
+                Thông tin khách hàng
+            </Title>
             <Descriptions
                 size="small"
                 column={2}
@@ -192,13 +190,19 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
                 // title={}
             />
             <Divider style={{ margin: '15px 0' }} />
-            <h3 style={{ fontSize: 18 }}>Thông tin chuyến đi</h3>
+            <Title level={3} style={{ fontSize: 18 }}>
+                Thông tin chuyến đi
+            </Title>
             <Descriptions size="small" column={2} items={tourInfo} />
             <Divider style={{ margin: '15px 0' }} />
-            <h3 style={{ fontSize: 18 }}>Thông tin đặt vé</h3>
+            <Title level={3} style={{ fontSize: 18 }}>
+                Thông tin đặt vé
+            </Title>
             <Descriptions size="small" column={2} items={bookingInfo} />
             <Divider style={{ margin: '15px 0' }} />
-            <h3 style={{ fontSize: 18 }}>Chính sách huỷ vé</h3>
+            <Title level={3} style={{ fontSize: 18 }}>
+                Chính sách huỷ vé
+            </Title>
             <RefundPolicy />
         </Drawer>
     );

@@ -1,5 +1,5 @@
 .wrapper {
-    border-radius: 30px;
+    border-radius: 20px;
     box-shadow: 1px 5px 20px 0px rgba(17, 12, 46, 0.15);
     margin: 0 auto 30px;
     padding: 0.6rem 2.5rem;
@@ -8,6 +8,7 @@
 .search-item {
     display: flex;
     align-items: center;
+    gap: 10px;
     .icon {
         color: #ee6e6e;
         font-size: 3rem;
@@ -24,12 +25,10 @@
         width: auto;
         font-weight: 600;
         font-size: 1.6rem;
-        color: #666;
 
         input {
             font-weight: 600;
             font-size: 1.6rem;
-            color: #666;
         }
     }
 }

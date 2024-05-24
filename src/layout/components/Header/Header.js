@@ -6,11 +6,12 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import config from '../../../config';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { StoreContext, actions } from '../../../store';
-import { Badge, Button, Dropdown, Input, Space, Tooltip } from 'antd';
+import { Badge, Button, Dropdown, Layout, Typography } from 'antd';
 import { MdArrowDropDown, MdOutlineClose, MdOutlineMenu, MdTour } from 'react-icons/md';
 import { IoLogOut, IoPerson } from 'react-icons/io5';
 import * as categoryService from '../../../services/categoryService';
 import Cookies from 'js-cookie';
+const { Title, Paragraph, Text } = Typography;
 const cx = classNames.bind(styles);
 
 function Header() {
@@ -76,23 +77,23 @@ function Header() {
             key: '1',
             label: (
                 <Badge dot={state.unpaidBooking}>
-                    <p style={{ fontSize: '1.6rem' }}>Trang cá nhân</p>
+                    <Text style={{ fontSize: '1.6rem' }}>Trang cá nhân</Text>
                 </Badge>
             ),
             icon: <IoPerson style={{ fontSize: '1.8rem' }} />,
         },
         {
             key: '2',
-            label: <p style={{ fontSize: '1.6rem' }}>Đăng xuất</p>,
+            label: <Text style={{ fontSize: '1.6rem' }}>Đăng xuất</Text>,
             icon: <IoLogOut style={{ fontSize: '1.8rem' }} />,
         },
     ];
     return (
         <>
-            <header className={cx('wrapper', { active: showMenuMb })}>
+            <Layout.Header className={cx('wrapper', { active: showMenuMb })}>
                 <div className={cx('inner')}>
                     <div className={cx('logo-wrapper')}>
-                        <Link to={config.routes.home}>
+                        <Link to={config.routes.home} className="d-flex">
                             <img
                                 src="https://res.cloudinary.com/dgsumh8ih/image/upload/v1693657591/logoFull.png"
                                 className={cx('logo')}
@@ -109,13 +110,15 @@ function Header() {
                                 className={(nav) => cx('header-nav_item', { active: nav.isActive })}
                                 to={config.routes.home}
                             >
-                                Trang chủ
+                                <Text style={{ fontSize: 18 }} style={{ fontSize: 18 }}>
+                                    Trang chủ
+                                </Text>
                             </NavLink>
                             <NavLink
                                 className={(nav) => cx('header-nav_item', { active: nav.isActive })}
                                 to={config.routes.aboutUs}
                             >
-                                Về chúng tôi
+                                <Text style={{ fontSize: 18 }}>Về chúng tôi</Text>
                             </NavLink>
 
                             <NavLink
@@ -123,16 +126,35 @@ function Header() {
                                 to={config.routes.tour}
                             >
                                 <Dropdown placement="bottom" menu={{ items: tourCategories }}>
-                                    <span className={cx('align-center')}>
+                                    <Text style={{ fontSize: 18 }}>
                                         Du lịch <MdArrowDropDown />
-                                    </span>
+                                    </Text>
                                 </Dropdown>
                             </NavLink>
+                            {userInfo && (
+                                <>
+                                    <NavLink
+                                        className={(nav) => cx('header-nav_item', 'mb-nav', { active: nav.isActive })}
+                                        to={config.routes.profile}
+                                    >
+                                        Trang cá nhân
+                                    </NavLink>
+                                    <div
+                                        onClick={() => {
+                                            navigate(config.routes.home);
+                                            handleLogOut();
+                                        }}
+                                        className={cx('header-nav_item', 'mb-nav')}
+                                    >
+                                        Đăng xuất
+                                    </div>
+                                </>
+                            )}
                         </nav>
                     </div>
                     {userInfo ? (
-                        <div className={cx('align-center')} size={'large'}>
-                            <h3>{userInfo.fullName.split(' ').pop()}</h3>
+                        <div className={cx('header-actions')} size={'large'}>
+                            <Text style={{ fontSize: 18 }}>{userInfo.fullName.split(' ').pop()}</Text>
                             <Dropdown
                                 menu={{
                                     items: optionItems,
@@ -150,7 +172,7 @@ function Header() {
                     ) : (
                         <div className={cx('header-actions')}>
                             <Link to={config.routes.login} className={cx('custom-btn')}>
-                                Đăng nhập
+                                <Text style={{ fontSize: 18 }}>Đăng nhập</Text>
                             </Link>
                             <Button
                                 onClick={() => navigate(config.routes.register)}
@@ -158,12 +180,12 @@ function Header() {
                                 type="ghost"
                                 className={cx('custom-btn', 'active')}
                             >
-                                Đăng ký
+                                <Text style={{ fontSize: 18 }}>Đăng ký</Text>
                             </Button>
                         </div>
                     )}
                 </div>
-            </header>
+            </Layout.Header>
             <div ref={overlayRef} className={cx('menu-modal-overlay', { active: showMenuMb })}></div>
             <MdOutlineMenu onClick={handleShowMenuMb} className={cx('show-menu-mb')} />
         </>

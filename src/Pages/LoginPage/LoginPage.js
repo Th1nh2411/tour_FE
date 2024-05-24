@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import Image from '../../components/Image';
 import images from '../../assets/images';
 import { useContext, useEffect, useState } from 'react';
-import { Button, Col, Form, Input, Modal, Row, Space, notification } from 'antd';
+import { Button, Col, Form, Input, Modal, Row, Space, Typography, notification } from 'antd';
 import * as authService from '../../services/authService';
 import { useNavigate } from 'react-router';
 import config from '../../config';
@@ -12,6 +12,7 @@ import Cookies from 'js-cookie';
 import { Link } from 'react-router-dom';
 import { useForm } from 'antd/es/form/Form';
 import ForgotPw from './ForgotPw';
+const { Title, Paragraph, Text } = Typography;
 const cx = classNames.bind(styles);
 
 function LoginPage() {
@@ -62,7 +63,9 @@ function LoginPage() {
                                 className={cx('form-logo')}
                             />
                         </div>
-                        <h1 className={cx('form-title')}>Đăng nhập</h1>
+                        <Title level={1} className={cx('form-title')}>
+                            Đăng nhập
+                        </Title>
                         <Form
                             form={form}
                             labelCol={{
@@ -99,16 +102,16 @@ function LoginPage() {
                             <Button type="ghost" size="large" className={cx('login-btn')} htmlType="submit">
                                 Đăng nhập
                             </Button>
-                            <h3 onClick={() => setShowForgot(true)} className={cx('option-title')}>
-                                <span>Quên mật khẩu?</span>
-                            </h3>
+                            <Title level={3} onClick={() => setShowForgot(true)} className={cx('option-title')}>
+                                <Text>Quên mật khẩu?</Text>
+                            </Title>
                         </Form>
-                        <h3 className={cx('option-title', 'mt-2')}>
+                        <Title level={3} className={cx('option-title', 'mt-2')}>
                             Thành viên mới?{' '}
-                            <span>
+                            <Text>
                                 <Link to={config.routes.register}>Đăng ký</Link>
-                            </span>
-                        </h3>
+                            </Text>
+                        </Title>
                     </div>
                 </Col>
             </Row>

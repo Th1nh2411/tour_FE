@@ -3,17 +3,12 @@ import PropTypes from 'prop-types';
 import { useContext, useEffect, useRef, useState } from 'react';
 import styles from './SearchBar.module.scss';
 import images from '../../assets/images';
-import { Button, Col, Input, InputNumber, Rate, Row, Select } from 'antd';
-import { BsFillStarFill } from 'react-icons/bs';
-import { IoTicketSharp } from 'react-icons/io5';
-import { priceFormat } from '../../utils/format';
+import { Button, Col, Input, InputNumber, Rate, Row, Select, Typography } from 'antd';
+
 import { HiOutlineLocationMarker, HiOutlineMap, HiOutlineUsers, HiPencil } from 'react-icons/hi';
-import { useNavigate } from 'react-router';
-import config from '../../config';
-import { StoreContext } from '../../store';
-import dayjs from 'dayjs';
 import { BiSearch } from 'react-icons/bi';
 const cx = classNames.bind(styles);
+const { Title, Paragraph, Text } = Typography;
 
 function SearchBar({ className, defaultValue, onSearch = () => {}, resetQuery, doneReset = () => {} }) {
     const [keyword, setLocationValue] = useState(defaultValue ? defaultValue.keyword : '');
@@ -29,31 +24,35 @@ function SearchBar({ className, defaultValue, onSearch = () => {}, resetQuery, d
     }, [resetQuery]);
     return (
         <div className={cx('wrapper', className)}>
-            <Row gutter={[10, 10]}>
-                <Col md={10}>
+            <Row align={'middle'} style={{ rowGap: 20 }} gutter={{ xs: 10, md: 30 }}>
+                <Col xs={24} md={10} lg={8}>
                     <div className={cx('search-item')}>
                         <HiOutlineMap className={cx('icon')} />
                         <div>
-                            <h5 className={cx('search-title')}>Du lịch đâu nè?</h5>
+                            <Title level={5} className={cx('search-title')}>
+                                Du lịch đâu nè?
+                            </Title>
                             <Input
+                                variant="filled"
                                 className={cx('search-input')}
                                 placeholder="Where are you going"
-                                bordered={false}
                                 value={keyword}
                                 onChange={(e) => setLocationValue(e.target.value)}
                             />
                         </div>
                     </div>
                 </Col>
-                <Col md={6}>
+                <Col xs={24} md={6} lg={6}>
                     <div className={cx('search-item')}>
                         <HiOutlineUsers className={cx('icon')} />
                         <div>
-                            <h5 className={cx('search-title')}>Chỗ trống</h5>
+                            <Title level={5} className={cx('search-title')}>
+                                Chỗ trống
+                            </Title>
                             <InputNumber
+                                variant="filled"
                                 className={cx('search-input')}
                                 placeholder="1"
-                                bordered={false}
                                 value={availableSeats}
                                 onChange={(value) => setAvailableSeats(value)}
                                 min={1}
@@ -61,25 +60,32 @@ function SearchBar({ className, defaultValue, onSearch = () => {}, resetQuery, d
                         </div>
                     </div>
                 </Col>
-                <Col className={cx('align-center')} md={6}>
-                    <Select
-                        placeholder="Chọn kiểu du lịch"
-                        size="large"
-                        value={duration}
-                        onChange={(value) => setDuration(value)}
-                        options={[
-                            {
-                                value: 0,
-                                label: 'Du lịch ngắn ngày',
-                            },
-                            {
-                                value: 1,
-                                label: 'Du lịch dài ngày',
-                            },
-                        ]}
-                    />
+                <Col xs={24} md={8} className={cx('align-center')} lg={6}>
+                    <div className={cx('search-item')}>
+                        <HiOutlineUsers className={cx('icon')} />
+                        <div>
+                            <Title level={5} className={cx('search-title')}>
+                                Kiểu du lịch
+                            </Title>
+                            <Select
+                                placeholder="Chọn kiểu du lịch"
+                                value={duration}
+                                onChange={(value) => setDuration(value)}
+                                options={[
+                                    {
+                                        value: 0,
+                                        label: 'Du lịch ngắn ngày',
+                                    },
+                                    {
+                                        value: 1,
+                                        label: 'Du lịch dài ngày',
+                                    },
+                                ]}
+                            />
+                        </div>
+                    </div>
                 </Col>
-                <Col md={2} className={cx('content-end')}>
+                <Col xs={24} md={24} lg={2}>
                     <div onClick={() => onSearch({ keyword, availableSeats, duration })} className={cx('search-btn')}>
                         <BiSearch />
                     </div>
