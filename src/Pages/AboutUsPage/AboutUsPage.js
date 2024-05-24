@@ -4,7 +4,7 @@ import Image from '../../components/Image';
 import images from '../../assets/images';
 import { useContext, useEffect, useState } from 'react';
 import { StoreContext, actions } from '../../store';
-import { Button, Col, Form, Row } from 'antd';
+import { Button, Col, Form, Row, Typography } from 'antd';
 import * as reviewService from '../../services/reviewService';
 import * as guideService from '../../services/guideService';
 import Slide from '../../components/Slide';
@@ -12,6 +12,7 @@ import GuideForm from '../../components/GuideForm';
 import GuideItem from './GuideItem';
 import TextArea from 'antd/es/input/TextArea';
 import { BiPlusCircle } from 'react-icons/bi';
+const { Title, Paragraph, Text } = Typography;
 const cx = classNames.bind(styles);
 
 function AboutUsPage() {
@@ -68,17 +69,17 @@ function AboutUsPage() {
                     </div>
                 </section>
                 <section className={cx('section-wrapper')}>
-                    <h3 className={cx('section-slogan')}>
-                        <span className={cx('slogan-text')}>Đồng hành</span>
-                    </h3>
-                    <h2 className={cx('mt-1')}>
+                    <Title level={3} className={cx('section-slogan')}>
+                        <Text className={cx('slogan-text')}>Đồng hành</Text>
+                    </Title>
+                    <Title className={cx('mt-1')}>
                         Những hướng dẫn viên tận tâm và đầy kinh nghiệm từ đội ngũ của chúng tôi
-                    </h2>
+                    </Title>
                     {state.userInfo && state.userInfo.role === 'admin' && (
-                        <h4 onClick={() => setShowGuideForm(true)} className={cx('add-btn')}>
+                        <Title level={4} onClick={() => setShowGuideForm(true)} className={cx('add-btn')}>
                             <BiPlusCircle className={cx('add-icon')} />
                             Thêm HDV mới
-                        </h4>
+                        </Title>
                     )}
                     <Slide className={cx('mt-2')} navigation={false} numItemPerSlide={3} autoPlay>
                         {allGuide &&
@@ -95,23 +96,25 @@ function AboutUsPage() {
                     </Slide>
                 </section>
                 <section className={cx('section-wrapper')}>
-                    <h3 className={cx('section-slogan')}>
-                        <span className={cx('slogan-text')}>Đánh giá</span>
-                    </h3>
-                    <h2 className={cx('mt-1')}>Những gì khách hàng đánh giá</h2>
+                    <Title level={3} className={cx('section-slogan')}>
+                        <Text className={cx('slogan-text')}>Đánh giá</Text>
+                    </Title>
+                    <Title className={cx('mt-1')}>Những gì khách hàng đánh giá</Title>
                     <Slide className={cx('mt-2')} navigation={false} numItemPerSlide={3} autoPlay>
                         {top8Reviews &&
                             top8Reviews.map((item, index) => (
                                 <div key={index} className={cx('review-item')}>
-                                    <p className={cx('review-comment')}>{item.comment}</p>
+                                    <Text className={cx('review-comment')}>{item.comment}</Text>
                                     <div className={cx('review-customer')}>
                                         <Image src={item.tourInfo.photo} className={cx('review-img')} />
 
                                         <div>
                                             {item.userInfo && (
-                                                <h3 className={cx('customer-name')}>{item.userInfo.fullName}</h3>
+                                                <Title level={3} className={cx('customer-name')}>
+                                                    {item.userInfo.fullName}
+                                                </Title>
                                             )}
-                                            <p className={cx('review-tourName')}>{item.tourInfo.tourName}</p>
+                                            <Text className={cx('review-tourName')}>{item.tourInfo.tourName}</Text>
                                         </div>
                                     </div>
                                 </div>
@@ -121,12 +124,12 @@ function AboutUsPage() {
                 <section className={cx('section-wrapper')}>
                     <Row gutter={[15, 15]} align={'middle'}>
                         <Col xs={24} md={12}>
-                            <h3 className={cx('section-slogan')}>
-                                <span className={cx('slogan-text')}>Góp ý</span>
-                            </h3>
-                            <h2 className={cx('mt-1')}>
+                            <Title level={3} className={cx('section-slogan')}>
+                                <Text className={cx('slogan-text')}>Góp ý</Text>
+                            </Title>
+                            <Title className={cx('mt-1')}>
                                 Góp ý của quý khách có thể giúp chúng tôi có thể phục vụ tốt hơn trong tương lai.
-                            </h2>
+                            </Title>
                             <Form form={feedbackForm} onFinish={handleSendFeedback}>
                                 <div className={cx('mt-2', 'd-flex')}>
                                     <Form.Item style={{ flex: 1 }} name="message">

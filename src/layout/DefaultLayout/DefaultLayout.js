@@ -3,7 +3,7 @@ import Footer from '../components/Footer';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './DefaultLayout.module.scss';
-import { ConfigProvider, FloatButton } from 'antd';
+import { ConfigProvider, FloatButton, theme } from 'antd';
 import { useContext, useState } from 'react';
 import { StoreContext } from '../../store';
 import ThemeMode from '../components/ThemeMode';
@@ -14,16 +14,15 @@ const cx = classNames.bind(styles);
 function DefaultLayout({ children }) {
     const [state, dispatch] = useContext(StoreContext);
     const [showChat, setShowChat] = useState(false);
+    const { defaultAlgorithm, darkAlgorithm } = theme;
     return (
         <ConfigProvider
             theme={{
-                token: {
-                    colorPrimary: '#faa935',
-                },
+                algorithm: state.theme === 'dark' ? darkAlgorithm : defaultAlgorithm,
             }}
         >
             {showChat && <ChatBox open={showChat} onClose={() => setShowChat(false)} />}
-            <FloatButton.Group>
+            <FloatButton.GroupText>
                 <FloatButton.BackTop />
                 <FloatButton
                     onClick={() => {
@@ -36,7 +35,7 @@ function DefaultLayout({ children }) {
                     icon={<FaCommentDots />}
                     type="primary"
                 />
-            </FloatButton.Group>
+            </FloatButton.GroupText>
             <div className={cx('wrapper')}>
                 <Header />
                 <ThemeMode />

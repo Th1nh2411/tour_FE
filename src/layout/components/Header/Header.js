@@ -6,11 +6,12 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import config from '../../../config';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { StoreContext, actions } from '../../../store';
-import { Badge, Button, Dropdown, Input, Space, Tooltip } from 'antd';
+import { Badge, Button, Dropdown, Typography } from 'antd';
 import { MdArrowDropDown, MdOutlineClose, MdOutlineMenu, MdTour } from 'react-icons/md';
 import { IoLogOut, IoPerson } from 'react-icons/io5';
 import * as categoryService from '../../../services/categoryService';
 import Cookies from 'js-cookie';
+const { Title, Paragraph, Text } = Typography;
 const cx = classNames.bind(styles);
 
 function Header() {
@@ -76,14 +77,14 @@ function Header() {
             key: '1',
             label: (
                 <Badge dot={state.unpaidBooking}>
-                    <p style={{ fontSize: '1.6rem' }}>Trang cá nhân</p>
+                    <Text style={{ fontSize: '1.6rem' }}>Trang cá nhân</Text>
                 </Badge>
             ),
             icon: <IoPerson style={{ fontSize: '1.8rem' }} />,
         },
         {
             key: '2',
-            label: <p style={{ fontSize: '1.6rem' }}>Đăng xuất</p>,
+            label: <Text style={{ fontSize: '1.6rem' }}>Đăng xuất</Text>,
             icon: <IoLogOut style={{ fontSize: '1.8rem' }} />,
         },
     ];
@@ -123,9 +124,9 @@ function Header() {
                                 to={config.routes.tour}
                             >
                                 <Dropdown placement="bottom" menu={{ items: tourCategories }}>
-                                    <span className={cx('align-center')}>
+                                    <Text className={cx('align-center')}>
                                         Du lịch <MdArrowDropDown />
-                                    </span>
+                                    </Text>
                                 </Dropdown>
                             </NavLink>
                             {userInfo && (
@@ -151,7 +152,7 @@ function Header() {
                     </div>
                     {userInfo ? (
                         <div className={cx('header-actions')} size={'large'}>
-                            <h3>{userInfo.fullName.split(' ').pop()}</h3>
+                            <Title level={3}>{userInfo.fullName.split(' ').pop()}</Title>
                             <Dropdown
                                 menu={{
                                     items: optionItems,

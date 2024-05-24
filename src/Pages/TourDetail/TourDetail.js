@@ -20,6 +20,7 @@ import {
     Space,
     Image as PreviewImage,
     Modal,
+    Typography,
 } from 'antd';
 import { HiLocationMarker } from 'react-icons/hi';
 import { useLocation, useNavigate, useParams } from 'react-router';
@@ -33,6 +34,7 @@ import { TbPlaneDeparture, TbTicket } from 'react-icons/tb';
 import * as reviewService from '../../services/reviewService';
 import * as tourService from '../../services/tourService';
 import RefundPolicy from '../../components/RefundPolicy';
+const { Title, Paragraph, Text } = Typography;
 const cx = classNames.bind(styles);
 
 function TourDetail({}) {
@@ -137,7 +139,7 @@ function TourDetail({}) {
                         <Skeleton loading={loading}>
                             <Image src={tourData.photo} className={cx('img')} />
                             <Space direction="vertical" size={'small'} className={cx('card')}>
-                                <h2>{tourData.tourName}</h2>
+                                <Title>{tourData.tourName}</Title>
                                 <div style={{ color: '#555' }} className={cx('align-center')}>
                                     <div className={cx('align-center')}>
                                         <BsFillStarFill className={cx('icon')} />
@@ -166,34 +168,34 @@ function TourDetail({}) {
                                         Còn lại: {tourData.availableSeats} /{tourData.maxSeats} vé
                                     </div>
                                 </div>
-                                <h2 className={cx('mt-1')}>Mô tả</h2>
-                                <p style={{ color: '#555' }}>{tourData.description}</p>
-                                <h2 className={cx('mt-1')}>Hành trình</h2>
+                                <Title className={cx('mt-1')}>Mô tả</Title>
+                                <Text style={{ color: '#555' }}>{tourData.description}</Text>
+                                <Title className={cx('mt-1')}>Hành trình</Title>
                                 {tourData.itineraries &&
                                     tourData.itineraries.map((item, index) => (
-                                        <p key={index} style={{ color: '#555' }}>
+                                        <Text key={index} style={{ color: '#555' }}>
                                             {item}
-                                        </p>
+                                        </Text>
                                     ))}
-                                <h2 className={cx('mt-1')}>Hướng dẫn viên</h2>
+                                <Title className={cx('mt-1')}>Hướng dẫn viên</Title>
 
                                 <Descriptions column={{ xs: 1, sm: 2, md: 2, lg: 1, xl: 2 }} items={guideItems} />
                             </Space>
                             <Space direction="vertical" size={'small'} className={cx('card', 'mt-2')}>
-                                <h2>Đánh giá chuyến đi ({numReviews} đánh giá)</h2>
+                                <Title>Đánh giá chuyến đi ({numReviews} đánh giá)</Title>
                                 {reviews &&
                                     reviews.map((item, index) => (
                                         <Space className={cx('review-item')} key={index} align="start">
                                             <Image className={cx('user-photo')} src={item.userInfo.photo} />
                                             <div>
-                                                <p style={{ fontWeight: 600 }}>{item.userInfo.fullName}</p>
+                                                <Text style={{ fontWeight: 600 }}>{item.userInfo.fullName}</Text>
                                                 <Rate
                                                     disabled
                                                     defaultValue={item.rating}
                                                     allowHalf
                                                     style={{ fontSize: 12 }}
                                                 />
-                                                <p style={{ color: '#555' }}>{item.comment}</p>
+                                                <Text style={{ color: '#555' }}>{item.comment}</Text>
                                                 <Space className={cx('mt-1')} key={index}>
                                                     {item.photo &&
                                                         item.photo.map((item, index) => (
@@ -219,14 +221,14 @@ function TourDetail({}) {
                             <div className={cx('booking-wrapper', 'card')}>
                                 <div className={cx('content-between', 'booking-header')}>
                                     <div className={cx('booking-price')}>
-                                        <span>{priceFormat(tourData.price)}đ</span> /1 vé
+                                        <Text>{priceFormat(tourData.price)}đ</Text> /1 vé
                                     </div>
                                     <div className={cx('align-center')}>
                                         <BsFillStarFill className={cx('icon')} />({tourData.averageRating || 0})
                                     </div>
                                 </div>
                                 <div className={cx('booking-form')}>
-                                    <h2>Thông tin đặt vé</h2>
+                                    <Title>Thông tin đặt vé</Title>
                                     <Descriptions size="small" column={1} items={infoItems} />
                                     <Row gutter={12}>
                                         <Col span={16}>
@@ -263,19 +265,19 @@ function TourDetail({}) {
                                         </Col>
                                     </Row>
                                     <div className={cx('align-center', 'content-between')}>
-                                        <p className={cx('price-calculate')}>
+                                        <Text className={cx('price-calculate')}>
                                             {priceFormat(tourData.price)}đ x {guestSize || 0} vé
-                                        </p>
-                                        <p className={cx('price-calculated')}>
+                                        </Text>
+                                        <Text className={cx('price-calculated')}>
                                             {priceFormat(tourData.price * guestSize)}đ
-                                        </p>
+                                        </Text>
                                     </div>
 
                                     <div className={cx('align-center', 'content-between')}>
-                                        <p className={cx('total-title')}>Total</p>
-                                        <p className={cx('total-calculated')}>
+                                        <Text className={cx('total-title')}>Total</Text>
+                                        <Text className={cx('total-calculated')}>
                                             {priceFormat(tourData.price * guestSize)}đ
-                                        </p>
+                                        </Text>
                                     </div>
                                 </div>
                                 {!state.userInfo && (

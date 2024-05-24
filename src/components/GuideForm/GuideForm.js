@@ -73,7 +73,7 @@ const GuideForm = ({ data, onClose = () => {} }) => {
             // width={'auto'}
             style={{ margin: '30px 0' }}
             centered
-            title={<h2 className={cx('text-center')}>{data ? 'Chỉnh sửa chuyến đi' : 'Thêm chuyến đi'}</h2>}
+            title={<Title className={cx('text-center')}>{data ? 'Chỉnh sửa chuyến đi' : 'Thêm chuyến đi'}</Title>}
             open
             onCancel={() => {
                 form.setFieldsValue(['']);

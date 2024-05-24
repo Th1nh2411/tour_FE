@@ -1,0 +1,444 @@
+@import url(https://fonts.googleapis.com/css?family=Shadows+Into+Light);
+
+.wrapper {
+    width: 50px;
+    position: fixed;
+    right: 20px;
+    bottom: 160px;
+    z-index: 1000;
+}
+
+.bg {
+    background-color: rgb(255, 255, 255);
+    width: 30px;
+    height: 30px;
+    position: fixed;
+    right: 30px;
+    bottom: 160px;
+    border-radius: 50%;
+    transition: all 0.7s ease;
+    z-index: -1;
+}
+
+.light + .bg {
+    transform: scale(90);
+    transform-origin: 90% 50%;
+}
+.planet {
+    position: relative;
+    margin: 0 auto;
+    width: 40px;
+    height: 40px;
+    background-color: #ebf3fe;
+    display: block;
+    border-radius: 50%;
+    position: relative;
+    box-shadow: inset -8px 0px 0px #d8e8f7, inset 3px 0px 0px #ffffff, inset -8px 0px 0px 4px #e2eefa,
+        0px 0px 0px 10px rgba(255, 255, 255, 0.05), 0px 0px 0px 20px rgba(255, 255, 255, 0.025),
+        0px 0px 0px 30px rgba(255, 255, 255, 0.0125);
+    border: solid 2px;
+    transition: all 0.2s ease-in;
+    cursor: pointer;
+}
+
+.planet:after {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: #d8e8f7;
+    position: absolute;
+    top: 20%;
+    right: 42%;
+    box-shadow: 5px -5px 0px 1px #cbd8e5, 6px 2px 0px -1px #d8e6f4;
+}
+
+.face {
+    position: absolute;
+    width: 100px;
+    top: 30%;
+    left: 30%;
+}
+
+.zzz1,
+.zzz2,
+.zzz3 {
+    color: white;
+    position: absolute;
+    bottom: 0;
+    left: 30%;
+    font-size: 12px;
+    opacity: 0;
+    font-family: 'Shadows Into Light', cursive;
+    animation-name: zzz-sleep;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+.zzz1:after,
+.zzz2:after,
+.zzz3:after {
+    content: 'z';
+}
+
+.zzz1 {
+    animation-delay: 0s;
+}
+
+.zzz2 {
+    animation-delay: 1.2s;
+    left: 15%;
+    bottom: 3%;
+}
+
+.zzz3 {
+    animation-delay: 2.4s;
+    left: 10%;
+    bottom: 6%;
+}
+
+.light .mouth {
+    margin-top: 5px;
+    margin-left: 3px;
+    height: 4px;
+    width: 5px;
+    diplay: block;
+    border-radius: 0px 0px 50% 50%;
+    background-color: transparent;
+    float: left;
+    border: 2px solid #151843;
+    border-top: 0;
+    position: relative;
+    margin-left: 0px;
+    animation-name: none;
+}
+
+.mouth {
+    margin-top: 14px;
+    margin-left: 3px;
+    height: 4px;
+    width: 4px;
+    diplay: block;
+    border-radius: 50%;
+    background-color: #151843;
+    float: left;
+    border: none;
+    border-top: 0;
+    position: relative;
+
+    animation-name: mouth-sleep;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-out;
+}
+
+.light .eye {
+    width: 5px;
+    height: 5px;
+    display: block;
+    float: left;
+    animation-name: eye-blink;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.eye {
+    width: 0px;
+    height: 5px;
+    display: block;
+    float: left;
+    position: relative;
+}
+
+.light .eye-in {
+    content: '';
+    width: 5px;
+    height: 5px;
+    background-color: #151843;
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border-radius: 50%;
+    transform: scale(1, 1) !important;
+    border: none;
+}
+
+.eye-in {
+    width: 4px;
+    height: 5px;
+    display: block;
+    position: absolute;
+    top: 5px;
+    left: -1px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border: 1px solid #151843;
+    border-top: 0;
+}
+
+.pos-star1 {
+    top: 50px;
+    left: 12px;
+}
+
+.pos-star2 {
+    top: -20px;
+    left: 24px;
+}
+
+.star {
+    width: 4px;
+    height: 4px;
+    background-color: white;
+    display: block;
+    border-radius: 50%;
+    float: left;
+    position: absolute;
+    transform-origin: 50% 50%;
+    animation-name: star3;
+    animation-duration: 20s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease;
+    transform-origin: 50% 50%;
+    transition: all 0.3s ease-out;
+}
+
+.star:before {
+    width: 4px;
+    height: 4px;
+    content: '';
+    background-color: white;
+    position: absolute;
+    transform: scale(1, 2) rotate(45deg);
+    animation-name: star1;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-out;
+    border-radius: 20%;
+    transition: all 0.3s ease-out;
+}
+
+.star:after {
+    width: 4px;
+    height: 4px;
+    content: '';
+    background-color: white;
+    position: absolute;
+    transform: scale(2, 1) rotate(45deg);
+    animation-name: star2;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-out;
+    animation-delay: 0.2s;
+    border-radius: 20%;
+    transition: all 0.3s ease-out;
+}
+
+@keyframes star1 {
+    0% {
+        transform: scale(1, 2) rotate(45deg);
+    }
+    50% {
+        transform: scale(1, 1) rotate(45deg);
+    }
+    100% {
+        transform: scale(1, 2) rotate(45deg);
+    }
+}
+
+@keyframes star2 {
+    0% {
+        transform: scale(2, 1) rotate(45deg);
+    }
+    50% {
+        transform: scale(1, 1) rotate(45deg);
+    }
+    100% {
+        transform: scale(2, 1) rotate(45deg);
+    }
+}
+
+@keyframes star3 {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes eye-blink {
+    0% {
+        transform: scale(1, 1);
+    }
+    2% {
+        transform: scale(1, 0);
+    }
+    4% {
+        transform: scale(1, 1);
+    }
+}
+
+@keyframes mouth-sleep {
+    0% {
+        transform: scale(1, 1);
+    }
+    35% {
+        transform: scale(0.7, 0.7);
+    }
+    40% {
+        transform: scale(0.7, 0.7);
+    }
+    75% {
+        transform: scale(1, 1);
+    }
+}
+
+@keyframes wiggle {
+    0% {
+        transform: translate(0px, 0px);
+    }
+    50% {
+        transform: translate(50px, 0px);
+    }
+    100% {
+        transform: translate(0px, 0px);
+    }
+}
+
+@keyframes zzz-sleep {
+    0% {
+        transform: translate(0px, 0px) scale(1, 1);
+        opacity: 0;
+    }
+    25% {
+        transform: translate(-5px, -10px) scale(1.1, 1.1);
+    }
+    50% {
+        transform: translate(8px, -20px) scale(0.9, 0.9);
+        opacity: 1;
+    }
+    75% {
+        transform: translate(-15px, -30px) scale(1.1, 1.1);
+    }
+    100% {
+        transform: translate(15px, -40px) scale(0.9, 0.9);
+        opacity: 0;
+    }
+}
+
+@keyframes zzz-awake {
+    0% {
+        transform: translate(0px, 0px) scale(1, 1) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-15px, -30px) scale(2, 2) rotate(10deg);
+        opacity: 0;
+    }
+}
+
+/* DAY TIME */
+
+#button {
+    border: 2px solid #f1c40f;
+    padding: 20px 20px;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 3px;
+    color: #f1c40f;
+    text-decoration: none;
+    position: absolute;
+    display: block;
+    text-align: center;
+    background: transparent;
+    text-shadow: none;
+    font-family: sans-serif;
+    margin: 0 auto;
+    bottom: -30px;
+    border-radius: 100px;
+    max-width: 200px;
+    left: 0;
+    right: 0;
+    transition: all 0.2s ease;
+}
+#button:active {
+    transform: scale(0.95);
+    transition: all 0.2s ease;
+}
+
+#button:hover {
+    border: 2px solid #f1c40f;
+    color: #fff;
+    background: #f1c40f;
+}
+
+.light #button {
+    border: 2px solid #ff8603;
+    color: #ff8603;
+    background: transparent;
+}
+
+.light #button:hover {
+    border: 2px solid #ff8603;
+    color: #fff;
+    background: #ff8603;
+}
+
+.light .planet {
+    background-color: #ffdb01 !important;
+    box-shadow: inset -5px 0px 0px #ff8603, inset 2px 0px 0px #ffffff, inset -11px 0px 0px -1px #ffd201,
+        0px 0px 0px 10px rgba(255, 210, 1, 0.2), 0px 0px 0px 20px rgba(255, 210, 1, 0.1),
+        0px 0px 0px 30px rgba(255, 210, 1, 0.05);
+}
+
+.light .planet:after {
+    top: 80%;
+    background-color: #ffd201;
+    box-shadow: 5px -5px 0px 1px #ffd201, 6px 1px 0px -1px #ffd201;
+}
+
+.light .star {
+    display: none;
+}
+
+.light .zzz1:after,
+.light .zzz2:after,
+.light .zzz3:after {
+    content: '!';
+}
+
+.light .zzz1,
+.light .zzz2,
+.light .zzz3 {
+    color: white;
+    top: 0;
+    right: 10%;
+    animation-name: zzz-awake;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+    opacity: 1;
+}
+
+.light .zzz1 {
+}
+
+.light .zzz2 {
+    animation-delay: 0.2s;
+    right: 15% !important;
+    top: 3%;
+}
+
+.light .zzz3 {
+    animation-delay: 0.4s;
+    right: 10% !important;
+    top: 6%;
+}

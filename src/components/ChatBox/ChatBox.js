@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from './ChatBox.module.scss';
-import { Drawer, Input, Skeleton } from 'antd';
+import { Drawer, Input, Skeleton, Typography } from 'antd';
 import { FaHeadset } from 'react-icons/fa';
 import { FcAssistant } from 'react-icons/fc';
 import { AiOutlineSend } from 'react-icons/ai';
@@ -8,6 +8,7 @@ import * as messageService from '../../services/messageService';
 import { useContext, useEffect, useState } from 'react';
 import { StoreContext } from '../../store';
 import io from 'socket.io-client';
+const { Title, Paragraph, Text } = Typography;
 const socket = io('http://localhost:4000');
 const cx = classNames.bind(styles);
 
@@ -95,7 +96,7 @@ function ChatBox({ className, open, onClose = () => {} }) {
                 }
             };
 
-            getMessage();
+            // getMessage();
         }
 
         setLoad(false);
@@ -112,9 +113,9 @@ function ChatBox({ className, open, onClose = () => {} }) {
         <Drawer
             width={'auto'}
             title={
-                <p className={cx('align-center')} style={{ fontSize: 22, color: 'white' }}>
+                <Text className={cx('align-center')} style={{ fontSize: 22, color: 'white' }}>
                     Hỗ trợ khách hàng <FaHeadset style={{ marginLeft: 8 }} />
-                </p>
+                </Text>
             }
             onClose={onClose}
             open={open}

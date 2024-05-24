@@ -4,8 +4,10 @@ import Image from '../../components/Image';
 import { useContext, useState } from 'react';
 import { StoreContext } from '../../store';
 import { HiPencil } from 'react-icons/hi';
+import { Typography } from 'antd';
 
 const cx = classNames.bind(styles);
+const { Title, Paragraph, Text } = Typography;
 
 function GuideItem({ data, onEdit }) {
     const [showAllDesc, setShowAllDesc] = useState(false);
@@ -20,12 +22,14 @@ function GuideItem({ data, onEdit }) {
                 )}
             </div>
             <div className={cx('guide-body')}>
-                <h3 className={cx('guide-name')}>{data.guideName}</h3>
-                <p className={cx('guide-languages')}>{data.languages}</p>
-                <p className={cx('guide-intro', { active: showAllDesc })}>{data.description}</p>
-                <h5 onClick={() => setShowAllDesc(!showAllDesc)} className={cx('show-more')}>
+                <Title level={3} className={cx('guide-name')}>
+                    {data.guideName}
+                </Title>
+                <Text className={cx('guide-languages')}>{data.languages}</Text>
+                <Text className={cx('guide-intro', { active: showAllDesc })}>{data.description}</Text>
+                <Title level={5} onClick={() => setShowAllDesc(!showAllDesc)} className={cx('show-more')}>
                     {showAllDesc ? 'Thu gọn' : 'Xem thêm'}
-                </h5>
+                </Title>
             </div>
         </div>
     );

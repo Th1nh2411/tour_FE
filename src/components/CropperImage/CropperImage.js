@@ -5,11 +5,12 @@ import { AiFillCheckCircle, AiFillCloseCircle, AiFillExclamationCircle, AiFillIn
 import { useContext, useEffect, useRef, useState } from 'react';
 import * as profileService from '../../services/profileService';
 import * as uploadService from '../../services/uploadService';
-import { Button, Checkbox, Col, Form, Input, InputNumber, Modal, Row, Slider, Space, Upload, message } from 'antd';
+import { Button, Checkbox, Col, Form, Input, InputNumber, Modal, Row, Slider, Space, Typography, Upload, message } from 'antd';
 import { BsUpload } from 'react-icons/bs';
 import { StoreContext, actions } from '../../store';
 import AvatarEditor from 'react-avatar-editor';
 const cx = classNames.bind(styles);
+const { Title, Paragraph, Text } = Typography;
 
 const CropperImage = ({ src, modalOpen, onModalClose = () => {} }) => {
     const [state, dispatch] = useContext(StoreContext);
@@ -43,7 +44,9 @@ const CropperImage = ({ src, modalOpen, onModalClose = () => {} }) => {
     return (
         <Modal onCancel={onModalClose} open={modalOpen} footer={false}>
             <div style={{ width: '100%', padding: '0 20px' }} align="center">
-                <h1 style={{ marginBottom: 15 }}>Cập nhật ảnh đại diện</h1>
+                <Title level={1} style={{ marginBottom: 15 }}>
+                    Cập nhật ảnh đại diện
+                </Title>
                 <AvatarEditor
                     ref={cropRef}
                     image={src}

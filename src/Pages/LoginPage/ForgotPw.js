@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import Image from '../../components/Image';
 import images from '../../assets/images';
 import { useContext, useEffect, useState } from 'react';
-import { Button, Col, Form, Input, Modal, Row, Space, notification } from 'antd';
+import { Button, Col, Form, Input, Modal, Row, Space, Typography, notification } from 'antd';
 import * as authService from '../../services/authService';
 import { useNavigate } from 'react-router';
 import config from '../../config';
@@ -11,6 +11,7 @@ import { StoreContext, actions } from '../../store';
 import Cookies from 'js-cookie';
 import { Link } from 'react-router-dom';
 const cx = classNames.bind(styles);
+const { Title, Paragraph, Text } = Typography;
 
 function ForgotPw({ open, onCloseModal = () => {} }) {
     const [state, dispatch] = useContext(StoreContext);
@@ -53,7 +54,7 @@ function ForgotPw({ open, onCloseModal = () => {} }) {
         <Modal
             width={'auto'}
             centered
-            title={<h2 style={{ textAlign: 'center', marginBottom: 20 }}>Quên mật khẩu</h2>}
+            title={<Title style={{ textAlign: 'center', marginBottom: 20 }}>Quên mật khẩu</Title>}
             open={open}
             onCancel={() => {
                 form.resetFields();

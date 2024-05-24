@@ -3,10 +3,11 @@ import styles from './ProfilePage.module.scss';
 import classNames from 'classnames/bind';
 import { useContext, useEffect, useRef, useState } from 'react';
 import * as profileService from '../../services/profileService';
-import { Button, Checkbox, Col, Form, Input, InputNumber, Modal, Row, Space, Upload, message } from 'antd';
+import { Button, Checkbox, Col, Form, Input, InputNumber, Modal, Row, Space, Typography, Upload, message } from 'antd';
 import { BsUpload } from 'react-icons/bs';
 import { StoreContext, actions } from '../../store';
 import Cookies from 'js-cookie';
+const { Title, Paragraph, Text } = Typography;
 const cx = classNames.bind(styles);
 
 const ProfileForm = ({ showForm, onClose = () => {} }) => {
@@ -48,7 +49,7 @@ const ProfileForm = ({ showForm, onClose = () => {} }) => {
                 form.resetFields();
                 onClose();
             }}
-            title={<h2 className={cx('text-center')}>Sửa thông tin cá nhân</h2>}
+            title={<Title className={cx('text-center')}>Sửa thông tin cá nhân</Title>}
             open={showForm}
             footer={null}
         >

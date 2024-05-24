@@ -3,17 +3,12 @@ import PropTypes from 'prop-types';
 import { useContext, useEffect, useRef, useState } from 'react';
 import styles from './SearchBar.module.scss';
 import images from '../../assets/images';
-import { Button, Col, Input, InputNumber, Rate, Row, Select } from 'antd';
-import { BsFillStarFill } from 'react-icons/bs';
-import { IoTicketSharp } from 'react-icons/io5';
-import { priceFormat } from '../../utils/format';
+import { Button, Col, Input, InputNumber, Rate, Row, Select, Typography } from 'antd';
+
 import { HiOutlineLocationMarker, HiOutlineMap, HiOutlineUsers, HiPencil } from 'react-icons/hi';
-import { useNavigate } from 'react-router';
-import config from '../../config';
-import { StoreContext } from '../../store';
-import dayjs from 'dayjs';
 import { BiSearch } from 'react-icons/bi';
 const cx = classNames.bind(styles);
+const { Title, Paragraph, Text } = Typography;
 
 function SearchBar({ className, defaultValue, onSearch = () => {}, resetQuery, doneReset = () => {} }) {
     const [keyword, setLocationValue] = useState(defaultValue ? defaultValue.keyword : '');
@@ -34,7 +29,9 @@ function SearchBar({ className, defaultValue, onSearch = () => {}, resetQuery, d
                     <div className={cx('search-item')}>
                         <HiOutlineMap className={cx('icon')} />
                         <div>
-                            <h5 className={cx('search-title')}>Du lịch đâu nè?</h5>
+                            <Title level={5} className={cx('search-title')}>
+                                Du lịch đâu nè?
+                            </Title>
                             <Input
                                 className={cx('search-input')}
                                 placeholder="Where are you going"
@@ -49,7 +46,9 @@ function SearchBar({ className, defaultValue, onSearch = () => {}, resetQuery, d
                     <div className={cx('search-item')}>
                         <HiOutlineUsers className={cx('icon')} />
                         <div>
-                            <h5 className={cx('search-title')}>Chỗ trống</h5>
+                            <Title level={5} className={cx('search-title')}>
+                                Chỗ trống
+                            </Title>
                             <InputNumber
                                 className={cx('search-input')}
                                 placeholder="1"

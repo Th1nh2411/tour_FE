@@ -1,7 +1,7 @@
 import styles from './ProfilePage.module.scss';
 import classNames from 'classnames/bind';
 import { BsCameraFill, BsFillClipboard2Fill, BsFillPhoneFill, BsPersonCircle, BsTicket } from 'react-icons/bs';
-import { Alert, Badge, Col, Popconfirm, Row, Skeleton, Space, notification } from 'antd';
+import { Alert, Badge, Col, Popconfirm, Row, Skeleton, Space, Typography, notification } from 'antd';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import * as bookingService from '../../services/bookingService';
 import * as authService from '../../services/authService';
@@ -18,6 +18,7 @@ import ProfileForm from './ProfileForm';
 import ChangePwForm from './ChangePwForm';
 import { useSearchParams } from 'react-router-dom';
 import CropperImage from '../../components/CropperImage';
+const { Title, Paragraph, Text } = Typography;
 const cx = classNames.bind(styles);
 
 function ProfilePage() {
@@ -125,19 +126,19 @@ function ProfilePage() {
                                     </Space>
                                     {state.userInfo && (
                                         <>
-                                            <h3 className={cx('profile-info')}>
-                                                Tên người dùng: <span>{state.userInfo.fullName}</span>
-                                            </h3>
-                                            <h3 className={cx('profile-info')}>
-                                                Tài khoản gmail: <span>{state.userInfo.email}</span>
-                                            </h3>
-                                            <h3 className={cx('profile-info')}>
+                                            <Title level={3} className={cx('profile-info')}>
+                                                Tên người dùng: <Text>{state.userInfo.fullName}</Text>
+                                            </Title>
+                                            <Title level={3} className={cx('profile-info')}>
+                                                Tài khoản gmail: <Text>{state.userInfo.email}</Text>
+                                            </Title>
+                                            <Title level={3} className={cx('profile-info')}>
                                                 Số điện thoại:
-                                                <span>{state.userInfo.phoneNumber}</span>
-                                            </h3>
-                                            <h3 className={cx('profile-info')}>
-                                                Địa chỉ: <span>{state.userInfo.address || 'Chưa có thông tin'}</span>
-                                            </h3>
+                                                <Text>{state.userInfo.phoneNumber}</Text>
+                                            </Title>
+                                            <Title level={3} className={cx('profile-info')}>
+                                                Địa chỉ: <Text>{state.userInfo.address || 'Chưa có thông tin'}</Text>
+                                            </Title>
                                         </>
                                     )}
                                 </div>
@@ -185,7 +186,7 @@ function ProfilePage() {
                                                         </div>
                                                         <div className={cx('invoice-info')}>
                                                             Khởi hành :{' '}
-                                                            <span>{dayjs(item.startDate).format('DD/MM/YYYY')}</span>
+                                                            <Text>{dayjs(item.startDate).format('DD/MM/YYYY')}</Text>
                                                         </div>
                                                     </div>
                                                 </div>

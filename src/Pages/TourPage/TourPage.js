@@ -5,7 +5,7 @@ import images from '../../assets/images';
 import { useContext, useEffect, useState } from 'react';
 import { StoreContext, actions } from '../../store';
 import config from '../../config';
-import { Col, Input, InputNumber, Modal, Pagination, Row, Skeleton } from 'antd';
+import { Col, Input, InputNumber, Modal, Pagination, Row, Skeleton, Typography } from 'antd';
 import { HiOutlineLocationMarker, HiOutlineMap, HiOutlineUsers } from 'react-icons/hi';
 import * as tourService from '../../services/tourService';
 import { BiPlusCircle, BiSearch } from 'react-icons/bi';
@@ -13,6 +13,7 @@ import TourItem from '../../components/TourItem/TourItem';
 import { useLocation } from 'react-router';
 import TourForm from '../../components/TourForm';
 import SearchBar from '../../components/SearchBar/SearchBar';
+const { Title, Paragraph, Text } = Typography;
 const cx = classNames.bind(styles);
 
 function TourPage() {
@@ -81,7 +82,9 @@ function TourPage() {
                         <div className={cx('banner-title')}>
                             {(category && category.categoryName) || 'Danh sách Tất Cả Tour'}
                         </div>
-                        <h4 className={cx('banner-desc')}>{category && category.description}</h4>
+                        <Title level={4} className={cx('banner-desc')}>
+                            {category && category.description}
+                        </Title>
                     </div>
                 </section>
                 <section className={cx('tour-section')}>
@@ -95,15 +98,16 @@ function TourPage() {
                         doneReset={() => setResetQuery(false)}
                     />
                     {state.userInfo && state.userInfo.role === 'admin' && (
-                        <h4 onClick={() => setShowTourForm(true)} className={cx('add-btn')}>
+                        <Title onClick={() => setShowTourForm(true)} className={cx('add-btn')}>
                             <BiPlusCircle className={cx('add-icon')} />
                             Thêm chuyến mới
-                        </h4>
+                        </Title>
                     )}
                     <Skeleton loading={loading}>
-                        <div className={cx('align-end', 'content-between')}>
-                            <h4>Số lượng chuyến: {numTours}</h4>
-                            <h4
+                        <Title level={4} className={cx('align-end', 'content-between')}>
+                            <Title>Số lượng chuyến: {numTours}</Title>
+                            <Title
+                                level={4}
                                 onClick={() => {
                                     setSearchQuery({});
                                     setResetQuery(true);
@@ -112,8 +116,8 @@ function TourPage() {
                                 className={cx('undo-filter')}
                             >
                                 Bỏ lọc
-                            </h4>
-                        </div>
+                            </Title>
+                        </Title>
                         <Row style={{ marginTop: 5 }} gutter={[20, 20]}>
                             {listTours ? (
                                 listTours.map((item, index) => (
@@ -128,7 +132,7 @@ function TourPage() {
                                     </Col>
                                 ))
                             ) : (
-                                <h3>No tour found</h3>
+                                <Title level={3}>No tour found</Title>
                             )}
                         </Row>
                     </Skeleton>

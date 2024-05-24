@@ -22,6 +22,7 @@ import {
     Skeleton,
     Space,
     Switch,
+    Typography,
     Upload,
     message,
 } from 'antd';
@@ -31,6 +32,7 @@ import TextArea from 'antd/es/input/TextArea';
 import dayjs from 'dayjs';
 import { range } from 'lodash-es';
 const { RangePicker } = DatePicker;
+const { Title, Paragraph, Text } = Typography;
 const cx = classNames.bind(styles);
 
 const TourForm = ({ data, onClose = () => {} }) => {
@@ -128,7 +130,7 @@ const TourForm = ({ data, onClose = () => {} }) => {
             width={'auto'}
             style={{ margin: '30px 0' }}
             centered
-            title={<h2 className={cx('text-center')}>{data ? 'Chỉnh sửa chuyến đi' : 'Thêm chuyến đi'}</h2>}
+            title={<Title className={cx('text-center')}>{data ? 'Chỉnh sửa chuyến đi' : 'Thêm chuyến đi'}</Title>}
             open
             onCancel={() => {
                 form.setFieldsValue(['']);
@@ -279,8 +281,8 @@ const TourForm = ({ data, onClose = () => {} }) => {
                                                 value: item._id,
                                                 label: (
                                                     <div>
-                                                        <p style={{ fontSize: 16 }}>{item.guideName}</p>
-                                                        <p style={{ color: '#999' }}>{item.languages}</p>
+                                                        <Text style={{ fontSize: 16 }}>{item.guideName}</Text>
+                                                        <Text style={{ color: '#999' }}>{item.languages}</Text>
                                                     </div>
                                                 ),
                                             }))

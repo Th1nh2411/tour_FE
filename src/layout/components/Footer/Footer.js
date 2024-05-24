@@ -2,12 +2,13 @@ import styles from './Footer.module.scss';
 import classNames from 'classnames/bind';
 import images from '../../../assets/images';
 import Image from '../../../components/Image/Image';
-import { Col, Row } from 'antd';
+import { Col, Row, Typography } from 'antd';
 import { FaFacebookF, FaLinkedinIn, FaPhoneAlt, FaYoutube } from 'react-icons/fa';
 import { IoLocationSharp, IoMail } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import config from '../../../config';
 const cx = classNames.bind(styles);
+const { Title, Paragraph, Text } = Typography;
 
 function Footer() {
     return (
@@ -21,7 +22,7 @@ function Footer() {
                                 Trải nghiệm và tạo nên nhiều hành trình đáng nhớ cùng Holidate.
                             </div>
                             <div className={cx('follow-wrapper')}>
-                                <h4>Theo dõi chúng tôi :</h4>
+                                <Title>Theo dõi chúng tôi :</Title>
                                 <div className={cx('list-icons')}>
                                     <FaFacebookF className={cx('social-icon')} />
                                     <FaLinkedinIn className={cx('social-icon')} />
