@@ -24,8 +24,8 @@ function SearchBar({ className, defaultValue, onSearch = () => {}, resetQuery, d
     }, [resetQuery]);
     return (
         <div className={cx('wrapper', className)}>
-            <Row gutter={[10, 10]}>
-                <Col md={10}>
+            <Row align={'middle'} style={{ rowGap: 20 }} gutter={{ xs: 10, md: 30 }}>
+                <Col xs={24} md={10} lg={8}>
                     <div className={cx('search-item')}>
                         <HiOutlineMap className={cx('icon')} />
                         <div>
@@ -42,7 +42,7 @@ function SearchBar({ className, defaultValue, onSearch = () => {}, resetQuery, d
                         </div>
                     </div>
                 </Col>
-                <Col md={5}>
+                <Col xs={24} md={6} lg={6}>
                     <div className={cx('search-item')}>
                         <HiOutlineUsers className={cx('icon')} />
                         <div>
@@ -60,25 +60,32 @@ function SearchBar({ className, defaultValue, onSearch = () => {}, resetQuery, d
                         </div>
                     </div>
                 </Col>
-                <Col className={cx('align-center')} md={6}>
-                    <Select
-                        placeholder="Chọn kiểu du lịch"
-                        size="large"
-                        value={duration}
-                        onChange={(value) => setDuration(value)}
-                        options={[
-                            {
-                                value: 0,
-                                label: 'Du lịch ngắn ngày',
-                            },
-                            {
-                                value: 1,
-                                label: 'Du lịch dài ngày',
-                            },
-                        ]}
-                    />
+                <Col xs={24} md={8} className={cx('align-center')} lg={6}>
+                    <div className={cx('search-item')}>
+                        <HiOutlineUsers className={cx('icon')} />
+                        <div>
+                            <Title level={5} className={cx('search-title')}>
+                                Kiểu du lịch
+                            </Title>
+                            <Select
+                                placeholder="Chọn kiểu du lịch"
+                                value={duration}
+                                onChange={(value) => setDuration(value)}
+                                options={[
+                                    {
+                                        value: 0,
+                                        label: 'Du lịch ngắn ngày',
+                                    },
+                                    {
+                                        value: 1,
+                                        label: 'Du lịch dài ngày',
+                                    },
+                                ]}
+                            />
+                        </div>
+                    </div>
                 </Col>
-                <Col md={2} className={cx('content-end')}>
+                <Col xs={24} md={24} lg={2}>
                     <div onClick={() => onSearch({ keyword, availableSeats, duration })} className={cx('search-btn')}>
                         <BiSearch />
                     </div>

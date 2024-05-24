@@ -73,7 +73,7 @@ function ChatBox({ className, open, onClose = () => {} }) {
             setLoad(true);
         };
 
-        postData();
+        // postData();
 
         setMessage('');
     };
@@ -96,7 +96,7 @@ function ChatBox({ className, open, onClose = () => {} }) {
                 }
             };
 
-            getMessage();
+            // getMessage();
         }
 
         setLoad(false);
@@ -107,7 +107,7 @@ function ChatBox({ className, open, onClose = () => {} }) {
         socket.on('receive_message', (data) => {
             setLoad(true);
         });
-        getListUser();
+        // getListUser();
     }, []);
     return (
         <Drawer

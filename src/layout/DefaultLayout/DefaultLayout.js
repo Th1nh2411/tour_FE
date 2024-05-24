@@ -21,8 +21,6 @@ function DefaultLayout({ children }) {
                 algorithm: state.theme === 'dark' ? darkAlgorithm : defaultAlgorithm,
                 token: {
                     fontFamily: 'Nunito',
-                    // colorBgLayout: '#f5f5f5',
-                    margin: 0,
                 },
                 components: {
                     Layout: {
