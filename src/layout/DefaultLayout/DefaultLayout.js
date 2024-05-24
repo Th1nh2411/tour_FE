@@ -6,6 +6,7 @@ import styles from './DefaultLayout.module.scss';
 import { ConfigProvider, FloatButton } from 'antd';
 import { useContext, useState } from 'react';
 import { StoreContext } from '../../store';
+import ThemeMode from '../components/ThemeMode';
 import { FaCommentDots } from 'react-icons/fa';
 import ChatBox from '../../components/ChatBox/ChatBox';
 
@@ -38,6 +39,7 @@ function DefaultLayout({ children }) {
             </FloatButton.Group>
             <div className={cx('wrapper')}>
                 <Header />
+                <ThemeMode />
                 <div className={cx('container')}>
                     <div className={cx('content')}>{children}</div>
                 </div>
