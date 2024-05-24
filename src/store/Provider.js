@@ -34,7 +34,7 @@ function Provider({ children }) {
 
     const initState = {
         userInfo: JSON.parse(Cookies.get('userInfo') || null),
-        theme: 'light',
+        theme: 'dark',
         showToast,
         unpaidBooking: null,
         getUnpaidBooking,

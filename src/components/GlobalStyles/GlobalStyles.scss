@@ -115,7 +115,6 @@ input::placeholder {
 
 a[href] {
     text-decoration: none;
-    color: #333;
 }
 .text-center {
     text-align: center;
@@ -196,9 +195,9 @@ section {
     background-color: var(--primary-color);
     color: #fff;
 }
-.ant-col {
-    font-family: 'Nunito', sans-serif;
-}
+// .ant-col {
+//     font-family: 'Nunito', sans-serif;
+// }
 
 .add-item {
     animation: shakeUp 0.3s forwards ease-in-out;

@@ -43,12 +43,14 @@ function TourPage() {
             maxDuration: query.duration === 0 ? 3 : query.duration === 1 ? 365 : undefined,
         });
 
-        setLoading(false);
-        if ((query.keyword || query.availableSeats > 1) && currentPageTours === 1) {
-            state.showToast('Thành công', `Tìm thấy ` + results.count + ' chuyến phù hợp');
+        if (results) {
+            setLoading(false);
+            if ((query.keyword || query.availableSeats > 1) && currentPageTours === 1) {
+                state.showToast('Thành công', `Tìm thấy ` + results.count + ' chuyến phù hợp');
+            }
+            setListTours(results.data);
+            setNumTours(results.count);
         }
-        setListTours(results.data);
-        setNumTours(results.count);
     };
 
     useEffect(() => {
@@ -104,10 +106,10 @@ function TourPage() {
                         </Title>
                     )}
                     <Skeleton loading={loading}>
-                        <Title level={4} className={cx('align-end', 'content-between')}>
-                            <Title>Số lượng chuyến: {numTours}</Title>
+                        <div className={cx('align-end', 'content-between')}>
+                            <Title level={5}>Số lượng chuyến: {numTours}</Title>
                             <Title
-                                level={4}
+                                level={5}
                                 onClick={() => {
                                     setSearchQuery({});
                                     setResetQuery(true);
@@ -117,7 +119,7 @@ function TourPage() {
                             >
                                 Bỏ lọc
                             </Title>
-                        </Title>
+                        </div>
                         <Row style={{ marginTop: 5 }} gutter={[20, 20]}>
                             {listTours ? (
                                 listTours.map((item, index) => (

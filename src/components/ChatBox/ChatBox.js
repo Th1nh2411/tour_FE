@@ -96,7 +96,7 @@ function ChatBox({ className, open, onClose = () => {} }) {
                 }
             };
 
-            // getMessage();
+            getMessage();
         }
 
         setLoad(false);

@@ -33,16 +33,16 @@ function SearchBar({ className, defaultValue, onSearch = () => {}, resetQuery, d
                                 Du lịch đâu nè?
                             </Title>
                             <Input
+                                variant="filled"
                                 className={cx('search-input')}
                                 placeholder="Where are you going"
-                                bordered={false}
                                 value={keyword}
                                 onChange={(e) => setLocationValue(e.target.value)}
                             />
                         </div>
                     </div>
                 </Col>
-                <Col md={6}>
+                <Col md={5}>
                     <div className={cx('search-item')}>
                         <HiOutlineUsers className={cx('icon')} />
                         <div>
@@ -50,9 +50,9 @@ function SearchBar({ className, defaultValue, onSearch = () => {}, resetQuery, d
                                 Chỗ trống
                             </Title>
                             <InputNumber
+                                variant="filled"
                                 className={cx('search-input')}
                                 placeholder="1"
-                                bordered={false}
                                 value={availableSeats}
                                 onChange={(value) => setAvailableSeats(value)}
                                 min={1}

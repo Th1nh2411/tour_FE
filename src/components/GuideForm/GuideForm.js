@@ -4,7 +4,21 @@ import classNames from 'classnames/bind';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import * as guideService from '../../services/guideService';
 import * as uploadService from '../../services/uploadService';
-import { Button, Col, DatePicker, Form, Input, InputNumber, Modal, Row, Select, Space, Switch, Upload } from 'antd';
+import {
+    Button,
+    Col,
+    DatePicker,
+    Form,
+    Input,
+    InputNumber,
+    Modal,
+    Row,
+    Select,
+    Space,
+    Switch,
+    Typography,
+    Upload,
+} from 'antd';
 import { BsDashCircle, BsPlusCircle, BsUpload } from 'react-icons/bs';
 import { StoreContext } from '../../store';
 import TextArea from 'antd/es/input/TextArea';
@@ -12,6 +26,7 @@ import dayjs from 'dayjs';
 import { range } from 'lodash-es';
 import GUIDE_FORM_DATA from './data';
 const cx = classNames.bind(styles);
+const { Title, Paragraph, Text } = Typography;
 
 const GuideForm = ({ data, onClose = () => {} }) => {
     const [state, dispatch] = useContext(StoreContext);

@@ -48,7 +48,7 @@ function Home() {
                             />
                         </Title>
                         <Title level={1} className={cx('section-title')}>
-                            Du hành khắp thế giới và tạo nhiều <Text>kỉ niệm đẹp với Holidate</Text>
+                            Du hành khắp thế giới và tạo nhiều <span>kỉ niệm đẹp với Holidate</span>
                         </Title>
                         <Text className={cx('section-desc')}>
                             Chúng tôi cung cấp một loạt các tour du lịch đa dạng, từ những kỳ nghỉ thư giãn tại các điểm

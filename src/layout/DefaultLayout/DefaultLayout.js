@@ -19,10 +19,20 @@ function DefaultLayout({ children }) {
         <ConfigProvider
             theme={{
                 algorithm: state.theme === 'dark' ? darkAlgorithm : defaultAlgorithm,
+                token: {
+                    fontFamily: 'Nunito',
+                    // colorBgLayout: '#f5f5f5',
+                    margin: 0,
+                },
+                components: {
+                    Layout: {
+                        colorBgHeader: state.theme === 'dark' ? '#001529' : '#f5f5f5',
+                    },
+                },
             }}
         >
             {showChat && <ChatBox open={showChat} onClose={() => setShowChat(false)} />}
-            <FloatButton.GroupText>
+            <FloatButton.Group>
                 <FloatButton.BackTop />
                 <FloatButton
                     onClick={() => {
@@ -35,7 +45,7 @@ function DefaultLayout({ children }) {
                     icon={<FaCommentDots />}
                     type="primary"
                 />
-            </FloatButton.GroupText>
+            </FloatButton.Group>
             <div className={cx('wrapper')}>
                 <Header />
                 <ThemeMode />
