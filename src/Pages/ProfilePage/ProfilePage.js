@@ -78,6 +78,7 @@ function ProfilePage() {
             state.showToast('Thành công', results.message);
         }
     };
+    const cardBg = { backgroundColor: state.theme === 'dark' ? '#001529' : '#f5f5f5' };
     return (
         <>
             <CropperImage modalOpen={showModalAvatar} src={avatarSrc} onModalClose={() => setShowModalAvatar(false)} />
@@ -126,19 +127,19 @@ function ProfilePage() {
                                     </Space>
                                     {state.userInfo && (
                                         <>
-                                            <Title level={3} className={cx('profile-info')}>
+                                            <Text className={cx('profile-info')}>
                                                 Tên người dùng: <Text>{state.userInfo.fullName}</Text>
-                                            </Title>
-                                            <Title level={3} className={cx('profile-info')}>
+                                            </Text>
+                                            <Text className={cx('profile-info')}>
                                                 Tài khoản gmail: <Text>{state.userInfo.email}</Text>
-                                            </Title>
-                                            <Title level={3} className={cx('profile-info')}>
+                                            </Text>
+                                            <Text className={cx('profile-info')}>
                                                 Số điện thoại:
                                                 <Text>{state.userInfo.phoneNumber}</Text>
-                                            </Title>
-                                            <Title level={3} className={cx('profile-info')}>
+                                            </Text>
+                                            <Text className={cx('profile-info')}>
                                                 Địa chỉ: <Text>{state.userInfo.address || 'Chưa có thông tin'}</Text>
-                                            </Title>
+                                            </Text>
                                         </>
                                     )}
                                 </div>
@@ -146,7 +147,7 @@ function ProfilePage() {
                         </div>
                     </Col>
                     <Col xs={24} lg={12}>
-                        <div className={cx('card')}>
+                        <div style={cardBg} className={cx('card')}>
                             <div className={cx('title')}>
                                 <BsFillClipboard2Fill className={cx('title-icon')} /> Lịch sử đặt chuyến
                             </div>
