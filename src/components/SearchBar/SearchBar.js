@@ -25,10 +25,10 @@ function SearchBar({ className, defaultValue, onSearch = () => {}, resetQuery, d
     return (
         <div className={cx('wrapper', className)}>
             <Row align={'middle'} style={{ rowGap: 20 }} gutter={{ xs: 10, md: 30 }}>
-                <Col xs={24} md={10} lg={8}>
+                <Col xs={24} md={10} lg={10}>
                     <div className={cx('search-item')}>
                         <HiOutlineMap className={cx('icon')} />
-                        <div>
+                        <div style={{ flex: 1 }}>
                             <Title level={5} className={cx('search-title')}>
                                 Du lịch đâu nè?
                             </Title>

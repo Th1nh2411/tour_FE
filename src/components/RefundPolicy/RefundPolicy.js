@@ -15,7 +15,7 @@ const RefundPolicy = () => {
                 <Text className={cx('refund-value')}>Huỷ vé miễn phí</Text>
             </div>
             <div className={cx('warning-refund')}>
-                <Text className={cx('refund-value')}>Phí huỷ vé : 100k</Text>
+                <Text className={cx('refund-value')}>Phí huỷ vé: 20%</Text>
                 <Text className={cx('refund-timeline')}>Trước 3 ngày</Text>
             </div>
             <div className={cx('danger-refund')}>

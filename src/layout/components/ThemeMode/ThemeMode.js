@@ -1,10 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import styles from './ThemeMode.module.scss';
 import classNames from 'classnames/bind';
-import { AiFillCloseCircle, AiOutlineLoading3Quarters } from 'react-icons/ai';
-import HeadlessTippy from '@tippyjs/react/headless';
-import { IoSearch } from 'react-icons/io5';
-import { useDebounce } from '../../../hooks';
 import { StoreContext, actions } from '../../../store';
 
 const cx = classNames.bind(styles);
@@ -13,6 +9,7 @@ function ThemeMode() {
     const toggleThemeMode = () => {
         console.log(state);
         dispatch(actions.setTheme(state.theme === 'light' ? 'dark' : 'light'));
+        document.documentElement.style.setProperty('--box-shadow-color', state.theme === 'dark' ? '#0003' : '#fff3');
     };
     return (
         <>
