@@ -1,6 +1,6 @@
 .refund-policy {
     position: relative;
-    margin: 20px 0;
+    margin: 50px 0;
     display: flex;
 
     .start-refund {
@@ -115,12 +115,15 @@
     font-size: 1.2rem;
     position: absolute;
     right: 0px;
-    top: 0px;
+    top: -25px;
     transform: translateX(50%);
 }
 .refund-value {
-    text-align: center;
-    padding-top: 40px;
+    position: absolute;
+    left: 50%;
+    bottom: -30px;
+    transform: translateX(-50%);
+    white-space: nowrap;
 }
 @media (max-width: 767px) {
     .refund-policy {

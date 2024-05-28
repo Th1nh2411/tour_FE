@@ -31,32 +31,32 @@ function TourItem({ className, data, onEdit }) {
             </div>
             <div className={cx('body')}>
                 <div className={cx('city-wrapper')}>
-                    <Title level={3} className={cx('address')}>
+                    <Title level={4} italic className={cx('address')}>
                         <HiOutlineLocationMarker className={cx('location-icon')} />
                         {data.address}
                     </Title>
-                    <div className={cx('rate-wrapper')}>
+                    <Text className={cx('rate-wrapper')}>
                         <BsFillStarFill className={cx('rate-icon')} />
                         {data.averageRating || 'Not rated'}
-                    </div>
+                    </Text>
                 </div>
-                <Title level={3} className={cx('title')}>
+                <Title level={4} className={cx('title')}>
                     {data.tourName}
                 </Title>
-                <Title level={4} className={cx('quantity-seats')}>
+                <Text className={cx('quantity-seats')}>
                     <IoTicketSharp className={cx('ticket-icon')} />
                     {data.availableSeats} còn lại
                     <Text className={cx('duration')}>{data.duration} ngày</Text>
-                </Title>
+                </Text>
                 <div className={cx('footer')}>
                     <div>
                         <Text>
-                            <Text style={{ fontWeight: 700 }}>Khời hành :</Text>{' '}
+                            <Text style={{ fontWeight: 700 }}>Khởi hành :</Text>{' '}
                             {dayjs(data.startDate).format('DD/MM/YYYY')}
                         </Text>
-                        <div className={cx('price')}>
-                            <Text>{priceFormat(data.price)}đ</Text> /1 vé
-                        </div>
+                        <Title level={5} style={{ margin: 0 }} className={cx('price')}>
+                            <span>{priceFormat(data.price)}đ</span> /1 vé
+                        </Title>
                     </div>
                     <Button
                         onClick={() => navigate(`/tour/${data._id}`)}

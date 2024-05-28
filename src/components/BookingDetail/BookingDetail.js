@@ -75,7 +75,9 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
             children: bookingDetail && (
                 <div>
                     {bookingDetail.tourInfo.itineraries.map((item, index) => (
-                        <Text key={index}>{item}</Text>
+                        <Text style={{ display: 'block' }} key={index}>
+                            {item}
+                        </Text>
                     ))}
                 </div>
             ),
@@ -167,7 +169,7 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
             title={<Text style={{ fontSize: 22 }}>Chi tiết chuyến đi</Text>}
             onClose={onClose}
             open={bookingDetail}
-            className={cx('wrapper', className)}
+            className={cx('wrapper', className, { darkBg: state.theme === 'dark' })}
             footer={actions}
             style={{
                 position: 'relative',

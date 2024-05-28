@@ -159,7 +159,9 @@ function ChatBox({ className, open, onClose = () => {} }) {
                         size="large"
                         style={{ marginRight: '12px', borderRadius: '16px' }}
                     />
-                    <AiOutlineSend className={cx('send-btn')} onClick={handlerSend} />
+                    <Text>
+                        <AiOutlineSend className={cx('send-btn')} onClick={handlerSend} />
+                    </Text>
                 </div>
             </Skeleton>
         </Drawer>

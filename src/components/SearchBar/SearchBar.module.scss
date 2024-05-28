@@ -1,8 +1,8 @@
 .wrapper {
     border-radius: 20px;
-    box-shadow: 1px 5px 20px 0px rgba(17, 12, 46, 0.15);
+    box-shadow: 1px 5px 20px 0px var(--box-shadow-color);
     margin: 0 auto 30px;
-    padding: 0.6rem 2.5rem;
+    padding: 2rem 2.5rem;
     width: fit-content;
 }
 .search-item {
@@ -22,7 +22,7 @@
         line-height: 1;
     }
     .search-input {
-        width: auto;
+        width: 100%;
         font-weight: 600;
         font-size: 1.6rem;
 
