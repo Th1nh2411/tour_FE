@@ -14,14 +14,14 @@ export const get = async (path, config = {}) => {
         return response.data;
     } catch (error) {
         if (error.response && error.response.status === 401) {
-            Cookies.remove('userInfo');
-            Modal.info({
-                centered: true,
-                title: 'Phiên đăng nhập đã kết thúc! Vui lòng đăng nhập lại.',
-                onOk() {
-                    window.location.href = window.location.protocol + '//' + window.location.host;
-                },
-            });
+            // Cookies.remove('userInfo');
+            // Modal.info({
+            //     centered: true,
+            //     title: 'Phiên đăng nhập đã kết thúc! Vui lòng đăng nhập lại.',
+            //     onOk() {
+            //         window.location.href = window.location.protocol + '//' + window.location.host;
+            //     },
+            // });
         }
     }
 };
@@ -31,14 +31,14 @@ export const post = async (path, body = {}, config = {}) => {
         return response.data;
     } catch (error) {
         if (error.response && error.response.status === 401) {
-            Cookies.remove('userInfo');
-            Modal.info({
-                centered: true,
-                title: 'Phiên đăng nhập đã kết thúc! Vui lòng đăng nhập lại.',
-                onOk() {
-                    window.location.href = window.location.protocol + '//' + window.location.host;
-                },
-            });
+            // Cookies.remove('userInfo');
+            // Modal.info({
+            //     centered: true,
+            //     title: 'Phiên đăng nhập đã kết thúc! Vui lòng đăng nhập lại.',
+            //     onOk() {
+            //         window.location.href = window.location.protocol + '//' + window.location.host;
+            //     },
+            // });
         } else {
             notification.open({
                 message: 'Thất bại',
@@ -55,14 +55,14 @@ export const del = async (path, config = {}) => {
         return response.data;
     } catch (error) {
         if (error.response && error.response.status === 401) {
-            Cookies.remove('userInfo');
-            Modal.info({
-                centered: true,
-                title: 'Phiên đăng nhập đã kết thúc! Vui lòng đăng nhập lại.',
-                onOk() {
-                    window.location.href = window.location.protocol + '//' + window.location.host;
-                },
-            });
+            // Cookies.remove('userInfo');
+            // Modal.info({
+            //     centered: true,
+            //     title: 'Phiên đăng nhập đã kết thúc! Vui lòng đăng nhập lại.',
+            //     onOk() {
+            //         window.location.href = window.location.protocol + '//' + window.location.host;
+            //     },
+            // });
         } else {
             notification.open({
                 message: 'Thất bại',
@@ -79,14 +79,14 @@ export const put = async (path, body = {}, config = {}) => {
         return response.data;
     } catch (error) {
         if (error.response && error.response.status === 401) {
-            Cookies.remove('userInfo');
-            Modal.info({
-                centered: true,
-                title: 'Phiên đăng nhập đã kết thúc! Vui lòng đăng nhập lại.',
-                onOk() {
-                    window.location.href = window.location.protocol + '//' + window.location.host;
-                },
-            });
+            // Cookies.remove('userInfo');
+            // Modal.info({
+            //     centered: true,
+            //     title: 'Phiên đăng nhập đã kết thúc! Vui lòng đăng nhập lại.',
+            //     onOk() {
+            //         window.location.href = window.location.protocol + '//' + window.location.host;
+            //     },
+            // });
         } else {
             notification.open({
                 message: 'Thất bại',
@@ -103,14 +103,14 @@ export const patch = async (path, body = {}, config = {}) => {
         return response.data;
     } catch (error) {
         if (error.response && error.response.status === 401) {
-            Cookies.remove('userInfo');
-            Modal.info({
-                centered: true,
-                title: 'Phiên đăng nhập đã kết thúc! Vui lòng đăng nhập lại.',
-                onOk() {
-                    window.location.href = window.location.protocol + '//' + window.location.host;
-                },
-            });
+            // Cookies.remove('userInfo');
+            // Modal.info({
+            //     centered: true,
+            //     title: 'Phiên đăng nhập đã kết thúc! Vui lòng đăng nhập lại.',
+            //     onOk() {
+            //         window.location.href = window.location.protocol + '//' + window.location.host;
+            //     },
+            // });
         } else {
             notification.open({
                 message: 'Thất bại',

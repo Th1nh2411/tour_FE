@@ -6,7 +6,18 @@ export const getSupportMessage = async (params) => {
         params,
     };
     try {
-        const res = await httpRequest.get(`messenger/support/get`, config);
+        const res = await httpRequest.get(`message/support`, config);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const getMessageByUser = async (params) => {
+    const config = {
+        params,
+    };
+    try {
+        const res = await httpRequest.get(`message`, config);
         return res;
     } catch (error) {
         console.log(error);
@@ -14,7 +25,15 @@ export const getSupportMessage = async (params) => {
 };
 export const sendSupportMessage = async (body) => {
     try {
-        const res = await httpRequest.post(`messenger/support/send`, body);
+        const res = await httpRequest.post(`message/support`, body);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const sendMessage = async (body) => {
+    try {
+        const res = await httpRequest.post(`message`, body);
         return res;
     } catch (error) {
         console.log(error);
@@ -22,7 +41,7 @@ export const sendSupportMessage = async (body) => {
 };
 export const countUnreadMessage = async (body) => {
     try {
-        const res = await httpRequest.post(`messenger/support/count`, body);
+        const res = await httpRequest.post(`message/support/count`, body);
         return res;
     } catch (error) {
         console.log(error);
@@ -30,7 +49,7 @@ export const countUnreadMessage = async (body) => {
 };
 export const readSupportMessage = async (body) => {
     try {
-        const res = await httpRequest.post(`messenger/support/read`, body);
+        const res = await httpRequest.post(`message/support/read`, body);
         return res;
     } catch (error) {
         console.log(error);

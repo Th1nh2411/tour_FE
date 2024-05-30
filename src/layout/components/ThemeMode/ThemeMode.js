@@ -1,15 +1,16 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import styles from './ThemeMode.module.scss';
 import classNames from 'classnames/bind';
+import Cookies from 'js-cookie';
 import { StoreContext, actions } from '../../../store';
 
 const cx = classNames.bind(styles);
 function ThemeMode() {
     const [state, dispatch] = useContext(StoreContext);
     const toggleThemeMode = () => {
-        console.log(state);
+        Cookies.set('theme', JSON.stringify(state.theme === 'light' ? 'dark' : 'light'));
         dispatch(actions.setTheme(state.theme === 'light' ? 'dark' : 'light'));
-        document.documentElement.style.setProperty('--box-shadow-color', state.theme === 'dark' ? '#0003' : '#fff3');
+        state.setStyleTheme(state.theme === 'light' ? 'dark' : 'light');
     };
     return (
         <>
