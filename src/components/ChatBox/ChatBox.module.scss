@@ -9,7 +9,6 @@
     display: flex;
     gap: 12px;
     overflow-x: scroll;
-    max-width: 500px;
     white-space: nowrap;
     position: relative;
     background-color: #cccccc24;
@@ -27,13 +26,13 @@
     opacity: 0.8;
 }
 .message-wrapper {
-    padding: 10px;
+    padding: 10px 10px 20px;
     overflow-y: scroll;
     height: 100%;
 }
 .message-item {
     display: flex;
-    align-items: center;
+    align-items: end;
     margin-bottom: 15px;
 }
 .message-item.active {
@@ -59,6 +58,9 @@
     display: block;
     color: #666;
 }
+.message-item.active .message-time {
+    text-align: end;
+}
 .message-input {
     width: 100%;
     display: flex;
@@ -77,4 +79,46 @@
 .wrapper ::-webkit-scrollbar {
     border-radius: 0;
     height: 4px;
+}
+// Loading dots
+.dots {
+    display: flex;
+    width: fit-content;
+    padding: 10px 8px 20px;
+    border-radius: 5px;
+    position: absolute;
+    left: 10px;
+    bottom: 64px;
+    .dot {
+        display: inline-block;
+        background-color: var(--primary-color);
+        border-radius: 50%;
+        margin-right: 5px;
+        &-small {
+            width: 8px;
+            height: 8px;
+            animation: typing 1s linear infinite;
+        }
+        &:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+        &:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+        &:nth-child(3) {
+            animation-delay: 0.5s;
+        }
+    }
+}
+
+@keyframes typing {
+    0% {
+        transform: translate(0, 0);
+    }
+    50% {
+        transform: translate(0, 6px);
+    }
+    100% {
+        transform: translate(0, 0);
+    }
 }

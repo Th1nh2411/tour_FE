@@ -5,6 +5,7 @@ import { AiFillCloseCircle, AiOutlineLoading3Quarters } from 'react-icons/ai';
 import HeadlessTippy from '@tippyjs/react/headless';
 import { IoSearch } from 'react-icons/io5';
 import { useDebounce } from '../../../hooks';
+import Title from 'antd/es/typography/Title';
 
 const cx = classNames.bind(styles);
 function Search() {
@@ -61,7 +62,9 @@ function Search() {
                 render={(attrs) => (
                     <>
                         <div className={cx('search-result')} tabIndex="-1">
-                            <h4 className={cx('search-title')}>Recipes</Title>
+                            <Title level={4} className={cx('search-title')}>
+                                Recipes
+                            </Title>
                             {searchResult.map((data) => (
                                 <div>Item</div>
                             ))}
