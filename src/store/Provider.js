@@ -31,13 +31,16 @@ function Provider({ children }) {
             }
         }, [2000]);
     };
-
+    const setStyleTheme = (theme) => {
+        document.documentElement.style.setProperty('--box-shadow-color', theme === 'dark' ? '#fff3' : '#0003');
+    };
     const initState = {
         userInfo: JSON.parse(Cookies.get('userInfo') || null),
-        theme: 'dark',
+        theme: JSON.parse(Cookies.get('theme') || null) || 'dark',
         showToast,
         unpaidBooking: null,
         getUnpaidBooking,
+        setStyleTheme,
     };
     const [state, dispatch] = useReducer(reducer, initState);
     const activeAccount = async () => {
@@ -52,6 +55,7 @@ function Provider({ children }) {
             }
         }, [2000]);
     };
+
     useEffect(() => {
         if (state.userInfo) {
             getUnpaidBooking();
@@ -59,6 +63,7 @@ function Provider({ children }) {
         if (email && activeID) {
             activeAccount();
         }
+        setStyleTheme(state.theme);
     }, []);
     return (
         <UserContext.Provider value={[state, dispatch]}>
