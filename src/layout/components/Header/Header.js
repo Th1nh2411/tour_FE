@@ -110,9 +110,7 @@ function Header() {
                                 className={(nav) => cx('header-nav_item', { active: nav.isActive })}
                                 to={config.routes.home}
                             >
-                                <Text style={{ fontSize: 18 }} style={{ fontSize: 18 }}>
-                                    Trang chủ
-                                </Text>
+                                <Text style={{ fontSize: 18 }}>Trang chủ</Text>
                             </NavLink>
                             <NavLink
                                 className={(nav) => cx('header-nav_item', { active: nav.isActive })}
@@ -154,7 +152,7 @@ function Header() {
                     </div>
                     {userInfo ? (
                         <div className={cx('header-actions')} size={'large'}>
-                            <Text style={{ fontSize: 18 }}>{userInfo.fullName.split(' ').pop()}</Text>
+                            <Text style={{ fontSize: 18 }}>{userInfo?.fullName?.split(' ').pop()}</Text>
                             <Dropdown
                                 menu={{
                                     items: optionItems,

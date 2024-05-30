@@ -9,6 +9,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { StoreContext } from '../../store';
 import io from 'socket.io-client';
 import dayjs from 'dayjs';
+import useDebounce from '../../hooks/useDebounce';
 const { Title, Paragraph, Text } = Typography;
 const socket = io('http://localhost:4000');
 const cx = classNames.bind(styles);
@@ -20,26 +21,45 @@ function ChatBox({ className, open, onClose = () => {} }) {
     const [message, setMessage] = useState('');
     const [conversation, setConversation] = useState();
     const [listUser, setListUser] = useState([]);
+    const [currentChat, setCurrentChat] = useState({});
     const [chosenUser, setChosenUser] = useState({});
+    const [isTyping, setIsTyping] = useState(false);
     const conversationRef = useRef(null);
+    const typeDebounce = useDebounce(message, 1000);
 
     const onChangeSend = (e) => {
         const value = e.target.value;
         setMessage(value);
 
-        socket.emit('keyboard_message_send', value);
+        socket.emit('typing', { chat_id: currentChat, sender_id: userInfo._id });
     };
-
+    useEffect(() => {
+        socket.emit('stop_typing', currentChat);
+    }, [typeDebounce]);
     // Client nhận dữ liệu từ server gửi xuống thông qua socket
     useEffect(() => {
-        socket.on('message_response', (newConversation) => {
-            if (newConversation) {
-                setConversation(newConversation);
-            } else {
+        socket.on('message_response', (data) => {
+            if (data.newConversation && data.chat_id === currentChat) {
+                setConversation(data.newConversation);
             }
         });
-        // console.log(conversation);
-    }, [socket]);
+        socket.on('display_typing', (data) => {
+            if (data.chat_id === currentChat && data.sender_id !== userInfo._id) {
+                setIsTyping(true);
+            }
+        });
+
+        socket.on('remove_typing', (chat_id) => {
+            if (chat_id === currentChat) {
+                setIsTyping(false);
+            }
+        });
+        return () => {
+            socket.off('display_typing');
+            socket.off('remove_typing');
+            socket.off('message_response');
+        };
+    }, [socket, currentChat]);
 
     //Hàm này dùng để gửi tin nhắn
     const handlerSend = () => {
@@ -50,17 +70,11 @@ function ChatBox({ className, open, onClose = () => {} }) {
             socketID: socket.id,
         };
         const newConversation = [...conversation, newMessage];
-        socket.emit('message', newConversation);
-        setConversation(newConversation);
+        socket.emit('message', { chat_id: currentChat, newConversation });
 
         //Tiếp theo nó sẽ postdata lên api đưa dữ liệu vào database
         const postData = async () => {
-            let res;
-            if (userInfo.role === 'admin') {
-                res = await messageService.sendMessage({ user_id: chosenUser, message });
-            } else {
-                res = await messageService.sendSupportMessage({ message });
-            }
+            const res = await messageService.sendMessage({ chat_id: currentChat, message });
             if (res && res.success) {
             }
             //Sau đó gọi hàm setLoad để useEffect lấy lại dữ liệu sau khi update
@@ -77,25 +91,27 @@ function ChatBox({ className, open, onClose = () => {} }) {
                 setLoading(true);
                 let res;
                 if (userInfo.role === 'admin') {
-                    res = await messageService.getMessageByUser({ user_id: chosenUser });
+                    res = await messageService.getMessageByUser({ user_id: chosenUser._id });
                 } else {
                     res = await messageService.getSupportMessage();
                 }
                 setLoading(false);
 
-                if (res && res.data) {
+                if (res) {
                     setConversation(res.data);
+                    console.log(res.chat_id);
+                    setCurrentChat(res.chat_id);
                 }
             };
 
             getMessage();
         }
-    }, [chosenUser]);
+    }, [chosenUser._id]);
     const getListUser = async () => {
         const response = await messageService.getListUser();
         if (response) {
             setListUser(response.data);
-            setChosenUser(response.data?.[0]._id);
+            setChosenUser(response.data?.[0]);
         }
     };
     useEffect(() => {
@@ -110,7 +126,7 @@ function ChatBox({ className, open, onClose = () => {} }) {
     }, [conversationRef, conversation]);
     return (
         <Drawer
-            width={'auto'}
+            width={'600px'}
             title={
                 <Text className={cx('align-center')} style={{ fontSize: 22, color: 'white' }}>
                     Hỗ trợ khách hàng <FaHeadset style={{ marginLeft: 8 }} />
@@ -128,7 +144,7 @@ function ChatBox({ className, open, onClose = () => {} }) {
         >
             <Flex className={cx('list-user')}>
                 {listUser?.map((user, index) => (
-                    <div onClick={() => setChosenUser(user._id)} key={index} className={cx('user-item')}>
+                    <div onClick={() => setChosenUser(user)} key={index} className={cx('user-item')}>
                         <Avatar alt="avatar" src={user.photo} />
                         <Text style={{ width: 45, textAlign: 'center' }} ellipsis>
                             {user.fullName?.split(' ').pop()}
@@ -141,18 +157,25 @@ function ChatBox({ className, open, onClose = () => {} }) {
                     {conversation?.map((item, index) => (
                         <div key={index} className={cx('message-item', { active: item.user_id === userInfo._id })}>
                             {item.user_id !== userInfo._id && <FcAssistant className={cx('default-avatar')} />}
-                            <div className={cx('ml-1')}>
+                            <div className={cx('ml-1')} style={{ maxWidth: '80%' }}>
                                 {item.user_id !== userInfo._id && (
                                     <Text style={{ display: 'block' }}>{chosenUser.fullName || 'Admin'}</Text>
                                 )}
                                 <div className={cx('message-content')}>
-                                    {item.content}
+                                    <Text style={{ color: '#333' }}>{item.content}</Text>
                                     <span className={cx('message-time')}>{dayjs(item.createdAt).format('HH:mm')}</span>
                                 </div>
                             </div>
                         </div>
                     ))}
                 </Skeleton>
+                {isTyping && (
+                    <div className={cx('dots')}>
+                        <div className={cx('dot', 'dot-small')}></div>
+                        <div className={cx('dot', 'dot-small')}></div>
+                        <div className={cx('dot', 'dot-small')}></div>
+                    </div>
+                )}
             </div>
             <div className={cx('message-input')}>
                 <Input
