@@ -23,6 +23,17 @@ export const getMessageByUser = async (params) => {
         console.log(error);
     }
 };
+export const deleteMessage = async (params) => {
+    const config = {
+        params,
+    };
+    try {
+        const res = await httpRequest.del(`message`, config);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
 export const sendSupportMessage = async (body) => {
     try {
         const res = await httpRequest.post(`message/support`, body);

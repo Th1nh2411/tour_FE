@@ -24,7 +24,7 @@ function DefaultLayout({ children }) {
                 },
                 components: {
                     Layout: {
-                        BgHeader: state.theme === 'dark' ? '#001529' : '#f5f5f5',
+                        headerBg: state.theme === 'dark' ? '#001529' : '#f5f5f5',
                         colorBgLayout: state.theme === 'dark' ? '#001529' : '#f5f5f5',
                     },
                 },

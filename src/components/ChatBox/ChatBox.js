@@ -1,9 +1,10 @@
 import classNames from 'classnames/bind';
 import styles from './ChatBox.module.scss';
-import { Avatar, Divider, Drawer, Flex, Input, Skeleton, Typography } from 'antd';
+import { Avatar, Divider, Drawer, Dropdown, Flex, Input, Popconfirm, Skeleton, Typography } from 'antd';
 import { FaHeadset } from 'react-icons/fa';
 import { FcAssistant } from 'react-icons/fc';
 import { AiOutlineSend } from 'react-icons/ai';
+import { HiOutlineDotsVertical } from 'react-icons/hi';
 import * as messageService from '../../services/messageService';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { StoreContext } from '../../store';
@@ -124,6 +125,37 @@ function ChatBox({ className, open, onClose = () => {} }) {
             conversationRef.current.scrollTop = conversationRef.current.scrollHeight;
         }
     }, [conversationRef, conversation]);
+    const handleDeleteConversation = () => {
+        const deleteConversation = async () => {
+            const response = await messageService.deleteMessage({ chat_id: currentChat });
+            if (response) {
+                setConversation([]);
+                state.showToast('Đã xóa cuộc hội thoại');
+            }
+        };
+        deleteConversation();
+    };
+    const items = [
+        {
+            label: (
+                <Popconfirm title="Xóa cuộc hội thoại này?" onConfirm={handleDeleteConversation}>
+                    <Text>Xóa cuộc hội thoại</Text>
+                </Popconfirm>
+            ),
+            key: '0',
+        },
+        {
+            label: <Text>Icon</Text>,
+            key: '1',
+        },
+        {
+            type: 'divider',
+        },
+        {
+            label: '3rd menu item',
+            key: '3',
+        },
+    ];
     return (
         <Drawer
             width={'600px'}
@@ -178,6 +210,11 @@ function ChatBox({ className, open, onClose = () => {} }) {
                 )}
             </div>
             <div className={cx('message-input')}>
+                <Dropdown menu={{ items }} trigger={'click'}>
+                    <Text>
+                        <HiOutlineDotsVertical className={cx('bottom-icon')} />
+                    </Text>
+                </Dropdown>
                 <Input
                     onPressEnter={handlerSend}
                     value={message}
@@ -187,7 +224,7 @@ function ChatBox({ className, open, onClose = () => {} }) {
                     style={{ marginRight: '12px', borderRadius: '16px' }}
                 />
                 <Text>
-                    <AiOutlineSend className={cx('send-btn')} onClick={handlerSend} />
+                    <AiOutlineSend className={cx('bottom-icon')} onClick={handlerSend} />
                 </Text>
             </div>
         </Drawer>
