@@ -32,7 +32,7 @@ function Provider({ children }) {
         }, [2000]);
     };
     const setStyleTheme = (theme) => {
-        document.documentElement.style.setProperty('--box-shadow-color', theme === 'dark' ? '#fff3' : '#0003');
+        document.documentElement.style.setProperty('--box-shadow-color', theme === 'dark' ? '#ffffff2b' : '#0003');
     };
     const initState = {
         userInfo: JSON.parse(Cookies.get('userInfo') || null),

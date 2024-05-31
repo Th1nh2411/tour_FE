@@ -41,24 +41,25 @@
 .header-nav {
     display: flex;
     margin-bottom: 0;
-}
-.header-nav_item {
-    text-decoration: none;
-    list-style: none;
-    font-weight: 700;
-    font-size: 2.2rem;
-    transition: 0.1s all ease-in-out;
-    &:hover {
+    .header-nav_item {
+        text-decoration: none;
+        list-style: none;
+        font-weight: 700;
+        font-size: 2.2rem;
+        &:hover span {
+            transition: 0.1s all ease-in-out;
+            opacity: 0.8;
+            cursor: pointer;
+        }
+    }
+    .header-nav_item.active span {
         color: var(--primary-color);
-        cursor: pointer;
+    }
+    .header-nav_item + .header-nav_item {
+        margin-left: 45px;
     }
 }
-.header-nav_item.active {
-    color: var(--primary-color);
-}
-.header-nav_item + .header-nav_item {
-    margin-left: 45px;
-}
+
 .cart-wrapper {
     position: relative;
     display: flex;
