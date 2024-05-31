@@ -11,7 +11,7 @@ import io from 'socket.io-client';
 import dayjs from 'dayjs';
 import useDebounce from '../../hooks/useDebounce';
 const { Title, Paragraph, Text } = Typography;
-const socket = io('http://localhost:4000');
+const socket = io('https://holidate-be.vercel.app');
 const cx = classNames.bind(styles);
 
 function ChatBox({ className, open, onClose = () => {} }) {
