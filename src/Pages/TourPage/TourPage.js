@@ -101,7 +101,7 @@ function TourPage() {
                         doneReset={() => setResetQuery(false)}
                     />
                     {state.userInfo && state.userInfo.role === 'admin' && (
-                        <Title onClick={() => setShowTourForm(true)} className={cx('add-btn')}>
+                        <Title level={4} onClick={() => setShowTourForm(true)} className={cx('add-btn')}>
                             <BiPlusCircle className={cx('add-icon')} />
                             Thêm chuyến mới
                         </Title>
@@ -110,6 +110,7 @@ function TourPage() {
                         <div className={cx('align-end', 'content-between')}>
                             <Title level={5}>Số lượng chuyến: {numTours}</Title>
                             <Title
+                                type="warning"
                                 level={5}
                                 onClick={() => {
                                     setSearchQuery({});

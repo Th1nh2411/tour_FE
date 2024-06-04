@@ -50,8 +50,8 @@ function TourItem({ className, data, onEdit }) {
                 </Text>
                 <div className={cx('footer')}>
                     <div>
-                        <Text>
-                            <Text style={{ fontWeight: 700 }}>Khởi hành :</Text>{' '}
+                        <Text style={{ fontWeight: 700 }}>Khởi hành :</Text>{' '}
+                        <Text type={dayjs().isAfter(dayjs(data.startDate)) ? 'danger' : 'success'}>
                             {dayjs(data.startDate).format('DD/MM/YYYY')}
                         </Text>
                         <Title level={5} style={{ margin: 0 }} className={cx('price')}>

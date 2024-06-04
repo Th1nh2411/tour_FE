@@ -68,8 +68,8 @@ const TourForm = ({ data, onClose = () => {} }) => {
         }
         const results = await tourService.addTour({
             ...values,
-            startDate: values.date[0],
-            endDate: values.date[1],
+            startDate: values.date?.[0],
+            endDate: values.date?.[1],
             availableSeats: values.maxSeats,
             duration: values.date[1].diff(values.date[0], 'day'),
             photo: res && res.url,
@@ -81,6 +81,7 @@ const TourForm = ({ data, onClose = () => {} }) => {
         }
     };
     const editTour = async (values) => {
+        console.log(values);
         setLoading(true);
         let res;
         if (values.photo) {
@@ -90,7 +91,8 @@ const TourForm = ({ data, onClose = () => {} }) => {
             {
                 ...values,
                 photo: res && res.url,
-                tourName: values.tourName !== data.tourName ? values.tourName : undefined,
+                startDate: values.date?.[0],
+                endDate: values.date?.[1],
             },
             data._id,
         );
@@ -100,7 +102,6 @@ const TourForm = ({ data, onClose = () => {} }) => {
             onClose(true);
         }
     };
-
     const initFormValue = {
         tourName: data && data.tourName,
         address: data && data.address,
@@ -111,7 +112,10 @@ const TourForm = ({ data, onClose = () => {} }) => {
         status: data && data.status,
         duration: data && data.duration,
         maxSeats: data && data.maxSeats,
-        date: data ? [dayjs(data.startDate), dayjs(data.endDate)] : [dayjs().add(1, 'day').hour(5).minute(0)],
+        date:
+            data && dayjs().isBefore(dayjs(data.endDate))
+                ? [dayjs(data.startDate), dayjs(data.endDate)]
+                : [dayjs().add(1, 'day').hour(5).minute(0)],
         category: data && data.category._id,
         guide: data && data.guide._id,
         itineraries: data && data.itineraries,
@@ -130,7 +134,11 @@ const TourForm = ({ data, onClose = () => {} }) => {
             width={'auto'}
             style={{ margin: '30px 0' }}
             centered
-            title={<Title className={cx('text-center')}>{data ? 'Chỉnh sửa chuyến đi' : 'Thêm chuyến đi'}</Title>}
+            title={
+                <Title level={2} className={cx('text-center')}>
+                    {data ? 'Chỉnh sửa chuyến đi' : 'Thêm chuyến đi'}
+                </Title>
+            }
             open
             onCancel={() => {
                 form.setFieldsValue(['']);
@@ -269,7 +277,7 @@ const TourForm = ({ data, onClose = () => {} }) => {
                                     rules={[{ required: true, message: 'Vui lòng chọn trường này' }]}
                                     style={{ flex: 1 }}
                                     name="guide"
-                                    label="Chọn hướng dẫn viên"
+                                    label="Chọn hướng dẫn viên - Ngôn ngữ thông thạo"
                                 >
                                     <Select
                                         size="large"
@@ -281,8 +289,8 @@ const TourForm = ({ data, onClose = () => {} }) => {
                                                 value: item._id,
                                                 label: (
                                                     <div>
-                                                        <Text style={{ fontSize: 16 }}>{item.guideName}</Text>
-                                                        <Text style={{ color: '#999' }}>{item.languages}</Text>
+                                                        <Text style={{ fontSize: 16 }}>{item.guideName} - </Text>
+                                                        <Text type="secondary">{item.languages}</Text>
                                                     </div>
                                                 ),
                                             }))

@@ -54,14 +54,14 @@ function ForgotPw({ open, onCloseModal = () => {} }) {
         <Modal
             width={'auto'}
             centered
-            title={<Title style={{ textAlign: 'center', marginBottom: 20 }}>Quên mật khẩu</Title>}
+            title={
+                <Title level={3} style={{ textAlign: 'center' }}>
+                    Quên mật khẩu
+                </Title>
+            }
             open={open}
-            onCancel={() => {
-                form.resetFields();
-                setStep(1);
-                onCloseModal();
-            }}
             footer={null}
+            closable={false}
         >
             <Form
                 form={form}
@@ -107,7 +107,7 @@ function ForgotPw({ open, onCloseModal = () => {} }) {
                                     message: 'Vui lòng nhập mật khẩu mới!',
                                 },
                                 {
-                                    min: 9,
+                                    min: 6,
                                     message: 'Mật khẩu phải dài hơn 9 ký tự!',
                                 },
                             ]}

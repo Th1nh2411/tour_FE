@@ -35,9 +35,10 @@ function RegisterPage() {
             <div className={cx('wrapper')}>
                 <Row
                     style={{
-                        boxShadow: 'rgba(17, 12, 46, 0.15) -1px 5px 20px 0px',
+                        boxShadow: 'var(--box-shadow-color) -1px 5px 20px 0px',
                         position: 'relative',
-                        borderRadius: 10,
+                        borderTopLeftRadius: 10,
+                        borderBottomLeftRadius: 10,
                     }}
                 >
                     <Col xs={0} md={11}>
@@ -55,7 +56,7 @@ function RegisterPage() {
                                     className={cx('form-logo')}
                                 />
                             </div>
-                            <Title level={1} className={cx('form-title')}>
+                            <Title level={2} className={cx('form-title')}>
                                 Tạo tài khoản
                             </Title>
                             <Form
@@ -163,7 +164,7 @@ function RegisterPage() {
                                     </Button>
                                 </Form.Item>
                             </Form>
-                            <Title level={3} className={cx('option-title')}>
+                            <Title level={5} className={cx('option-title')}>
                                 Đã có tài khoản?{' '}
                                 <Text>
                                     <Link to={config.routes.login}>Đăng nhập</Link>

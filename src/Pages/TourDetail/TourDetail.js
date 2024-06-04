@@ -157,16 +157,22 @@ function TourDetail({}) {
                                 <div className={cx('align-center')}>
                                     <Text className={cx('align-center')}>
                                         <TbPlaneDeparture className={cx('icon')} />
-                                        {dayjs(tourData.startDate).format('DD/MM/YYYY')}
+                                        <Text type={dayjs().isAfter(dayjs(tourData.startDate)) && 'danger'}>
+                                            {dayjs(tourData.startDate).format('DD/MM/YYYY')}
+                                        </Text>
                                     </Text>{' '}
                                     <Text className={cx('align-center', 'ml-3')}>
                                         <AiOutlineFieldTime className={cx('icon')} />
                                         {tourData.duration} ngày
                                     </Text>
-                                    <Text className={cx('align-center', 'ml-3')}>
-                                        <TbTicket className={cx('icon')} />
-                                        Còn lại: {tourData.availableSeats} /{tourData.maxSeats} vé
-                                    </Text>
+                                    {dayjs().isBefore(dayjs(tourData.startDate)) && (
+                                        <Text className={cx('align-center', 'ml-3')}>
+                                            <TbTicket className={cx('icon')} />
+                                            {tourData.availableSeats === tourData.maxSeats
+                                                ? 'Hết vé'
+                                                : `Còn lại: ${tourData.availableSeats} /${tourData.maxSeats} vé`}
+                                        </Text>
+                                    )}
                                 </div>
                                 <Title level={3} className={cx('mt-1')}>
                                     Mô tả

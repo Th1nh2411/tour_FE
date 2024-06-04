@@ -9,6 +9,7 @@ import * as bookingService from '../../services/bookingService';
 import dayjs from 'dayjs';
 import { priceFormat } from '../../utils/format';
 import RefundPolicy from '../RefundPolicy/RefundPolicy';
+import TextArea from 'antd/es/input/TextArea';
 const { Title, Paragraph, Text } = Typography;
 
 const cx = classNames.bind(styles);
@@ -131,7 +132,9 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
             ),
         },
     ];
-    const actions = bookingDetail && bookingDetail.status !== -1 && (
+    console.log(dayjs().isAfter(dayjs(bookingDetail?.endDate)));
+    const joinedTrip = dayjs().isAfter(dayjs(bookingDetail?.endDate)) && bookingDetail?.status === 2;
+    const actions = bookingDetail?.status !== -1 && !joinedTrip && (
         <Space className={cx('content-end')}>
             <Popconfirm
                 title="Huỷ chuyến"
@@ -145,7 +148,7 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
             </Popconfirm>
 
             <Button
-                disabled={bookingDetail.status >= 1}
+                disabled={bookingDetail?.status >= 1} // has pay deposit or pay all
                 loading={loading.payment1}
                 onClick={() => payment(1)}
                 type="primary"
@@ -154,7 +157,7 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
                 Thanh toán cọc (20%)
             </Button>
             <Button
-                disabled={bookingDetail.status === 2}
+                disabled={bookingDetail?.status === 2} // has pay pay all
                 loading={loading.payment2}
                 onClick={() => payment(2)}
                 type="primary"
@@ -182,9 +185,14 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
                 </Button>
             }
         >
-            <Title level={3} style={{ fontSize: 18 }}>
-                Thông tin khách hàng
-            </Title>
+            {joinedTrip && (
+                <>
+                    <Title level={4}>Nhận xét</Title>
+                    <TextArea placeholder="Chia sẻ cảm nhận của bạn về chuyến đi với mọi người nào!"></TextArea>
+                    <Divider style={{ margin: '15px 0' }} />
+                </>
+            )}
+            <Title level={4}>Thông tin khách hàng</Title>
             <Descriptions
                 size="small"
                 column={2}
@@ -192,19 +200,13 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
                 // title={}
             />
             <Divider style={{ margin: '15px 0' }} />
-            <Title level={3} style={{ fontSize: 18 }}>
-                Thông tin chuyến đi
-            </Title>
+            <Title level={4}>Thông tin chuyến đi</Title>
             <Descriptions size="small" column={2} items={tourInfo} />
             <Divider style={{ margin: '15px 0' }} />
-            <Title level={3} style={{ fontSize: 18 }}>
-                Thông tin đặt vé
-            </Title>
+            <Title level={4}>Thông tin đặt vé</Title>
             <Descriptions size="small" column={2} items={bookingInfo} />
             <Divider style={{ margin: '15px 0' }} />
-            <Title level={3} style={{ fontSize: 18 }}>
-                Chính sách huỷ vé
-            </Title>
+            <Title level={4}>Chính sách huỷ vé</Title>
             <RefundPolicy />
         </Drawer>
     );
