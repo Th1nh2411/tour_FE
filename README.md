@@ -16,3 +16,6 @@ password: 123456
 username: admin
 
 password: 123456
+
+* Payment test account :
+BANK NCB / 9704198526191432198 / NGUYEN VAN A / 07/15 / 123456
