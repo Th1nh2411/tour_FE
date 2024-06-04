@@ -159,46 +159,57 @@ function ProfilePage() {
                             <Skeleton loading={loading}>
                                 <div className={cx('body', 'invoice-list')}>
                                     {listBooking && listBooking.length !== 0 ? (
-                                        listBooking.map((item, index) => (
-                                            <div key={index} className={cx('invoice-wrapper')}>
-                                                <div className={cx('left-side')}>
-                                                    <Image src={item.tourInfo.photo} className={cx('invoice-img')} />
-                                                    <div className={cx('invoice-body')}>
-                                                        <Text className={cx('invoice-title')}>
-                                                            {item.tourInfo.tourName}
-                                                        </Text>
-                                                        <div className={cx('invoice-info')}>
-                                                            Trạng thái :{' '}
-                                                            <Badge
-                                                                status={
-                                                                    item.status === -1
-                                                                        ? 'default'
-                                                                        : item.status === 0
-                                                                        ? 'error'
-                                                                        : item.status === 1
-                                                                        ? 'processing'
-                                                                        : 'success'
-                                                                }
-                                                                text={
-                                                                    item.status === -1
-                                                                        ? 'Đã huỷ'
-                                                                        : item.status === 0
-                                                                        ? 'Chưa thanh toán'
-                                                                        : item.status === 1
-                                                                        ? 'Đã thanh toán cọc (20%)'
-                                                                        : 'Đã thanh toán'
-                                                                }
-                                                            />
-                                                        </div>
-                                                        <div className={cx('invoice-info')}>
-                                                            Khởi hành :{' '}
-                                                            <Text>{dayjs(item.startDate).format('DD/MM/YYYY')}</Text>
+                                        listBooking.map((item, index) => {
+                                            const joinedTrip =
+                                                dayjs().isAfter(dayjs(item?.endDate)) && item?.status === 2;
+                                            const bookingStatusColor =
+                                                item.status === -1
+                                                    ? 'default'
+                                                    : item.status === 0
+                                                    ? 'error'
+                                                    : item.status === 1
+                                                    ? 'processing'
+                                                    : 'success';
+                                            const bookingStatus =
+                                                item.status === -1
+                                                    ? 'Đã huỷ'
+                                                    : item.status === 0
+                                                    ? 'Chưa thanh toán'
+                                                    : item.status === 1
+                                                    ? 'Đã thanh toán cọc (20%)'
+                                                    : joinedTrip
+                                                    ? 'Đã hoàn thành'
+                                                    : 'Đã thanh toán';
+                                            return (
+                                                <div key={index} className={cx('invoice-wrapper')}>
+                                                    <div className={cx('left-side')}>
+                                                        <Image
+                                                            src={item.tourInfo.photo}
+                                                            className={cx('invoice-img')}
+                                                        />
+                                                        <div className={cx('invoice-body')}>
+                                                            <Text className={cx('invoice-title')}>
+                                                                {item.tourInfo.tourName}
+                                                            </Text>
+                                                            <div className={cx('invoice-info')}>
+                                                                Trạng thái :{' '}
+                                                                <Badge
+                                                                    status={bookingStatusColor}
+                                                                    text={bookingStatus}
+                                                                />
+                                                            </div>
+                                                            <div className={cx('invoice-info')}>
+                                                                Khởi hành :{' '}
+                                                                <Text>
+                                                                    {dayjs(item.startDate).format('DD/MM/YYYY')}
+                                                                </Text>
+                                                            </div>
                                                         </div>
                                                     </div>
+                                                    <Button onClick={() => setDetailBooking(item)}>Chi tiết</Button>
                                                 </div>
-                                                <Button onClick={() => setDetailBooking(item)}>Chi tiết</Button>
-                                            </div>
-                                        ))
+                                            );
+                                        })
                                     ) : (
                                         <Alert
                                             icon={<TbMoodSadSquint />}
