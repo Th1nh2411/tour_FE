@@ -58,6 +58,7 @@ function Header() {
                                 style={{ fontSize: '1.8rem', fontWeight: 500, lineHeight: 2 }}
                                 to={'/tour/category/' + item._id}
                                 state={{ category: item }}
+                                onClick={handleCloseMenuMb}
                             >
                                 {item.categoryName}
                             </Link>
@@ -109,12 +110,14 @@ function Header() {
                             <NavLink
                                 className={(nav) => cx('header-nav_item', { active: nav.isActive })}
                                 to={config.routes.home}
+                                onClick={handleCloseMenuMb}
                             >
                                 <Text style={{ fontSize: 18 }}>Trang chủ</Text>
                             </NavLink>
                             <NavLink
                                 className={(nav) => cx('header-nav_item', { active: nav.isActive })}
                                 to={config.routes.aboutUs}
+                                onClick={handleCloseMenuMb}
                             >
                                 <Text style={{ fontSize: 18 }}>Về chúng tôi</Text>
                             </NavLink>
@@ -122,8 +125,12 @@ function Header() {
                             <NavLink
                                 className={(nav) => cx('header-nav_item', { active: nav.isActive })}
                                 to={config.routes.tour}
+                                onClick={handleCloseMenuMb}
                             >
-                                <Dropdown placement="bottom" menu={{ items: tourCategories }}>
+                                <Dropdown
+                                    placement="bottom"
+                                    menu={{ items: tourCategories, item: { borderBottom: '1px solid #fff' } }}
+                                >
                                     <Text style={{ fontSize: 18 }}>
                                         Du lịch <MdArrowDropDown />
                                     </Text>
@@ -134,18 +141,23 @@ function Header() {
                                     <NavLink
                                         className={(nav) => cx('header-nav_item', 'mb-nav', { active: nav.isActive })}
                                         to={config.routes.profile}
+                                        onClick={handleCloseMenuMb}
                                     >
-                                        Trang cá nhân
+                                        <Badge dot={state.unpaidBooking}>
+                                            <Text style={{ fontSize: 18 }}>Trang cá nhân</Text>
+                                        </Badge>
                                     </NavLink>
-                                    <div
+                                    <Text
+                                        style={{ fontSize: 18 }}
                                         onClick={() => {
                                             navigate(config.routes.home);
                                             handleLogOut();
+                                            handleCloseMenuMb();
                                         }}
                                         className={cx('header-nav_item', 'mb-nav')}
                                     >
                                         Đăng xuất
-                                    </div>
+                                    </Text>
                                 </>
                             )}
                         </nav>
@@ -157,8 +169,14 @@ function Header() {
                                 menu={{
                                     items: optionItems,
                                     onClick: ({ key }) => {
-                                        if (key == 1) navigate(config.routes.profile);
-                                        if (key == 2) handleLogOut();
+                                        if (key == 1) {
+                                            navigate(config.routes.profile);
+                                            handleCloseMenuMb();
+                                        }
+                                        if (key == 2) {
+                                            handleLogOut();
+                                            handleCloseMenuMb();
+                                        }
                                     },
                                 }}
                             >

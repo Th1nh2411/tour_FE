@@ -27,6 +27,9 @@ function DefaultLayout({ children }) {
                         headerBg: state.theme === 'dark' ? '#001529' : '#f5f5f5',
                         colorBgLayout: state.theme === 'dark' ? '#001529' : '#f5f5f5',
                     },
+                    Rate: {
+                        marginXS: 4,
+                    },
                 },
             }}
         >

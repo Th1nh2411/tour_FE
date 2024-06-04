@@ -45,7 +45,7 @@ function TourPage() {
 
         if (results) {
             setLoading(false);
-            if ((query.keyword || query.availableSeats > 1) && currentPageTours === 1) {
+            if ((query.keyword || query.availableSeats > 1 || query.duration) && currentPageTours === 1) {
                 state.showToast('Thành công', `Tìm thấy ` + results.count + ' chuyến phù hợp');
             }
             setListTours(results.data);
@@ -54,14 +54,15 @@ function TourPage() {
     };
 
     useEffect(() => {
-        // if (category) {
-        setResetQuery(true);
-        setCurrentPageTours(1);
-        setSearchQuery({});
-        // getSearchTours();
-        // }
+        if (category) {
+            setResetQuery(true);
+            setCurrentPageTours(1);
+            setSearchQuery({});
+            // getSearchTours();
+        }
     }, [category]);
     useEffect(() => {
+        console.log(searchQuery);
         getSearchTours(searchQuery);
     }, [currentPageTours, searchQuery]);
     return (

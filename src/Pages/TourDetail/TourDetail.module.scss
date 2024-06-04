@@ -55,14 +55,13 @@
     gap: 16px;
 }
 .booking-header {
-    padding-bottom: 20px;
+    padding-bottom: 12px;
     border-bottom: 1px solid #e5e7eb;
 }
 .booking-price {
     font-size: 1.6rem;
 
     span {
-        color: #333;
         font-weight: 700;
     }
 }
@@ -89,11 +88,9 @@
 
 .total-title {
     font-size: 1.8rem;
-    color: #333;
 }
 .total-calculated {
     font-size: 1.8rem;
-    color: #333;
 }
 
 .reviews-bar {
