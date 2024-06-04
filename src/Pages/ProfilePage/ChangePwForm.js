@@ -31,7 +31,11 @@ const ChangePwForm = ({ showForm, onClose = () => {} }) => {
                 form.resetFields();
                 onClose();
             }}
-            title={<Title className={cx('text-center')}>Đổi mật khẩu</Title>}
+            title={
+                <Title level={2} className={cx('text-center')}>
+                    Đổi mật khẩu
+                </Title>
+            }
             open={showForm}
             footer={null}
         >
