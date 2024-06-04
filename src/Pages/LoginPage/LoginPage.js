@@ -30,9 +30,9 @@ function LoginPage() {
         if (results) {
             dispatch(actions.setUserInfo(results.data));
             Cookies.set('userInfo', JSON.stringify(results.data));
-            const checkPayment = await state.getUnpaidBooking();
 
             state.showToast('Thành công', 'Đăng nhập thành công!');
+            const checkPayment = await state.getUnpaidBooking();
             navigate(config.routes.home);
         } else {
             dispatch(actions.setUnpaidBooking(null));
@@ -43,9 +43,10 @@ function LoginPage() {
             <ForgotPw open={showForgot} onCloseModal={() => setShowForgot(false)} />
             <Row
                 style={{
-                    boxShadow: 'rgba(17, 12, 46, 0.15) -1px 5px 20px 0px',
+                    boxShadow: 'var(--box-shadow-color) -1px 5px 20px 0px',
                     position: 'relative',
-                    borderRadius: 10,
+                    borderTopLeftRadius: 10,
+                    borderBottomLeftRadius: 10,
                 }}
             >
                 <Col xs={0} md={11} style={{ textAlign: 'center' }}>
@@ -63,7 +64,7 @@ function LoginPage() {
                                 className={cx('form-logo')}
                             />
                         </div>
-                        <Title level={1} className={cx('form-title')}>
+                        <Title level={2} className={cx('form-title', 'text-center')}>
                             Đăng nhập
                         </Title>
                         <Form
@@ -106,7 +107,7 @@ function LoginPage() {
                                 <Text>Quên mật khẩu?</Text>
                             </Title>
                         </Form>
-                        <Title level={3} className={cx('option-title', 'mt-2')}>
+                        <Title level={5} className={cx('option-title')}>
                             Thành viên mới?{' '}
                             <Text>
                                 <Link to={config.routes.register}>Đăng ký</Link>

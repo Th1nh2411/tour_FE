@@ -82,15 +82,17 @@ function ProfilePage() {
     return (
         <>
             <CropperImage modalOpen={showModalAvatar} src={avatarSrc} onModalClose={() => setShowModalAvatar(false)} />
-            <BookingDetail
-                bookingDetail={detailBooking}
-                onClose={(edited) => {
-                    if (edited === true) {
-                        getAllBooking();
-                    }
-                    setDetailBooking(false);
-                }}
-            />
+            {detailBooking && (
+                <BookingDetail
+                    bookingDetail={detailBooking}
+                    onClose={(edited) => {
+                        if (edited === true) {
+                            getAllBooking();
+                        }
+                        setDetailBooking(false);
+                    }}
+                />
+            )}
             <ProfileForm showForm={showEditProfile} onClose={() => setShowEditProfile(false)} />
             <ChangePwForm showForm={showChangePw} onClose={() => setShowChangePw(false)} />
             <div className={cx('wrapper')}>

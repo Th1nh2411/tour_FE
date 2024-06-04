@@ -45,7 +45,7 @@ function TourPage() {
 
         if (results) {
             setLoading(false);
-            if ((query.keyword || query.availableSeats > 1) && currentPageTours === 1) {
+            if ((query.keyword || query.availableSeats > 1 || query.duration) && currentPageTours === 1) {
                 state.showToast('Thành công', `Tìm thấy ` + results.count + ' chuyến phù hợp');
             }
             setListTours(results.data);
@@ -54,14 +54,15 @@ function TourPage() {
     };
 
     useEffect(() => {
-        // if (category) {
-        setResetQuery(true);
-        setCurrentPageTours(1);
-        setSearchQuery({});
-        // getSearchTours();
-        // }
+        if (category) {
+            setResetQuery(true);
+            setCurrentPageTours(1);
+            setSearchQuery({});
+            // getSearchTours();
+        }
     }, [category]);
     useEffect(() => {
+        console.log(searchQuery);
         getSearchTours(searchQuery);
     }, [currentPageTours, searchQuery]);
     return (
@@ -100,7 +101,7 @@ function TourPage() {
                         doneReset={() => setResetQuery(false)}
                     />
                     {state.userInfo && state.userInfo.role === 'admin' && (
-                        <Title onClick={() => setShowTourForm(true)} className={cx('add-btn')}>
+                        <Title level={4} onClick={() => setShowTourForm(true)} className={cx('add-btn')}>
                             <BiPlusCircle className={cx('add-icon')} />
                             Thêm chuyến mới
                         </Title>
@@ -109,6 +110,7 @@ function TourPage() {
                         <div className={cx('align-end', 'content-between')}>
                             <Title level={5}>Số lượng chuyến: {numTours}</Title>
                             <Title
+                                type="warning"
                                 level={5}
                                 onClick={() => {
                                     setSearchQuery({});

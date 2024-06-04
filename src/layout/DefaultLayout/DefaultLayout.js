@@ -21,11 +21,16 @@ function DefaultLayout({ children }) {
                 algorithm: state.theme === 'dark' ? darkAlgorithm : defaultAlgorithm,
                 token: {
                     fontFamily: 'Nunito',
+                    boxShadow:
+                        '0px 1px 3px 0 var(--box-shadow-color), 0 3px 8px 0px var(--box-shadow-color), 0px 2px 3px 0px var(--box-shadow-color)',
                 },
                 components: {
                     Layout: {
                         headerBg: state.theme === 'dark' ? '#001529' : '#f5f5f5',
                         colorBgLayout: state.theme === 'dark' ? '#001529' : '#f5f5f5',
+                    },
+                    Rate: {
+                        marginXS: 4,
                     },
                 },
             }}

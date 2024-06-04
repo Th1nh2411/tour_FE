@@ -139,63 +139,73 @@ function TourDetail({}) {
                         <Skeleton loading={loading}>
                             <Image src={tourData.photo} className={cx('img')} />
                             <Space direction="vertical" size={'small'} className={cx('card')}>
-                                <Title>{tourData.tourName}</Title>
-                                <div style={{ color: '#555' }} className={cx('align-center')}>
-                                    <div className={cx('align-center')}>
+                                <Title level={3}>{tourData.tourName}</Title>
+                                <div className={cx('align-center')}>
+                                    <Text className={cx('align-center')}>
                                         <BsFillStarFill className={cx('icon')} />
                                         {tourData.averageRating || 0}
-                                    </div>
-                                    <div className={cx('align-center', 'ml-3')}>
+                                    </Text>
+                                    <Text className={cx('align-center', 'ml-3')}>
                                         <HiLocationMarker className={cx('icon')} />
                                         {tourData.address}
-                                    </div>
-                                    <div className={cx('align-center', 'ml-3')}>
+                                    </Text>
+                                    <Text className={cx('align-center', 'ml-3')}>
                                         <MdTour className={cx('icon')} />
                                         {tourData.category && tourData.category.categoryName}
-                                    </div>
+                                    </Text>
                                 </div>
-                                <div style={{ color: '#555' }} className={cx('align-center')}>
-                                    <div className={cx('align-center')}>
+                                <div className={cx('align-center')}>
+                                    <Text className={cx('align-center')}>
                                         <TbPlaneDeparture className={cx('icon')} />
-                                        {dayjs(tourData.startDate).format('DD/MM/YYYY')}
-                                    </div>{' '}
-                                    <div className={cx('align-center', 'ml-3')}>
+                                        <Text type={dayjs().isAfter(dayjs(tourData.startDate)) && 'danger'}>
+                                            {dayjs(tourData.startDate).format('DD/MM/YYYY')}
+                                        </Text>
+                                    </Text>{' '}
+                                    <Text className={cx('align-center', 'ml-3')}>
                                         <AiOutlineFieldTime className={cx('icon')} />
                                         {tourData.duration} ngày
-                                    </div>
-                                    <div className={cx('align-center', 'ml-3')}>
-                                        <TbTicket className={cx('icon')} />
-                                        Còn lại: {tourData.availableSeats} /{tourData.maxSeats} vé
-                                    </div>
-                                </div>
-                                <Title className={cx('mt-1')}>Mô tả</Title>
-                                <Text style={{ color: '#555' }}>{tourData.description}</Text>
-                                <Title className={cx('mt-1')}>Hành trình</Title>
-                                {tourData.itineraries &&
-                                    tourData.itineraries.map((item, index) => (
-                                        <Text key={index} style={{ color: '#555' }}>
-                                            {item}
+                                    </Text>
+                                    {dayjs().isBefore(dayjs(tourData.startDate)) && (
+                                        <Text className={cx('align-center', 'ml-3')}>
+                                            <TbTicket className={cx('icon')} />
+                                            {tourData.availableSeats === tourData.maxSeats
+                                                ? 'Hết vé'
+                                                : `Còn lại: ${tourData.availableSeats} /${tourData.maxSeats} vé`}
                                         </Text>
-                                    ))}
-                                <Title className={cx('mt-1')}>Hướng dẫn viên</Title>
+                                    )}
+                                </div>
+                                <Title level={3} className={cx('mt-1')}>
+                                    Mô tả
+                                </Title>
+                                <Text>{tourData.description}</Text>
+                                <Title level={3} className={cx('mt-1')}>
+                                    Hành trình
+                                </Title>
+                                {tourData.itineraries &&
+                                    tourData.itineraries.map((item, index) => <Text key={index}>{item}</Text>)}
+                                <Title level={3} className={cx('mt-1')}>
+                                    Hướng dẫn viên
+                                </Title>
 
                                 <Descriptions column={{ xs: 1, sm: 2, md: 2, lg: 1, xl: 2 }} items={guideItems} />
                             </Space>
                             <Space direction="vertical" size={'small'} className={cx('card', 'mt-2')}>
-                                <Title>Đánh giá chuyến đi ({numReviews} đánh giá)</Title>
+                                <Title level={3}>Đánh giá chuyến đi ({numReviews} đánh giá)</Title>
                                 {reviews &&
                                     reviews.map((item, index) => (
                                         <Space className={cx('review-item')} key={index} align="start">
                                             <Image className={cx('user-photo')} src={item.userInfo.photo} />
                                             <div>
-                                                <Text style={{ fontWeight: 600 }}>{item.userInfo.fullName}</Text>
+                                                <Text style={{ fontWeight: 600, marginRight: 10 }}>
+                                                    {item.userInfo.fullName}
+                                                </Text>
                                                 <Rate
                                                     disabled
                                                     defaultValue={item.rating}
                                                     allowHalf
                                                     style={{ fontSize: 12 }}
                                                 />
-                                                <Text style={{ color: '#555' }}>{item.comment}</Text>
+                                                <Title level={5}>{item.comment}</Title>
                                                 <Space className={cx('mt-1')} key={index}>
                                                     {item.photo &&
                                                         item.photo.map((item, index) => (
@@ -221,14 +231,15 @@ function TourDetail({}) {
                             <div className={cx('booking-wrapper', 'card')}>
                                 <div className={cx('content-between', 'booking-header')}>
                                     <div className={cx('booking-price')}>
-                                        <Text>{priceFormat(tourData.price)}đ</Text> /1 vé
+                                        <Text>{priceFormat(tourData.price)}đ /1 vé</Text>
                                     </div>
                                     <div className={cx('align-center')}>
-                                        <BsFillStarFill className={cx('icon')} />({tourData.averageRating || 0})
+                                        <BsFillStarFill className={cx('icon')} />
+                                        <Text>({tourData.averageRating || 0})</Text>
                                     </div>
                                 </div>
                                 <div className={cx('booking-form')}>
-                                    <Title>Thông tin đặt vé</Title>
+                                    <Title level={3}>Thông tin đặt vé</Title>
                                     <Descriptions size="small" column={1} items={infoItems} />
                                     <Row gutter={12}>
                                         <Col span={16}>
