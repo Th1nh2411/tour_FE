@@ -4,12 +4,14 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import styles from './BookingDetail.module.scss';
 import { redirect, useNavigate } from 'react-router';
 import { StoreContext } from '../../store';
-import { Alert, Badge, Button, Descriptions, Divider, Drawer, Popconfirm, Space, Typography } from 'antd';
+import { Alert, Badge, Button, Descriptions, Divider, Drawer, Form, Popconfirm, Rate, Space, Typography } from 'antd';
 import * as bookingService from '../../services/bookingService';
+import * as reviewService from '../../services/reviewService';
 import dayjs from 'dayjs';
 import { priceFormat } from '../../utils/format';
 import RefundPolicy from '../RefundPolicy/RefundPolicy';
 import TextArea from 'antd/es/input/TextArea';
+import { MdAddPhotoAlternate } from 'react-icons/md';
 const { Title, Paragraph, Text } = Typography;
 
 const cx = classNames.bind(styles);
@@ -132,7 +134,6 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
             ),
         },
     ];
-    console.log(dayjs().isAfter(dayjs(bookingDetail?.endDate)));
     const joinedTrip = dayjs().isAfter(dayjs(bookingDetail?.endDate)) && bookingDetail?.status === 2;
     const actions = bookingDetail?.status !== -1 && !joinedTrip && (
         <Space className={cx('content-end')}>
@@ -166,6 +167,14 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
             </Button>
         </Space>
     );
+    const sendReview = async (values) => {
+        setLoading(true);
+        const results = await reviewService.createReview({ review: values.review }, bookingDetail._id);
+        if (results) {
+            state.showToast('Thành công', results.message);
+        }
+        setLoading(false);
+    };
     return (
         <Drawer
             width={700}
@@ -186,11 +195,35 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
             }
         >
             {joinedTrip && (
-                <>
-                    <Title level={4}>Nhận xét</Title>
-                    <TextArea placeholder="Chia sẻ cảm nhận của bạn về chuyến đi với mọi người nào!"></TextArea>
+                <Form initialValues={{ rate: 5 }} onFinish={sendReview}>
+                    <div className="d-flex" style={{ gap: 10 }}>
+                        <Title level={4}>Nhận xét</Title>
+                        <Form.Item style={{ margin: '0' }} name="rate">
+                            <Rate allowHalf style={{ fontSize: 16 }} />
+                        </Form.Item>
+                    </div>
+                    <Form.Item
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Bạn chưa nhập nhận xét!',
+                            },
+                        ]}
+                        name="review"
+                    >
+                        <TextArea
+                            allowClear
+                            placeholder="Chia sẻ cảm nhận của bạn về chuyến đi với mọi người nào!"
+                        ></TextArea>
+                    </Form.Item>
+                    <div className={cx('align-center', 'content-end')} style={{ gap: 10 }}>
+                        <Button icon={<MdAddPhotoAlternate />}></Button>
+                        <Button htmlType="submit" type="primary">
+                            Gửi nhận xét
+                        </Button>
+                    </div>
                     <Divider style={{ margin: '15px 0' }} />
-                </>
+                </Form>
             )}
             <Title level={4}>Thông tin khách hàng</Title>
             <Descriptions
@@ -201,10 +234,10 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
             />
             <Divider style={{ margin: '15px 0' }} />
             <Title level={4}>Thông tin chuyến đi</Title>
-            <Descriptions size="small" column={2} items={tourInfo} />
+            <Descriptions size="small" column={1} bordered items={tourInfo} />
             <Divider style={{ margin: '15px 0' }} />
             <Title level={4}>Thông tin đặt vé</Title>
-            <Descriptions size="small" column={2} items={bookingInfo} />
+            <Descriptions size="small" column={2} bordered items={bookingInfo} />
             <Divider style={{ margin: '15px 0' }} />
             <Title level={4}>Chính sách huỷ vé</Title>
             <RefundPolicy />

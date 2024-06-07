@@ -32,6 +32,9 @@ function DefaultLayout({ children }) {
                     Rate: {
                         marginXS: 4,
                     },
+                    Form: {
+                        itemMarginBottom: 16,
+                    },
                 },
             }}
         >
