@@ -203,6 +203,16 @@ html body {
         background-color: var(--primary-color);
         color: #fff;
     }
+    .ant-upload-wrapper.ant-upload-picture-card-wrapper
+        .ant-upload-list.ant-upload-list-picture-card
+        .ant-upload-list-item-container,
+    .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload.ant-upload-select {
+        height: 40px;
+        width: 40px;
+    }
+    .ant-upload-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item {
+        padding: 4px;
+    }
 }
 // .ant-col {
 //     font-family: 'Nunito', sans-serif;

@@ -61,7 +61,7 @@ function Provider({ children }) {
             getUnpaidBooking();
         }
         if (email && activeID) {
-            activeAccount();
+            // activeAccount();
         }
         setStyleTheme(state.theme);
     }, []);

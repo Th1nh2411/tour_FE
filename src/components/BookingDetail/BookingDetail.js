@@ -4,7 +4,21 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import styles from './BookingDetail.module.scss';
 import { redirect, useNavigate } from 'react-router';
 import { StoreContext } from '../../store';
-import { Alert, Badge, Button, Descriptions, Divider, Drawer, Form, Popconfirm, Rate, Space, Typography } from 'antd';
+import {
+    Alert,
+    Badge,
+    Button,
+    Descriptions,
+    Divider,
+    Drawer,
+    Form,
+    Image,
+    Popconfirm,
+    Rate,
+    Space,
+    Typography,
+    Upload,
+} from 'antd';
 import * as bookingService from '../../services/bookingService';
 import * as reviewService from '../../services/reviewService';
 import dayjs from 'dayjs';
@@ -20,7 +34,24 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
     const [state, dispatch] = useContext(StoreContext);
     const [loading, setLoading] = useState({});
     const navigate = useNavigate();
-
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState('');
+    const [fileList, setFileList] = useState([]);
+    const getBase64 = (file) =>
+        new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = (error) => {};
+        });
+    const handlePreview = async (file) => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64(file.originFileObj);
+        }
+        setPreviewImage(file.url || file.preview);
+        setPreviewOpen(true);
+    };
+    const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
     const payment = async (flag) => {
         setLoading({ ...loading, payment1: flag === 1, payment2: flag === 2 });
         const results = await bookingService.vnpayPayment({ id_order: bookingDetail._id, flag });
@@ -217,7 +248,31 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
                         ></TextArea>
                     </Form.Item>
                     <div className={cx('align-center', 'content-end')} style={{ gap: 10 }}>
-                        <Button icon={<MdAddPhotoAlternate />}></Button>
+                        {previewImage && (
+                            <Image
+                                wrapperStyle={{
+                                    display: 'none',
+                                }}
+                                preview={{
+                                    visible: previewOpen,
+                                    onVisibleChange: (visible) => setPreviewOpen(visible),
+                                    afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                                }}
+                                src={previewImage}
+                            />
+                        )}
+                        {fileList.length < 4 && (
+                            <Upload
+                                // action="http://localhost:3000/profile"
+                                listType="picture-card"
+                                accept="image/png, image/jpeg"
+                                fileList={fileList}
+                                onPreview={handlePreview}
+                                onChange={handleChange}
+                            >
+                                <Button icon={<MdAddPhotoAlternate />}></Button>
+                            </Upload>
+                        )}
                         <Button htmlType="submit" type="primary">
                             Gửi nhận xét
                         </Button>
