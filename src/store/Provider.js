@@ -23,13 +23,15 @@ function Provider({ children }) {
     const email = searchParams.get('email');
 
     const getUnpaidBooking = async () => {
-        setTimeout(async () => {
-            const results = await bookingService.getUnpaidBooking();
-            if (results) {
-                dispatch(actions.setUnpaidBooking(results.data));
-                showToast('Thông báo', 'Bạn có chuyến đi chưa hoàn tất thanh toán!', 'info');
-            }
-        }, [2000]);
+        if (state.userInfo) {
+            setTimeout(async () => {
+                const results = await bookingService.getUnpaidBooking();
+                if (results) {
+                    dispatch(actions.setUnpaidBooking(results.data));
+                    showToast('Thông báo', 'Bạn có chuyến đi chưa hoàn tất thanh toán!', 'info');
+                }
+            }, [5000]);
+        }
     };
     const setStyleTheme = (theme) => {
         document.documentElement.style.setProperty('--box-shadow-color', theme === 'dark' ? '#ffffff2b' : '#0003');
@@ -57,11 +59,9 @@ function Provider({ children }) {
     };
 
     useEffect(() => {
-        if (state.userInfo) {
-            getUnpaidBooking();
-        }
+        getUnpaidBooking();
         if (email && activeID) {
-            // activeAccount();
+            activeAccount();
         }
         setStyleTheme(state.theme);
     }, []);
