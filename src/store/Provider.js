@@ -18,9 +18,7 @@ function Provider({ children }) {
         });
     };
     const [searchParams, setSearchParams] = useSearchParams();
-    const id_user = searchParams.get('id_user');
     const activeID = searchParams.get('activeID');
-    const email = searchParams.get('email');
 
     const getUnpaidBooking = async () => {
         if (state.userInfo) {
@@ -46,23 +44,23 @@ function Provider({ children }) {
     };
     const [state, dispatch] = useReducer(reducer, initState);
     const activeAccount = async () => {
-        setTimeout(async () => {
-            const results = await authService.activeAccount({ id_user, activeID, email });
-            if (results) {
-                if (state.userInfo) {
-                    dispatch(actions.setUserInfo({ ...state.userInfo, email }));
-                    Cookies.set('userInfo', JSON.stringify({ ...state.userInfo, email }));
+        if (activeID) {
+            setTimeout(async () => {
+                const results = await authService.activeAccount({ activeID });
+                if (results) {
+                    if (state.userInfo) {
+                        dispatch(actions.setUserInfo({ ...state.userInfo, email: results.newEmail }));
+                        Cookies.set('userInfo', JSON.stringify({ ...state.userInfo, email: results.newEmail }));
+                    }
+                    showToast('Thông báo', results.message, 'success');
                 }
-                showToast('Thông báo', results.message, 'success');
-            }
-        }, [2000]);
+            }, [2000]);
+        }
     };
 
     useEffect(() => {
         getUnpaidBooking();
-        if (email && activeID) {
-            activeAccount();
-        }
+        activeAccount();
         setStyleTheme(state.theme);
     }, []);
     return (

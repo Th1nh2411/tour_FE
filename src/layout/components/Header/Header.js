@@ -187,7 +187,7 @@ function Header() {
                         </div>
                     ) : (
                         <div className={cx('header-actions')}>
-                            <Link to={config.routes.login} className={cx('custom-btn')}>
+                            <Link to={config.routes.login} className={cx('custom-btn')} onClick={handleCloseMenuMb}>
                                 <Text style={{ fontSize: 18 }}>Đăng nhập</Text>
                             </Link>
                             <Button

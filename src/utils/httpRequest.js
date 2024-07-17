@@ -3,7 +3,10 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router';
 const httpRequest = axios.create({
-    baseURL: 'https://holidate-be.vercel.app/api/v1/',
+    baseURL:
+        process.env.REACT_APP_ENV === 'dev'
+            ? 'http://localhost:4000/api/v1/'
+            : 'https://holidate-be.vercel.app/api/v1/',
     withCredentials: true,
     headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
     credentials: 'include',
