@@ -22,7 +22,7 @@ function ChatBox({ className, open, onClose = () => {} }) {
     const [message, setMessage] = useState('');
     const [conversation, setConversation] = useState();
     const [listUser, setListUser] = useState([]);
-    const [currentChat, setCurrentChat] = useState({});
+    const [currentChatId, setCurrentChatId] = useState();
     const [chosenUser, setChosenUser] = useState({});
     const [isTyping, setIsTyping] = useState(false);
     const conversationRef = useRef(null);
@@ -32,26 +32,26 @@ function ChatBox({ className, open, onClose = () => {} }) {
         const value = e.target.value;
         setMessage(value);
 
-        socket.emit('typing', { chat_id: currentChat, sender_id: userInfo._id });
+        socket.emit('typing', { chat_id: currentChatId, sender_id: userInfo._id });
     };
     useEffect(() => {
-        socket.emit('stop_typing', currentChat);
+        socket.emit('stop_typing', currentChatId);
     }, [typeDebounce]);
     // Client nhận dữ liệu từ server gửi xuống thông qua socket
     useEffect(() => {
         socket.on('message_response', (data) => {
-            if (data.newConversation && data.chat_id === currentChat) {
+            if (data.newConversation && data.chat_id === currentChatId) {
                 setConversation(data.newConversation);
             }
         });
         socket.on('display_typing', (data) => {
-            if (data.chat_id === currentChat && data.sender_id !== userInfo._id) {
+            if (data.chat_id === currentChatId && data.sender_id !== userInfo._id) {
                 setIsTyping(true);
             }
         });
 
         socket.on('remove_typing', (chat_id) => {
-            if (chat_id === currentChat) {
+            if (chat_id === currentChatId) {
                 setIsTyping(false);
             }
         });
@@ -60,7 +60,7 @@ function ChatBox({ className, open, onClose = () => {} }) {
             socket.off('remove_typing');
             socket.off('message_response');
         };
-    }, [socket, currentChat]);
+    }, [socket, currentChatId]);
 
     //Hàm này dùng để gửi tin nhắn
     const handlerSend = () => {
@@ -71,11 +71,11 @@ function ChatBox({ className, open, onClose = () => {} }) {
             socketID: socket.id,
         };
         const newConversation = [...conversation, newMessage];
-        socket.emit('message', { chat_id: currentChat, newConversation });
+        socket.emit('message', { chat_id: currentChatId, newConversation });
 
         //Tiếp theo nó sẽ postdata lên api đưa dữ liệu vào database
         const postData = async () => {
-            const res = await messageService.sendMessage({ chat_id: currentChat, message });
+            const res = await messageService.sendMessage({ chat_id: currentChatId, message });
             if (res && res.success) {
             }
             //Sau đó gọi hàm setLoad để useEffect lấy lại dữ liệu sau khi update
@@ -101,13 +101,13 @@ function ChatBox({ className, open, onClose = () => {} }) {
                 if (res) {
                     setConversation(res.data);
                     console.log(res.chat_id);
-                    setCurrentChat(res.chat_id);
+                    setCurrentChatId(res.chat_id);
                 }
             };
 
             getMessage();
         }
-    }, [chosenUser._id]);
+    }, [chosenUser]);
     const getListUser = async () => {
         const response = await messageService.getListUser();
         if (response) {
@@ -127,7 +127,7 @@ function ChatBox({ className, open, onClose = () => {} }) {
     }, [conversationRef, conversation]);
     const handleDeleteConversation = () => {
         const deleteConversation = async () => {
-            const response = await messageService.deleteMessage({ chat_id: currentChat });
+            const response = await messageService.deleteMessage({ chat_id: currentChatId });
             if (response) {
                 setConversation([]);
                 state.showToast('Đã xóa cuộc hội thoại');
@@ -178,7 +178,14 @@ function ChatBox({ className, open, onClose = () => {} }) {
                 {listUser?.map((user, index) => (
                     <div onClick={() => setChosenUser(user)} key={index} className={cx('user-item')}>
                         <Avatar alt="avatar" src={user.photo} />
-                        <Text style={{ width: 45, textAlign: 'center' }} ellipsis>
+                        <Text
+                            style={{
+                                width: 45,
+                                textAlign: 'center',
+                                color: chosenUser._id === user._id ? 'var(--primary-color)' : '',
+                            }}
+                            ellipsis
+                        >
                             {user.fullName?.split(' ').pop()}
                         </Text>
                     </div>
