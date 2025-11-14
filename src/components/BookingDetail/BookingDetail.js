@@ -56,7 +56,7 @@ function BookingDetail({ className, bookingDetail, onClose = () => {} }) {
         setLoading({ ...loading, payment1: flag === 1, payment2: flag === 2 });
         const results = await bookingService.vnpayPayment({ id_order: bookingDetail._id, flag });
         if (results) {
-            window.location.replace(results.data);
+            window.open(results.data, '_blank').focus();
         }
         setLoading({});
         onClose(true);

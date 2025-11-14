@@ -58,7 +58,7 @@ function TourDetail({}) {
         });
         if (results) {
             const results2 = await bookingService.vnpayPayment({ id_order: results.data._id, flag });
-            if (results2) window.location.replace(results2.data);
+            if (results2) window.open(results2.data, '_blank').focus();
         }
         setBookLoading(false);
     };

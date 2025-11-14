@@ -6,7 +6,7 @@ const httpRequest = axios.create({
     baseURL:
         process.env.REACT_APP_ENV === 'dev'
             ? 'http://localhost:4000/api/v1/'
-            : 'https://holidate-be.vercel.app/api/v1/',
+            : 'https://tour-be-13cn.onrender.com/api/v1/',
     withCredentials: true,
     headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
     credentials: 'include',
