@@ -21,6 +21,7 @@ import {
     Image as PreviewImage,
     Modal,
     Typography,
+    Flex,
 } from 'antd';
 import { HiLocationMarker } from 'react-icons/hi';
 import { useLocation, useNavigate, useParams } from 'react-router';
@@ -49,6 +50,7 @@ function TourDetail({}) {
     const [bookLoading, setBookLoading] = useState(false);
     const [currentPageReview, setCurrentPageReview] = useState(1);
     const { idTour } = useParams();
+    const navigate = useNavigate();
 
     const payment = async () => {
         setBookLoading(true);
@@ -60,7 +62,16 @@ function TourDetail({}) {
             const results2 = await bookingService.vnpayPayment({ id_order: results.data._id, flag });
             if (results2) window.open(results2.data, '_blank').focus();
         } else {
-            state.showToast('Thất bại', results.response && results.response.data.message);
+            state.showToast(
+                'Thất bại',
+                <Flex align="center" justify="start">
+                    <span>{results.response && results.response.data.message}</span>
+                    <Button type="link" onClick={() => navigate(config.routes.profile)}>
+                        Xem
+                    </Button>
+                </Flex>,
+                'error',
+            );
         }
         setBookLoading(false);
     };

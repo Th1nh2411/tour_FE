@@ -35,7 +35,6 @@ const GuideForm = ({ data, onClose = () => {} }) => {
     const [state, dispatch] = useContext(StoreContext);
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
 
     const addGuide = async (values) => {
         setLoading(true);
@@ -50,16 +49,7 @@ const GuideForm = ({ data, onClose = () => {} }) => {
         });
         setLoading(false);
         if (results) {
-            state.showToast(
-                'Success',
-                <Flex align="center" justify="start">
-                    <span>Bạn có chuyến đi chưa thanh toán!</span>
-                    <Button type="link" onClick={() => navigate(config.routes.profile)}>
-                        Xem
-                    </Button>
-                </Flex>,
-                'error',
-            );
+            state.showToast('Success', results.message);
             onClose(true);
         }
     };
