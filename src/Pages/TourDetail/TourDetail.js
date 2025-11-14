@@ -71,6 +71,7 @@ function TourDetail({}) {
                     </Button>
                 </Flex>,
                 'error',
+                10,
             );
         }
         setBookLoading(false);

@@ -11,12 +11,14 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import config from '../config';
 function Provider({ children }) {
     const [api, contextHolder] = notification.useNotification();
-    const showToast = (message = '', description = '', type = 'success') => {
+    const showToast = (message = '', description = '', type = 'success', duration = 3) => {
         api[type]({
             message,
             description,
             placement: 'bottomRight',
-            duration: 30000,
+            duration,
+            showProgress: true,
+            pauseOnHover: true,
         });
     };
     const [searchParams, setSearchParams] = useSearchParams();
@@ -37,6 +39,7 @@ function Provider({ children }) {
                             </Button>
                         </Flex>,
                         'info',
+                        10,
                     );
                 }
             }, [5000]);
