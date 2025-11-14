@@ -56,9 +56,11 @@ function TourDetail({}) {
             tourInfo: tourData._id,
             guestSize,
         });
-        if (results) {
+        if (results?.success) {
             const results2 = await bookingService.vnpayPayment({ id_order: results.data._id, flag });
             if (results2) window.open(results2.data, '_blank').focus();
+        } else {
+            state.showToast('Thất bại', results.response && results.response.data.message);
         }
         setBookLoading(false);
     };

@@ -3,11 +3,12 @@ import UserContext from './Context';
 import reducer from './reducer';
 import { actions } from '.';
 import images from '../assets/images';
-import { notification } from 'antd';
+import { Button, Flex, notification } from 'antd';
 import Cookies from 'js-cookie';
 import * as bookingService from '../services/bookingService';
 import * as authService from '../services/authService';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import config from '../config';
 function Provider({ children }) {
     const [api, contextHolder] = notification.useNotification();
     const showToast = (message = '', description = '', type = 'success') => {
@@ -15,18 +16,28 @@ function Provider({ children }) {
             message,
             description,
             placement: 'bottomRight',
+            duration: 30000,
         });
     };
     const [searchParams, setSearchParams] = useSearchParams();
     const activeID = searchParams.get('activeID');
-
+    const navigate = useNavigate();
     const getUnpaidBooking = async () => {
         if (state.userInfo) {
             setTimeout(async () => {
                 const results = await bookingService.getUnpaidBooking();
                 if (results) {
                     dispatch(actions.setUnpaidBooking(results.data));
-                    showToast('Thông báo', 'Bạn có chuyến đi chưa hoàn tất thanh toán!', 'info');
+                    showToast(
+                        'Thông báo',
+                        <Flex align="center" justify="start">
+                            <span>Bạn có chuyến đi chưa thanh toán!</span>
+                            <Button type="link" onClick={() => navigate(config.routes.profile)}>
+                                Xem
+                            </Button>
+                        </Flex>,
+                        'info',
+                    );
                 }
             }, [5000]);
         }

@@ -2,10 +2,11 @@ import * as httpRequest from '../utils/httpRequest';
 
 export const createBooking = async (body) => {
     try {
-        const res = await httpRequest.post(`booking`, body);
+        const res = await httpRequest.post(`booking`, body, {}, true);
         return res;
     } catch (error) {
         console.log(error);
+        return error;
     }
 };
 export const cancelBooking = async (id) => {

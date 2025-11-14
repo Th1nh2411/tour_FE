@@ -3,10 +3,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router';
 const httpRequest = axios.create({
-    baseURL:
-        process.env.REACT_APP_ENV === 'dev'
-            ? 'http://localhost:4000/api/v1/'
-            : 'https://tour-be-13cn.onrender.com/api/v1/',
+    baseURL: 'https://tour-be-13cn.onrender.com/api/v1/',
     withCredentials: true,
     headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -28,11 +25,14 @@ export const get = async (path, config = {}) => {
         }
     }
 };
-export const post = async (path, body = {}, config = {}) => {
+export const post = async (path, body = {}, config = {}, customCatch) => {
     try {
         const response = await httpRequest.post(path, body, config);
         return response.data;
     } catch (error) {
+        if (customCatch) {
+            throw error;
+        }
         if (error.response && error.response.status === 401) {
             Cookies.remove('userInfo');
             Modal.info({
